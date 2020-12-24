@@ -1,0 +1,289 @@
+https://icons.getbootstrap.com/
+
+
+
+Yii::$app->user->getId()                | obtener el id del usuaria de la sesion
+
+$user = Users::findOne($id);            | Obteler una referencia al objeto usuario por id
+
+Yii::$app->user->isGuest                | indica si el usuario es anonimo
+
+----------------------------------------
+<?php
+
+namespace app\controllers;
+
+
+
+use Yii;
+use app\models\Apps;
+use app\models\AppsSearch;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\helpers\URL;
+
+----------------------------------------
+
+Ejemplo de Boton
+Html::button("<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>",
+                    ['class'=>'kv-action-btn',
+                        'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/create','id'=>$model->id]) . "';",
+                        'data-toggle'=>'tooltip',
+                        'title'=>Yii::t('app', 'Create New Record'),
+                    ]
+                )
+
+<?= Html::button('Press me!', ArrayHelper::merge(['value'=>Url::to(['controller/action'])], ['additionalOptions'])); ?>
+
+-----------------------------------------------------
+
+Yii::$app->getUrlManager()->getBaseUrl() 	Carpeta base del proyecto	http:// sitio.com/apps/web/ 	
+Yii::getAlias('@web'); 			
+Yii::$app->user->isGuest 	nos indica está logueado	true/false	
+Url::toRoute("site/login") 	Devuelve la url de path indicado		https://www.yiiframework.com/doc/api/2.0/yii-helpers-url 
+
+// /index.php?r=site%2Findex
+echo Url::to(['site/index']);
+
+// /index.php?r=site%2Findex&src=ref1#name
+echo Url::to(['site/index', 'src' => 'ref1', '#' => 'name']);
+
+// /index.php?r=post%2Findex     assume the alias "@posts" is defined as "/post/index"
+echo Url::to(['@posts']);
+
+// the currently requested URL
+echo Url::to();
+
+// /images/logo.gif
+echo Url::to('@web/images/logo.gif');
+
+// images/logo.gif
+echo Url::to('images/logo.gif');
+
+// http://www.example.com/images/logo.gif
+echo Url::to('@web/images/logo.gif', true);
+
+// https://www.example.com/images/logo.gif
+echo Url::to('@web/images/logo.gif', 'https');
+
+// //www.example.com/images/logo.gif
+echo Url::to('@web/images/logo.gif', '');
+-------------------------------------------------------------
+
+ Html::encode($this->title)
+
+--------------------------------------------------------
+
+cambiar e layout desde el controlador
+ $this->layout = 'blabla';
+
+//------------------------------------------------------
+ Yii::$app->params['idApp'] // acceder al la matriz de parametros
+
+ -------------------------------------------------------------------
+
+<?php 
+//use app\models\Country;
+$countries=Country::find()->all();
+
+//use yii\helpers\ArrayHelper;
+$listData=ArrayHelper::map($countries,'code','name');
+
+echo $form->field($model, 'name')->dropDownList(
+        $listData,
+        ['prompt'=>'Select...']
+        );
+?>
+	
+-------------------------------------------------------------
+ <?php 
+ use yii\web\View ;
+  $script = "function test() { alert('hi');}";    
+  $this->registerJs($script, View::POS_END, 'my-options'); 
+  
+  o 
+
+  $this->registerJsFile($url, View::POS_END,null)
+?>
+
+ 'onclick'=>"window.location.href = '" . \Yii::$app->urlManager->createUrl(['/grafica/index','id'=>$model->idApp]) . "';"
+
+ View::POS_HEAD para la sección head.
+View::POS_BEGIN justo después de la etiqueta <body>.
+View::POS_END justo antes de cerrar la etiqueta </body>.
+View::POS_READY para ejecutar código en el evento ready del documento. Esto registrará jQuery automáticamente.
+View::POS_LOAD para ejecutar código en el evento load del documento. Esto registrará jQuery automáticamente.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+    public function actionAjaxSearch()
+{
+    //$model = new ArticuloSearch();
+    
+    if (Yii::$app->request->isAjax) {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        if ($dataProvider ) {
+            return [
+                'data' => [
+                    'success' => true,
+                    'model' => $model,
+                    'data'=>$dataProvider,
+                    'message' => 'Model has been saved.',
+                ],
+                'code' => 0,
+            ];
+        } else {
+            return [
+                'data' => [
+                    'success' => false,
+                    'model' => null,
+                    'data'=>null,
+                    'message' => 'An error occured.',
+                ],
+                'code' => 1, // Some semantic codes that you know them for yourself
+            ];
+        }
+    }
+}
+
+
+----------------------------------------------------
+
+var a=new Server;
+a.consulta('index.php?r=productos%2Flista-ajax&id=28fa040f72e1f257-20200524123311',[],function(){alert('listo')});
+
+ ============================================================================================================================
+
+ Tareas 
+ + hacer ventana para cargar fotos
+    -hacer distintos tamaños de la misma foto
+    https://www.yiiframework.com/doc/guide/2.0/en/input-file-upload
+ + hacer ventana para seleccionar fotos
+
+ + Agregar Categorias, tiempo de elavoracion, lista de costos a productos
+
+
+ https://www.yiiframework.com/doc/guide/2.0/es/security-authorization
+
+ https://forum.yiiframework.com/t/json-input-in-restful-api/80233/4
+
+//=======================IMPORTANTE CAMBIO===================================
+
+/media/ties/D6807A058079EC7D/PROYECTOS2020/SigmaApps/YII2/vendor/yiisoft/yii2/base/Application.php
+    
+    Agregue esta variable de array para poder pasar valores a los layout
+    
+     /**
+      @var array  lista de variables dinamica
+      */
+    public $variables=[];
+
+    ....
+
+    [CONTROLADOR- action]
+
+         Yii::$app->variables=['idApp'=>$id];
+
+         ---------------------------------------------------
+
+Cómo puedo cambiar el color a una imagen .svg con css?
+         HTML
+
+            <svq>
+            <pathclass="path"d=""></path>
+            </svg>
+         CSS
+
+            .path {
+            fill: red;
+            }
+categoria
+
+#	Nombre	Tipo	Cotejamiento	Atributos	Nulo	Predeterminado	Comentarios	Extra	Acción
+	1	codigoPrimaria	varchar(255)	latin1_swedish_ci		No	Ninguna			Cambiar Cambiar	Eliminar Eliminar	
+Más Más
+	2	app_idApp	varchar(124)	latin1_swedish_ci		No	Ninguna			Cambiar Cambiar	Eliminar Eliminar	
+Más Más
+	3	nombre	varchar(80)	latin1_swedish_ci		No	Ninguna			Cambiar Cambiar	Eliminar Eliminar	
+Más Más
+	4	descripcion	varchar(255)	latin1_swedish_ci		Sí	NULL			Cambiar Cambiar	Eliminar Eliminar	
+Más Más
+	5	style	varchar(252)	latin1_swedish_ci		Sí	NULL			Cambiar Cambiar	Eliminar Eliminar	
+Más Más
+
+---------------Comillas invertidas------------------
+// "Old syntax"
+const userInfo = 'User info: ' + user.getName() + ' ' + user.getEmail();
+// "New syntax"
+const userInfo = `User info: ${user.getName()} ${user.getEmail()}`;
+
+<strong>…</strong>	Poner texto en negrita	Puede ser sustituido por CSS.
+<i>…</i>	Poner texto en cursiva	Puede ser sustituido por CSS.
+<em>…</em>	Poner texto en cursiva	Puede ser sustituido por CSS.
+<u>…</u>	Poner texto subrayado	Deprecated. Sustituir por CSS.
+
+
+
+Para que recargue la pagina cada 10''
+ <meta http-equiv="refresh" content="10">
+
+-------------------------------------------------------------------------------------
+lINK CON parametros <?= Html::a('Create Cuenta', ['create','idApp'=>$idApp], ['class' => 'btn btn-success']) ?>
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+ Hay soluciones mucho más complicadas, pero una muy simple y simple es simplemente agregar una cadena de consulta aleatoria a su CSS incluido.
+
+Tales como src="/css/styles.css?v={random number/string}"
+
+Si está utilizando php u otro lenguaje del lado del servidor, puede hacerlo automáticamente con time(). Entonces sería styles.css?v=<?=time();?>
+
+De esta manera, la cadena de consulta será nueva cada vez. Como dije, hay soluciones mucho más complicadas que son más dinámicas, pero en lo que respecta a las pruebas, este método es superior (IMO).
+
+ 133
+
+ --------------------------------------------------------------------------------------------
+ 
+// EJEMPLO
+Pjax::begin(['enablePushState' => false   // para que no cambie el url
+]);
+$form = ActiveForm::begin(['method' => 'post',
+                            'action' => Url::to(['apps/upload','idApp'=>'temp']),
+                            'options' => ['enctype' => 'multipart/form-data','data-pjax' => '']]) ?>
+
+    <?= Html::img($modelf->urlFile,['style'=>['width' => '300px']]);?>
+
+    <?= $form->field($modelf, 'imageFile')->fileInput() ?>
+
+    <button>Submit</button>
+
+<?php ActiveForm::end();
+Pjax::end(); ?>
+
+=============================================== JS ADD===============================
+
+use yii\web\View ;
+...
+$urlUpdate= \Yii::$app->urlManager->createUrl(['apps/update','id'=>$model->idApp]);
+$script=<<<JS
+ $(document).ready(function() {
+    $('#botConf').click(function(e) {
+      window.location.href ="$urlUpdate";
+      e.stopPropagation();
+    });
+});
+    
+JS;
+$this->registerJs($script, View::POS_END, 'my-options'); 
+
+
+RULES...
+
+[[‘date’, ‘date2’], ‘date’, ‘format’ => ‘dd-MM-yyyy’],
+<?= $form->field($model, 'from_date')->widget(\yii\jui\DatePicker::classname(), [
+    //'language' => 'es',
+    //'dateFormat' => 'yyyy-MM-dd',
+]) ?>

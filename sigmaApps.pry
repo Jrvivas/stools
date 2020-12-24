@@ -1,0 +1,162 @@
+proyecto:{
+    nombre:'sigmaApps'
+    sistema:'multiplataforma'
+    frontend:'PHP-MYSQL'
+    backend:'HTML-CSS-JS'
+
+    enidades:[
+        User:{
+            tipo:'sys'
+            props:[
+                *ID:INT
+                +username:txt('USERNAME')
+                +password:txt('PASSWORD')
+                +aunthKey:txt('KEY_LONG')
+                +accessToken:txt('KEY_LONG')           
+                //-aplicaciones:[App]+ => SI(tipo='Propirtario',[App.lista,App.agregar],App.lista)    //solo para propietarios ->indica que es una lista de aplicaciones y "que se puedes crear nuevas"
+            ]
+        }
+
+
+        //??
+        Invitado->User:{
+            tipo:'sys'
+            props:[
+                -Superior:<Invitado> // puede tener o no superior (si es propietario no tiene superior) 
+                -modulos:[Modulo]  
+            ]
+        }
+
+        Propietario->User:{
+            tipo:'sys'
+            props:[
+                +Invitados:[Invitado]+
+                -aplicaciones:[App]+     // que es una lista de aplicaciones y "que se puedes crear nuevas"  
+            ]
+        }
+
+        App:{
+            label:'Aplicacion'
+            tipo:'sys'
+            props:[
+                *idApp:txt('KEY_LONG')&     // se genera automaticamente
+                *user:<User>                // esto ya está implicito en el usuario
+                +nombre:txt('NOMBRE')
+                +codigoApp('Tipo de Aplicación'):<[APP_TIPOS]>
+                -urlLogo:txt('URL_FILE')        //actuales
+                -Color1:txt('RGBCOLOR')         //actuales
+                -Color2:txt('RGBCOLOR')         //actuales
+                -Color3:txt('RGBCOLOR')         //actuales
+                -Estilo:json('ESTILO')          //Posible-------------
+                -Modulos:[Modulo]                //Elejir modulos existentes
+            ]
+             
+            list:[
+                APP_TIPOS:[
+                    ['GRAPHIC','Comercio gráfico'],
+                    ['FAST_FOOD','Comercio de comida'],
+                    ['PIZZERIA','Pizzeria']]
+            ]
+        }
+
+        Modulo:{
+            tipo:'sys'
+            props:[
+                *id
+                +Nombre:txt('NOMBRE')
+                -icono:txt('URL_FILE')
+                +urlInicio:txt('URL_WEB')
+                +acciones:[Accion]
+
+            ]
+        }
+        Producto:{
+			label:'Producto'
+			tipo:'app'
+			props:[
+                *id
+                *idApp
+                +Nombre
+                -Codigo:txt('CODIGO')
+                -foto:txt('URL_FILE')
+                -tipo:<[Categoria]>
+                +Descripcion:txt('DESCRIPCION')
+                +Estado:<[]>
+                +Precio:num('MONEDA')
+                +Costo:num('MONEDA')
+                +Costo base:num('MONEDA')
+                -Costos de Instalación:num('MONEDA')
+                -Opciones:json('ESTILO')
+                -Unidad:<[]>
+
+
+            ]
+            
+        }
+
+        Categoria:{
+            tipo:'app'
+            props:[
+                *codigo:txt('CODIGO')
+                *app_idApp:txt('CODIGO')
+                +Nombre:txt('NOMBRE')
+                -style:txt('PROPIEDAD')
+
+            ]
+        }
+
+        Precios:{
+            tipo:'app'
+            props:[
+                *idProducto:num('ID')
+                *app_idApp:txt('CODIGO')
+                -idCliente:num('ID')
+                +Precio:num('MONEDA')
+                -formula:txt('PROPIEDAD')
+                +Nombre:txt('NOMBRE')
+                -style:txt('PROPIEDAD')
+
+            ]
+        }
+
+        Stock:{
+            tipo:'app'
+            props:[
+                *idProducto : num('ID')
+                *app_idApp : txt('CODIGO')
+               // -idDeposito : num('ID')
+                +fechaActualización : date('FECHA-HORA')
+                +Cantidad : num('CANTIDAD')
+                -CantidadMin : num('CANTIDAD')
+                -formula : txt('PROPIEDAD')
+            ]
+        }
+    ]
+
+    tipos:[
+        txt:{
+            tipo:'string'
+            longitud:60
+            filtro:''
+            funcion:''
+            ocultar:NO          // ocultar lo que se escribe
+            variantes:[
+                NOMBRE:{
+                    longitud:80
+                    filtro:''
+                    funcion:''
+                    }
+                PASSWORD:{
+                    longitud:12
+                    filtro:''       //poner fitros de caracteres
+                    funcion:''
+                    ocultar:SI
+                }    
+            ]
+            
+
+        ]
+    ]
+
+
+}
