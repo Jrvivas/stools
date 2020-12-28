@@ -1,0 +1,9 @@
+27-12-20:
+trabajar con pedido: 
+    agregar Nuevo pedido:
+        buscar cliente (Error)
+        >Se agregaron la fuciones:
+            listaPrioridades() etatica
+            isEditable() public
+            contructor para inicializar propiedades
+            DataProvider para mostrar detalles

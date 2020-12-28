@@ -3,37 +3,41 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Contacto;
+use app\models\Pedido;
 use app\models\Util;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
+use yii\data\ActiveDataProvider;
 //use yii\jui\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\Pedido */
 /* @var $form yii\widgets\ActiveForm */
 
+// Hacemos la lista de Clientes
 $contacto = Contacto::find()->where(['app_idApp' => $model->app_idApp, 'cliente' => 'SI'])->orderBy(['nombre' => SORT_DESC])->all();
 $clientes = ArrayHelper::map($contacto, 'id', 'nombre');
 
 /*foreach($contacto as $clt){
     $clientes[]=[$clt['id']=>$clt['nombre']];
 }*/
+
+//Descripcion del pedido
 $model->nombre = 'PEDIDO_' . date('Y-m-d');
-$prioridades = [0 => 'Normal', 2 => 'Media', 4 => 'Alta', 8 => 'Urgente', 10 => 'Hoy'];
 
-$estados = ['ESPERA' => 'Espera', 'PRESUPUESTO' => 'Presupuesto', 'APROBADO' => 'Aprobado', 'DISENIO' => 'Diseño', 'ELABORACION' => 'Elaboración', 'RETRASADO' => 'Retrasado', 'TERMINADO' => 'Terminado', 'ENTREGADO' => 'Entregado', 'ANULADO' => 'Anulado'];
+//Lista de las prioridades
+$prioridades = Pedido::listaPrioridades();
 
+$estados = Pedido::listEstados();
 
 $idApp = $model->app_idApp;
+$editable = $model->isEditable();
 
 
+
+// reemplazar por un data provider
+//-----------------------------------
 $detalles = '[';
 $sep = '';
-$editable = true;
-if ($model->estado == 'ENTREGADO') {
-    $editable = false;
-} else {
-    $editable = true;
-}
 
 foreach ($model->detallesPedido as $d) {
     if (empty($d->ancho)) $d->ancho = 0;
@@ -47,12 +51,16 @@ foreach ($model->detallesPedido as $d) {
         ',"alto":' . $d->alto . ',"fraccion":' .$d->fraccion .',"inst":' . $d->inst . ',"detalle":"' . str_replace('"', "'", $d->detalle) . '","monto":' . $d->monto . ',"estado":"' . $estado . '"}';
     $sep = ',';
 }
-if (empty($model->descuento)) $model->descuento = 0;
-if (empty($model->impuesto)) $model->impuesto = 0;
-if (empty($model->pago)) $model->pago = 0;
-if (empty($model->saldo)) $model->saldo = 1;
-if (empty($model->estado)) $model->estado = 'ESPERA';
-if (empty($model->prioridad)) $model->prioridad = 0; //Normal
+//------------------------------------------------------
+
+//TODO 
+$listDetalle = new ActiveDataProvider([
+    'query' =>$model->detallesPedido,
+    'pagination' => [
+        'pageSize' => 10,
+    ],
+]);
+
 
 $cliente=$model->cliente;
 $lblCliente='-Sin Cliente-';

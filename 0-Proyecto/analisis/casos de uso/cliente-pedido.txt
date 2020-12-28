@@ -1,0 +1,4 @@
+1: Cliente le hace un pedido de varias cosas a José que es un vendedor del local
+le pide que primero le pase un presupuesto por e-mail
+2: Cliente hace un pedido de varios detalle a un preventista y quiere saber cuanto 
+es el monto total para hacer una entrega para luego pagarlos cuando se los entreguen a domicilio

@@ -58,6 +58,13 @@ class Pedido extends \yii\db\ActiveRecord
                Pedido::$_ESTADO_RECHAZADO=>'Rechazado'
                ];
     }
+
+    /**
+     * Lista de Prioridades
+     */
+    public static function listaPrioridades(){
+        return [0 => 'Normal', 2 => 'Media', 4 => 'Alta', 8 => 'Urgente', 10 => 'Hoy'];
+    }
        
     /**
      * {@inheritdoc}
@@ -85,6 +92,18 @@ class Pedido extends \yii\db\ActiveRecord
             [['id', 'app_idApp'], 'unique', 'targetAttribute' => ['id', 'app_idApp']],
             [['app_idApp'], 'exist', 'skipOnError' => true, 'targetClass' => Apps::className(), 'targetAttribute' => ['app_idApp' => 'idApp']],
         ];
+    }
+
+    public function __construct()
+    {
+            parent::__construct();
+            if (empty($this->descuento)) $this->descuento = 0;
+            if (empty($this->impuesto)) $this->impuesto = 0;
+            if (empty($this->pago)) $this->pago = 0;
+            if (empty($this->saldo)) $this->saldo = 1;
+            if (empty($this->estado)) $this->estado = 'ESPERA';
+            if (empty($this->prioridad)) $this->prioridad = 0; //Normal
+
     }
 
     /**
@@ -176,6 +195,19 @@ class Pedido extends \yii\db\ActiveRecord
     public function maxId($id){
         return $this->find()->where(['app_idApp'=>$id])->max('id');
      }
+
+    /**
+     * Metodo que indica si el el Pedido es editable o no
+     * @return boolean
+     */
+    public function isEditable(){
+           if ($this->estado == Pedido::$_ESTADO_ENTREGADO) {
+                return false;
+            } else {
+                return true;
+            }
+    }
+  
 
 
      //-------------------------------------------
