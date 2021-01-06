@@ -248,6 +248,21 @@ class Apps extends \yii\db\ActiveRecord
      ];
      }
     
+      /**
+     * get the Apps model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return Apps the loaded model o null
+
+     */
+     static function get($id)
+    {
+        if (($model = Apps::findOne($id)) !== null) {
+            return $model;
+        }
+
+        return null;
+    }
 
    
 }

@@ -1,0 +1,108 @@
+Caso de Uso Manejo de pedidos
+
+-Hacer un pedido/presupuesto
+	+Buscar cliente
+	 *Crear nuevo
+	 *Cargar datos del Cliente a pedido
+	+Cargar fecha actual #1
+	+Cargar fecha estimada de entrega #2
+	+Agregar descripci'on del pedido #3
+	+Agregar (Modificar,Borrar) detalles del pedido
+	 *Buscar producto
+	 *Establecer cantidad
+	 *Describir detalle
+	 *Calculo de monto
+	 *Calculo de costo
+	 *Calculo de tiempo 
+	+Calculo total de monto
+	+Calculo  total de costo
+	+Calculo  total de tiempo
+	+Establecer Estado del pedido
+	+Establecer  prioridad
+	
+-Esperar respuesta del cliente
+-Aprobar pedido
+ +Pasar a disenio
+   *Dercripcion del producto
+   *Archivos relaccionados
+   *Fotos, documentos
+ +Pasar a produccion
+   *preproduccion
+   *pedidos de materiales
+   *elaboraci'on
+   
+ +Pasar a terminado
+   *Pasar a enviar?
+   *Pasar a retira?
+ +Pasar a Entregado
+   *Actualizar Stock de producto?
+   *Generar compromiso de pago
+-Hacer una venta rapida
+
+
+REFERENCIAS
+
+#1: La fecha de inicio se carga autom'aticamente  pero  sepuede modificar
+#2: La fecha de entrega se estrima seg'un el tiempo que tarda la elaboraci'on o preparaci'on de los productos listados
+#3: Se puede agregar una descripci'on del pedido, si no se hace el sistema tiene que generar una con el nombre del cliente el  tipo del pedido y la fecha Ej: Pedido Juan Perez 03-05-21
+
+CLASES
+
+Pedido{
+	 +estado:<['Presupuesto','Espera','Aprobado',...]>
+	 +fechaIni
+	 +fechaEntrega
+	 +fechaFin
+	 +deccripcion
+	 +ciente:<Cliente(A)>
+	 +prioridad:<['NORMAL','MEDIA','ALTA','URGENTE','HOY']>{
+	 			IF(this.fechaEntrega-@HOY() > this.tiempoTotal+10D;) return 'NORMAL'
+	 			IF(This.fechaEntrega-@HOY() > this.tiempoTotal) return 'ALTA'
+       IF(This.fechaEntrega-@HOY() =< this.tiempoTotal) return 'URGENTE'
+	 }
+	 +detalles:<DetallePedido(AMD)>
+	 montoTotal:@SUM(DetallePedido.monto)
+	 costoTotal:@SUM(DetallePedido.costo)
+	 tiempoTotal:@SUM(DetallePedido.tiempo)
+	 
+	 Resposabilidades:[
+	 	+Registrar  un pedido del cliente
+	 	+Registrar la compra inmediarte de un cliente Anonimo
+	 	+Informar el estado del pedido
+	 	+Registrar el responsable de haberlo creado
+	 	+Registrar el responsable de su modificacion
+	 	+Indicar prioridad del pedido
+	 	+Calcular Monto,Costo y Tiempo  totales
+	 	+Registrar  un adelanto por le trabajo ??
+	 	+Cambiar prioridad seg'un  tiempo de entrega
+	 	 ]
+	 		 
+}
+
+DICCIONARIO
+  + Requerido
+  - Puede ser nulo
+  <propiedad ':' tipo>
+  <'selecionar  uno de un grupo de valores'>
+  ['array de elemetos']
+  Objeto'(acciones)'  A: Agregar , M:Modificar, D: Eliminar
+  Objeto.'propidad'
+  Objeto.'metodo()'
+  @'OPERACION()'
+  
+  
+  
+
+  
+
+
+
+
+
+	
+
+
+
+
+
+

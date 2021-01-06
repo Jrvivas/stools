@@ -2,8 +2,12 @@
 trabajar con pedido: 
     agregar Nuevo pedido:
         buscar cliente (Error)
-        >Se agregaron la fuciones:
+        >Se agregaron la fuciones Model y form_new:
             listaPrioridades() etatica
             isEditable() public
             contructor para inicializar propiedades
             DataProvider para mostrar detalles
+
+29-12-20:
+    OBJ: Lograr agregar detalles editables y borrables
+    >Agregado del la propiedad newDetalle en las caccion create 

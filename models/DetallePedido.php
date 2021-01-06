@@ -88,6 +88,16 @@ class DetallePedido extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Productos::className(), ['app_idApp' => 'app_idApp','id'=>'productos_id']);
     }
+        /**
+     * Gets query for Pedido.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPedido()
+    {
+        return $this->hasOne(Pedido::className(), ['app_idApp' => 'app_idApp','id'=>'pedido_id']);
+    }
+
 
         /**
      * Gets query for [[Stock]].

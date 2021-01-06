@@ -127,7 +127,7 @@ class PedidoController extends  AppController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($idApp)
+    public function actionCreate($idApp,$newDetalle=false) //se agrego newDetalle
     {
       
 
@@ -135,11 +135,64 @@ class PedidoController extends  AppController
         $model->app_idApp=$idApp;
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            // Verifica si del formulario es nuevo
+            //var_dump($model);
+           
+            //Nombre del pedido
+            if(!isset($model->nombre)){
+                $fecha= date("Y-m-d h:i:sa");
+                $model->nombre='Pedido_'.$model->cliente->nombre.'_'.$fecha;
+ 
+            }
+            if(!isset($model->id)){
+                $model->id= $model->maxId($idApp)+1;
+            }
+            
+
+            if($model->save()){
+                //var_dump($model);
+                    if($model->accion==="newDetalle"){
+                        $modelDetalle=new DetallePedido();
+                        $modelDetalle->pedido_id=$model->id;
+                        $modelDetalle->app_idApp=$idApp;
+                        //return $this->render('@app\view\detalle-pedido\create', ['model' => $modelDetalle, 'idApp' => $idApp]);
+                        return $this->redirect(["detalle-pedido/create",'idPedido' =>$model->id, 'idApp' => $idApp]);
+                    }
+                    return $this->redirect(['view', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+            }
+            $model->id=null;
+           
         }
 
         return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+    
+    /**
+     * Updates an existing Pedido model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @param string $app_idApp
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id, $app_idApp)
+    {
+        $model = $this->findModel($id, $app_idApp);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if($model->accion==="newDetalle"){
+                $modelDetalle=new DetallePedido();
+                $modelDetalle->pedido_id=$model->id;
+                $modelDetalle->app_idApp=$app_idApp;
+                return $this->render('\new_detalle', ['model' => $modelDetalle, 'idApp' => $app_idApp]);
+            }
+            return $this->redirect(['view', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+        }
+
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
@@ -312,26 +365,6 @@ class PedidoController extends  AppController
         ];
     }
 
-    /**
-     * Updates an existing Pedido model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @param string $app_idApp
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id, $app_idApp)
-    {
-        $model = $this->findModel($id, $app_idApp);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
 
     /**
      * Deletes an existing Pedido model.

@@ -42,6 +42,8 @@ class Pedido extends \yii\db\ActiveRecord
 
     public static $_FECHA_NO_NECESARIA=-999;
 
+    public $accion="";
+
 
     /**
      * Lista de estado con un label
@@ -83,12 +85,12 @@ class Pedido extends \yii\db\ActiveRecord
             [['id', 'app_idApp', 'contacto_id', 'nombre', 'fechaIni'], 'required'],
             [['id', 'contacto_id', 'idResponsable','delivery','prioridad','idModifico'], 'integer'],
             ['idModifico','default','value'=>null],
-            [['fechaIni', 'fechaFin', 'fechaEntrega'], 'safe'],
+            [['fechaIni', 'fechaFin', 'fechaEntrega','accion'], 'safe'],
             [['monto','pago','saldo'], 'number'],
             [['app_idApp','nombre'], 'string', 'max' => 124],
             [['descuento', 'impuesto'], 'string', 'max' => 45],
             [['comentarios'], 'string', 'max' => 512],
-            [['estado'], 'string', 'max' => 20],
+            [['estado','accion'], 'string', 'max' => 20],
             [['id', 'app_idApp'], 'unique', 'targetAttribute' => ['id', 'app_idApp']],
             [['app_idApp'], 'exist', 'skipOnError' => true, 'targetClass' => Apps::className(), 'targetAttribute' => ['app_idApp' => 'idApp']],
         ];
@@ -97,12 +99,14 @@ class Pedido extends \yii\db\ActiveRecord
     public function __construct()
     {
             parent::__construct();
-            if (empty($this->descuento)) $this->descuento = 0;
-            if (empty($this->impuesto)) $this->impuesto = 0;
-            if (empty($this->pago)) $this->pago = 0;
-            if (empty($this->saldo)) $this->saldo = 1;
-            if (empty($this->estado)) $this->estado = 'ESPERA';
-            if (empty($this->prioridad)) $this->prioridad = 0; //Normal
+            $this->contacto_id=null;   //Cliente eventual
+            $this->descuento = 0;
+            $this->impuesto = 0;
+            $this->pago = 0;
+            $this->saldo = 0;
+            $this->monto = 0;
+            $this->estado = 'ESPERA';
+            $this->prioridad = 0; //Normal
 
     }
 
