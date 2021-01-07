@@ -56,6 +56,9 @@ function Server(){
                                 }
         
         
+                      },
+                      fail:function(){
+                        alert('Error en el servidor')
                       }
                         });
 

@@ -153,7 +153,7 @@ window.onload=function() {
   
 JS;
 $this->registerJs($script, View::POS_BEGIN, 'my-options');
-$this->registerJsFile(Yii::getAlias('@web') . '/js/models/app_model_pedido.js?v=0.005', ['depends' => [yii\web\YiiAsset::className()],'position' => View::POS_END], null);//Agregamos React
+//$this->registerJsFile(Yii::getAlias('@web') . '/js/models/app_model_pedido.js?v=0.005', ['depends' => [yii\web\YiiAsset::className()],'position' => View::POS_END], null);//Agregamos React
 //$this->registerJsFile(Yii::getAlias('@web') . '/js/components/app_new_detalle_pedido.js?v=0.009', ['type'=>'text/babel','position' => View::POS_END], null);//Agregamos React
 //$this->registerJsFile(Yii::getAlias('@web') . '/js/components/app_new_detalle_pedido_opt.js?v=0.000', ['depends' => [yii\web\YiiAsset::className()],'position' => View::POS_END], null);//Agregamos React
 
@@ -220,7 +220,7 @@ $this->registerJsFile(Yii::getAlias('@web') . '/js/models/app_model_pedido.js?v=
                     <div class=" col-md-12 text-right ">
                         <button class="btn btn-primary" type="button" onclick="nuevoDetalle()" style="font-size:1.5rem;" >Nuevo detalle</button>
                         <?= $form->field($model, 'accion')->hiddenInput()->label(false)?> 
-                       <?= 'a'//Html::a('Nuevo detalle', ['pedido/create', 'idApp' => $model->app_idApp,'newDetalle'=>'true'], ['class' => 'btn btn-danger  mx-2', 'style' => 'font-size:1.5em;']) ?>
+                       
                     </div>
                 <?php } ?>
 

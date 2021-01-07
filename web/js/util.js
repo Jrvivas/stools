@@ -89,4 +89,13 @@ function isNumber(n)
         return {width, height};
         }
 
+    /**
+     * Clase que maneja mensajes
+     */    
+    class Msg{
+
+        static error(ambito,mensaje){
+            console.log('ERROR: '+ambito+'('+mensaje+')');
+        }
+    }    
     //------------------------------------------------------------------------

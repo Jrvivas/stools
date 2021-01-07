@@ -8,7 +8,7 @@ return [
     'charset' => 'latin1',*/
     'dsn' => 'mysql:host=localhost;dbname=sigma75_apps',
     'username' => 'root',
-    'password' => '',
+    'password' => 'ties75',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

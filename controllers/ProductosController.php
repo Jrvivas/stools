@@ -310,6 +310,35 @@ class ProductosController extends AppController
       
       
     }
+
+    public function actionFindAjax($idApp,$id){
+        $pto=$this->findModel($id, $idApp);
+
+        if (Yii::$app->request->isAjax) {
+           
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+
+            if($pto){
+                $data=$pto;
+
+                return [
+                    'error'=>0,
+                    'data'=>$data,
+                    'message' => 'ok',
+                    ];
+
+            } else {
+                return [
+                    'error'=>1,
+                    'data'=>'',
+                    'message' => 'Problemas para obtener el producto',
+                ];
+            }
+
+
+        }
+    }
     
 
 }

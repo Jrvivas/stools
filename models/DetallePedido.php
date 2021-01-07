@@ -58,7 +58,7 @@ class DetallePedido extends \yii\db\ActiveRecord
             'productos_id' => 'Id Producto',
             'detalle' => 'Descripcion',
             'cantidad'=>'Cantidad',
-            'monto' => 'Costo',
+            'monto' => 'Monto',
             'alto' => 'Alto',
             'ancho'=>'Ancho',
             'inst'=>'Instalación',
