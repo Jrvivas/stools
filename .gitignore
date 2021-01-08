@@ -15,8 +15,9 @@ Thumbs.db
 # composer vendor dir
 /vendor
 
-# archivo de react
-/00_conversor
+# archivo de aplicacion anterior solo para modificaciones
+/apps_old
+
 # composer itself is not needed
 composer.phar
 

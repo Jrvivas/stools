@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 use yii\web\View;
 use yii\data\ActiveDataProvider;
 
+use yii\helpers\URL;
+
 //use yii\jui\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\Pedido */
@@ -153,7 +155,7 @@ window.onload=function() {
   
 JS;
 $this->registerJs($script, View::POS_BEGIN, 'my-options');
-$this->registerJsFile(Yii::getAlias('@web') . '/js/models/app_model_pedido.js?v=0.005', ['depends' => [yii\web\YiiAsset::className()],'position' => View::POS_END], null);//Agregamos React
+//$this->registerJsFile(Yii::getAlias('@web') . '/js/models/app_model_pedido.js?v=0.005', ['depends' => [yii\web\YiiAsset::className()],'position' => View::POS_END], null);//Agregamos React
 //$this->registerJsFile(Yii::getAlias('@web') . '/js/components/app_new_detalle_pedido.js?v=0.009', ['type'=>'text/babel','position' => View::POS_END], null);//Agregamos React
 //$this->registerJsFile(Yii::getAlias('@web') . '/js/components/app_new_detalle_pedido_opt.js?v=0.000', ['depends' => [yii\web\YiiAsset::className()],'position' => View::POS_END], null);//Agregamos React
 
@@ -209,8 +211,24 @@ $this->registerJsFile(Yii::getAlias('@web') . '/js/models/app_model_pedido.js?v=
                         ['class' => 'yii\grid\SerialColumn'],
                         'cantidad',
                         'detalle',
-                        'monto'
-                        ]
+                        'monto',
+                        [   'class' => 'yii\grid\ActionColumn',
+                            'template'=>'{update}{delete}',
+                            'urlCreator' => function ($action, $model, $key, $index) {
+
+                                if ($action === 'update') {
+                                    $url=Url::to(['detalle-pedido/update','id'=>$model->id,'pedido_id'=>$model->pedido_id,'app_idApp'=>$model->app_idApp]);
+                                    return $url;
+                                }
+                                if ($action === 'delete') {
+                                    $url=Url::to(['detalle-pedido/delete','id'=>$model->id,'pedido_id'=>$model->pedido_id,'app_idApp'=>$model->app_idApp]);
+                                    return $url;
+                                }
+
+                        
+                            }
+                        ],
+                    ]
                                     ])
                 ?>
                 <!-- hasta aca modificando-->
@@ -220,7 +238,7 @@ $this->registerJsFile(Yii::getAlias('@web') . '/js/models/app_model_pedido.js?v=
                     <div class=" col-md-12 text-right ">
                         <button class="btn btn-primary" type="button" onclick="nuevoDetalle()" style="font-size:1.5rem;" >Nuevo detalle</button>
                         <?= $form->field($model, 'accion')->hiddenInput()->label(false)?> 
-                       <?= 'a'//Html::a('Nuevo detalle', ['pedido/create', 'idApp' => $model->app_idApp,'newDetalle'=>'true'], ['class' => 'btn btn-danger  mx-2', 'style' => 'font-size:1.5em;']) ?>
+                       
                     </div>
                 <?php } ?>
 

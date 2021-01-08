@@ -58,7 +58,7 @@ class DetallePedido extends \yii\db\ActiveRecord
             'productos_id' => 'Id Producto',
             'detalle' => 'Descripcion',
             'cantidad'=>'Cantidad',
-            'monto' => 'Costo',
+            'monto' => 'Monto',
             'alto' => 'Alto',
             'ancho'=>'Ancho',
             'inst'=>'Instalación',
@@ -115,5 +115,12 @@ class DetallePedido extends \yii\db\ActiveRecord
     public function maxId($id,$pedido_id){
         return $this->find()->where(['app_idApp'=>$id,'pedido_id'=>$pedido_id])->max('id');
      }
+
+     /**
+      * Devuelve el objeto en un json cargado
+      */
+    public function toJson(){
+        return  json_encode($this->find()->where(['id'=>$this->id,'app_idApp'=>$this->app_idApp,'pedido_id'=>$this->pedido_id])->asArray()->one());
+    }
 
 }

@@ -159,7 +159,7 @@ class PedidoController extends  AppController
                         //return $this->render('@app\view\detalle-pedido\create', ['model' => $modelDetalle, 'idApp' => $idApp]);
                         return $this->redirect(["detalle-pedido/create",'idPedido' =>$model->id, 'idApp' => $idApp]);
                     }
-                    return $this->redirect(['view', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+                    return $this->redirect(['index', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
             }
             $model->id=null;
            
@@ -187,9 +187,9 @@ class PedidoController extends  AppController
                 $modelDetalle=new DetallePedido();
                 $modelDetalle->pedido_id=$model->id;
                 $modelDetalle->app_idApp=$app_idApp;
-                return $this->render('\new_detalle', ['model' => $modelDetalle, 'idApp' => $app_idApp]);
+                return $this->redirect(["detalle-pedido/create",'idPedido' =>$model->id, 'idApp' => $app_idApp]);
             }
-            return $this->redirect(['view', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+            return $this->redirect(['index', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
         }
 
         return $this->render('update', [

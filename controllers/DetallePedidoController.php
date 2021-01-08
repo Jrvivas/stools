@@ -7,14 +7,14 @@ use Yii;
 use app\models\DetallePedido;
 use app\models\DetallePedidoSearch;
 use app\models\Productos;
-use yii\web\Controller;
+use app\models\AppController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * DetallePedidoController implements the CRUD actions for DetallePedido model.
  */
-class DetallePedidoController extends Controller
+class DetallePedidoController extends AppController
 {
     /**
      * {@inheritdoc}
@@ -74,8 +74,13 @@ class DetallePedidoController extends Controller
         $app=Apps::get($idApp);
         $productos=$app->productos;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'pedido_id' => $model->pedido_id, 'app_idApp' => $model->app_idApp]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            $model->id=$model->maxId($idApp,$idPedido)+1;
+            if($model->save()){
+                return $this->redirect(['pedido/update', 'id' => $model->pedido_id, 'app_idApp' => $model->app_idApp]);
+            }
+
+            
         }
 
         return $this->render('create', [
@@ -96,13 +101,18 @@ class DetallePedidoController extends Controller
     public function actionUpdate($id, $pedido_id, $app_idApp)
     {
         $model = $this->findModel($id, $pedido_id, $app_idApp);
+        $app=Apps::get($app_idApp);
+        $productos=$app->productos;
+      
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'pedido_id' => $model->pedido_id, 'app_idApp' => $model->app_idApp]);
+            return $this->redirect(['pedido/update', 'id' => $model->pedido_id, 'app_idApp' => $model->app_idApp]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'productos'=>$productos
+           
         ]);
     }
 
@@ -119,7 +129,9 @@ class DetallePedidoController extends Controller
     {
         $this->findModel($id, $pedido_id, $app_idApp)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['pedido/update', 'id' => $pedido_id, 'app_idApp' => $app_idApp]);
+
+        //return $this->redirect(['index']);
     }
 
     /**

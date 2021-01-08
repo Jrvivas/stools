@@ -195,7 +195,9 @@ class Pedido extends \yii\db\ActiveRecord
 
 
 
-
+    /**
+     * Busca el maximo id  de los pedido 
+     */
     public function maxId($id){
         return $this->find()->where(['app_idApp'=>$id])->max('id');
      }
