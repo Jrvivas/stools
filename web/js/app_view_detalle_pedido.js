@@ -12,7 +12,9 @@ class Pantalla{
         this.idApp=idApp;
         this.handleSelectProducto=null;
         this.productoSel=null;
-        this.detalle=new DetallePedido()
+        this.detalle=new DetallePedido();
+        this.idCliente=null;
+
     }
     //metodo que refresca la pantalla luego de una modificación
     refresh(){
@@ -43,13 +45,20 @@ class Pantalla{
                 $("#field-alto").hide()
                 $("#field-ancho").hide()
                 $("#field-fraccion").hide()
- 
+                descripcion=this.productoSel.nombre
                 break;
             case Producto.UNIDAD_PRECIO_M2:
                 $("#field-alto").show()
                 $("#field-ancho").show()
                 $("#field-fraccion").show()
+                descripcion='medidas ('+this.detalle.ancho+'m X '+this.detalle.alto+'m) '+this.productoSel.nombre;
                 break;
+            case Producto.UNIDAD_PRECIO_MLINEAL:
+                $("#field-alto").hide()
+                $("#field-ancho").show()
+                $("#field-fraccion").show()
+                descripcion='medidas ('+this.detalle.ancho+'m X '+this.detalle.alto+'m) '+this.productoSel.nombre;
+                break;    
             default:
                $("#field-alto").hide()
                $("#field-ancho").hide()
@@ -85,8 +94,11 @@ class Pantalla{
 
             this.msg(this.MSG_ESPERA,true)         //hacemos visible el mensaje de espera
 
-            this.productoSel=Producto.find(this.idApp,idProducto,(producto)=>{
+            this.productoSel=Producto.find(this.idApp,idProducto,this.idCliente,(producto)=>{
                 if(producto){
+
+                    // ### EL producto debe tener el precio de la lista
+                    //     O es pecial segun el cliente
                     this.productoSel=producto
                     this.detalle.producto=producto
                     this.detalle.calcularMonto();// calcula es mosnto para el nuevo producto
@@ -101,19 +113,29 @@ class Pantalla{
             
         }
     }
-
+    /**
+     * Cuando cambia el valor cantidad 
+     */
     handlerChangeCantidad=(newCantidad)=>{
         if(!isNaN(newCantidad)){
             this.detalle.setCantidad(newCantidad*1)   //comvertimos en numero
             this.refresh()
         }
     }
+
+    /**
+     * Cuando cambia el valor Ancho
+     */
     handlerChangeAncho=(newCantidad)=>{
         if(!isNaN(newCantidad)){
             this.detalle.setAncho(newCantidad*1)   //comvertimos en numero
             this.refresh()
         }
     }
+
+    /**
+     * Cuando cambia el valor Alto
+     */
     handlerChangeAlto=(newCantidad)=>{
         if(!isNaN(newCantidad)){
             this.detalle.setAlto(newCantidad*1)   //comvertimos en numero

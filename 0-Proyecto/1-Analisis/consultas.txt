@@ -1,0 +1,17 @@
+SELECT * FROM `pedido`as p 
+LEFT JOIN `detallePedido`as dp
+ON p.id=dp.pedido_id AND p.app_idApp= dp.app_idApp 
+WHERE p.app_idApp='216b68d3638b76c2-20200527081443' AND p.estado='ENTREGADO'
+
+SELECT * FROM `detallePedido`as dp
+LEFT JOIN `pedido`as p 
+ON p.id=dp.pedido_id AND p.app_idApp= dp.app_idApp 
+WHERE p.app_idApp='216b68d3638b76c2-20200527081443' AND p.estado='ENTREGADO'
+
+SELECT pt.nombre,sum(dp.alto*dp.ancho*dp.cantidad) as 'sup', sum(dp.monto) as 'monto' FROM `detallePedido`as dp
+LEFT JOIN `pedido`as p 
+ON  p.id=dp.pedido_id AND p.app_idApp= dp.app_idApp 
+LEFT JOIN `productos`as pt
+ON dp.productos_id=pt.id AND pt.app_idApp= dp.app_idApp 
+WHERE p.app_idApp='216b68d3638b76c2-20200527081443' AND p.estado='ENTREGADO'
+GROUP by pt.id

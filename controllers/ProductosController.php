@@ -311,8 +311,11 @@ class ProductosController extends AppController
       
     }
 
-    public function actionFindAjax($idApp,$id){
+    public function actionFindAjax($idApp,$id,$idCliente=null){
         $pto=$this->findModel($id, $idApp);
+        if (isset($idCliente)){
+
+        }
 
         if (Yii::$app->request->isAjax) {
            
