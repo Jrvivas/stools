@@ -37,7 +37,29 @@ class Pantalla{
 
     showDatosCampos(){
         let descripcion='medidas ('+this.detalle.ancho+' X '+this.detalle.alto+') '+this.productoSel.nombre;
-       
+
+        switch(this.productoSel.unidad){
+            case Producto.UNIDAD_PRECIO_UNIDAD:
+                $("#field-alto").hide()
+                $("#field-ancho").hide()
+                $("#field-fraccion").hide()
+ 
+                break;
+            case Producto.UNIDAD_PRECIO_M2:
+                $("#field-alto").show()
+                $("#field-ancho").show()
+                $("#field-fraccion").show()
+                break;
+            default:
+               $("#field-alto").hide()
+               $("#field-ancho").hide()
+               $("#field-fraccion").hide()
+
+
+
+        }
+
+
         $("#detallepedido-cantidad").val(this.detalle.cantidad)
         $("#detallepedido-alto").val(this.detalle.alto)
         $("#detallepedido-ancho").val(this.detalle.ancho)
@@ -45,6 +67,16 @@ class Pantalla{
         $("#detallepedido-fraccion").val(this.detalle.fraccion)
         $("#detallepedido-detalle").val(descripcion)
         $("#detallepedido-inst").val(this.detalle.inst)
+    }
+
+    /**
+     * Metodo que muestra una ventana para la busqueda de un producto
+     */
+    showBuscarProducto(){
+
+        //Desplegar la ventana flotante
+
+
     }
 
     //cuando selecciona un producto
