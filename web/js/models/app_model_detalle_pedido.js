@@ -15,6 +15,8 @@ class DetallePedido{
         this.monto=monto
         this.ancho=ancho
         this.alto=alto
+        this.costo=0
+        this.tiempo=0
         this.fraccion=alto*ancho
         this.inst=0
         this.detalle=''//descripcion
@@ -64,6 +66,8 @@ class DetallePedido{
             let precio=parseFloat(this.producto.precio)
             let unxcaja=parseFloat(this.producto.unxCaja)
             let cajaxpallet=parseFloat(this.producto.cajaxPallet)
+            let costoPrto=parseFloat(this.producto.costo)
+            let tiempoPrto=parseFloat(this.producto.tiempo)
 
             if(this.precioDif>0){
                 precio=this.precioDif
@@ -72,31 +76,55 @@ class DetallePedido{
             this.fraccion=this.alto*this.ancho;
 
             let monto=this.producto.precio*cantidad;
+
+            let costo=costoPrto*cantidad* this.fraccion;
+            let tiempo=tiempoPrto*cantidad* this.fraccion;
+
             
             unxcaja=unxcaja!=0?unxcaja:1
             cajaxpallet=cajaxpallet!=0?cajaxpallet:1
 
             switch(this.producto.unidad){
-            case Producto.UNIDAD_PRECIO_UNIDAD:
-                monto=precio*cantidad
-                break
-            case Producto.UNIDAD_PRECIO_CAJA:
-                monto=(precio/unxcaja)*cantidad
-                break
-            case Producto.UNIDAD_PRECIO_PALLET:
-                monto=(precio/cajaxpallet/unxcaja)*cantidad
-                break
-            case Producto.UNIDAD_PRECIO_M2:
-                monto=precio*this.fraccion*cantidad
-                break
-            case Producto.UNIDAD_PRECIO_MLINEAL:
-                monto=precio*cantidad
-                break
+
+                case Producto.UNIDAD_PRECIO_UNIDAD:
+                    monto=precio*cantidad
+                    break
+
+                case Producto.UNIDAD_PRECIO_CAJA:
+                    monto=(precio/unxcaja)*cantidad
+                    costo=(costoPrto/unxcaja)*cantidad
+                    tiempo=(tiempoPrto/unxcaja)*cantidad
+
+                    break
+
+                case Producto.UNIDAD_PRECIO_PALLET:
+                    monto=(precio/cajaxpallet/unxcaja)*cantidad
+                    costo=(costoPrto/cajaxpallet/unxcaja)*cantidad
+                    tiempo=(tiempoPrto/cajaxpallet/unxcaja)*cantidad
+                    break
+
+                case Producto.UNIDAD_PRECIO_M2:
+                    monto=precio*this.fraccion*cantidad
+                    costo=costoPrto*cantidad* this.fraccion;
+                    tiempo=tiempoPrto*cantidad* this.fraccion;
+                    break
+
+
+                case Producto.UNIDAD_PRECIO_MLINEAL:
+                    monto=precio*cantidad
+                    costo=costoPrto*cantidad;
+                    tiempo=tiempoPrto*cantidad;
+                    break
             }
             this.monto=monto.toFixed(2);
+            this.costo=costo.toFixed(2);
+            this.tiempo=tiempo.toFixed(2);
           
        
     }
+
+   
+
     /**TODO */
     toJson(){
         return {id:this.id,

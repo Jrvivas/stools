@@ -63,12 +63,11 @@ class Pantalla{
                $("#field-alto").hide()
                $("#field-ancho").hide()
                $("#field-fraccion").hide()
+               descripcion='producto '+this.productoSel.nombre;
 
 
 
         }
-
-
         $("#detallepedido-cantidad").val(this.detalle.cantidad)
         $("#detallepedido-alto").val(this.detalle.alto)
         $("#detallepedido-ancho").val(this.detalle.ancho)
@@ -76,6 +75,9 @@ class Pantalla{
         $("#detallepedido-fraccion").val(this.detalle.fraccion)
         $("#detallepedido-detalle").val(descripcion)
         $("#detallepedido-inst").val(this.detalle.inst)
+        $("#detallepedido-costo").val(this.detalle.costo)
+        $("#detallepedido-tiempo").val(this.detalle.tiempo)
+
     }
 
     /**
@@ -84,6 +86,7 @@ class Pantalla{
     showBuscarProducto(){
 
         //Desplegar la ventana flotante
+        $("#body-modal").html(Helpers.listFind('Productos','list_productos','pantalla.handlerSelectProducto(this.value)'));
 
 
     }

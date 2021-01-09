@@ -10,7 +10,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div id="body<?=$id?>" class="modal-body">
+      <div id="body-<?=$id?>" class="modal-body">
       <div class="text-center"> 
          <img src="assets/imgs/espera.gif" alt="*" style="width:64px;padding:0px">
       </div>

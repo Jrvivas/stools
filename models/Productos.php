@@ -17,6 +17,7 @@ use Yii;
  * @property string $estado
  * @property float $precio
  * @property float $costo
+ * @property float|0 $tiempo en horas
  * @property float $costoBase
  * @property int $idLista
  * @property string|null $opciones
@@ -49,7 +50,7 @@ class Productos extends \yii\db\ActiveRecord
         return [
             [['id', 'app_idApp', 'nombre','precio', 'costo',], 'required'],
             [['id','idTipoProducto','idLista'], 'integer'],
-            [['precio', 'costo', 'costoBase','costoInstalacion','unxCaja','cajaxPallet'], 'number'],
+            [['precio', 'costo','tiempo', 'costoBase','costoInstalacion','unxCaja','cajaxPallet'], 'number'],
             [['app_idApp', 'codigo'], 'string', 'max' => 124],
             [['nombre', 'urlFoto','categoriaCodigo'], 'string', 'max' => 255],
             [['descripcion', 'opciones'], 'string', 'max' => 512],
@@ -74,6 +75,7 @@ class Productos extends \yii\db\ActiveRecord
             'estado' => 'Estado',
             'precio' => 'Precio',
             'costo' => 'Costo',
+            'tiempo'=> 'Tiempo',
             'costoBase' => 'Costo base',
             'costoInstalacion'=>'Costo de Instalación',
             'idLista' => 'Lista de precio',

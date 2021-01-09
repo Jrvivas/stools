@@ -98,4 +98,27 @@ function isNumber(n)
             console.log('ERROR: '+ambito+'('+mensaje+')');
         }
     }    
+
+
+    class Helpers{
+        /**
+         * Metodo que devuel el txt htmlpara dibujar una lista
+         * @param {string} title 
+         * @param {string} idUlLista identificador del contenido de la lista
+         * @param {string} funcOnKeyUP texto que se escribirá en elente las comillas del evento onkeyup
+         */
+        static listFind(title,idUlLista,funcOnKeyUP){
+            return `<div class="row">
+                        <div class="col-md-12 mt-5 ">
+                            <div class="row marco_app" style="height: 500px; overflow: overlay;">
+                                <h2 class="text-center">${title}</h2>
+                                <div> Buscar <input  class="form-control" type="text" onkeyup="${funcOnKeyUP}"/>
+                                <ul  class="list-group "  style="    margin-top: 10px;" id="${idUlLista}">
+                                </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+        }
+    }
     //------------------------------------------------------------------------

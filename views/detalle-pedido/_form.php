@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\Web\View;
+use app\views\controls\Img;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\DetallePedido */
@@ -43,27 +44,47 @@ $lstProductos=ArrayHelper::map($productos,'id','nombre' )
                 <?= $form->field($model, 'id')->textInput(['disabled' => true]) ?>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-2 col-xs-10">
                 <?= $form->field($model, 'productos_id')->dropDownList($lstProductos,['onchange'=>'pantalla.handlerSelectProducto(this.value)']) ?>
             </div> 
+
+            <div class="col-md-1 col-xs-2"> 
+                     
+                     <button id="botProducto" class="btn btn-primary" data-toggle="modal" data-target="#modal" type="button" onclick="pantalla.showBuscarProducto()" style="margin-top: 15px;"><?= Img::icon('search','','16px','16px')?></button>
+                   
+            </div>
+
             <div class="col-md-6">
                 <div id="detalle-datos-producto"></div>
-            </div>    
+            </div>  
+
             <div class="col-md-2" id="field-cantidad">
                 <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeCantidad(this.value)']) ?>
             </div>    
+
             <div class="col-md-2"  id="field-ancho" >    
                 <?= $form->field($model, 'ancho')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeAncho(this.value)']) ?>
             </div>    
+
             <div class="col-md-2"  id="field-alto">
                 <?= $form->field($model, 'alto')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeAlto(this.value)']) ?>
             </div>    
+
             <div class="col-md-2">
                 <?= $form->field($model, 'detalle')->textInput(['maxlength' => true]) ?>
             </div>    
             <div class="col-md-2">
                 <?= $form->field($model, 'monto')->textInput(['maxlength' => true]) ?>
-            </div>    
+            </div>  
+            <!-- Costo del detalle-->
+            <div class="col-md-2"  id="field-costo">
+                <?= $form->field($model, 'costo')->textInput(['maxlength' => true]) ?>
+            </div>
+            <!-- Tiempo en Horas del pedido-->
+            <div class="col-md-2"  id="field-tiempo">
+                <?= $form->field($model, 'tiempo')->textInput(['maxlength' => true]) ?>
+            </div>  
+
             <div class="col-md-2"  id="field-fraccion">
                 <?= $form->field($model, 'fraccion')->textInput(['maxlength' => true]) ?>
             </div>    
@@ -82,6 +103,6 @@ $lstProductos=ArrayHelper::map($productos,'id','nombre' )
 
 
 
-    <?php  echo $this->render('/controls/_modalView', ['id'=>'Modal','title'=> Html::encode($this->title) ]); ?>
+    <?php  echo $this->render('/controls/_modalView', ['id'=>'modal','title'=> Html::encode($this->title) ]); ?>
     
 </div>

@@ -17,9 +17,9 @@ class Producto{
     static ESTADO_BORRADO='BORRADO'
     static ESTADO_SUSPENSO='SUSPENSO'
 
-    static find(idApp,id,done){
+    static find(idApp,id,idCliente,done){
         if(idApp!=null && !isNaN(id) ){
-            (new Server()).consulta('index.php?r=productos%2Ffind-ajax&idApp='+idApp+'&id='+id,{'_csrf': yii.getCsrfToken()},function(rst){
+            (new Server()).consulta('index.php?r=productos%2Ffind-ajax&idApp='+idApp+'&id='+id+'&idCliente='+idCliente,{'_csrf': yii.getCsrfToken()},function(rst){
                 if(rst){
                     let producto=rst.data;
                         //console.log("Datas :",producto);
@@ -45,6 +45,7 @@ class Producto{
                 estado=Producto.ESTADO_ACTIVO,
                 precio=0,
                 costo=0,
+                tiempo=0,   //tiempo de elavoracion del producto
                 unidad=Producto.UNIDAD_PRECIO_UNIDAD,
                 unxCaja=0,
                 cajaxPallet=0,
