@@ -22,9 +22,9 @@ class Producto{
             (new Server()).consulta('index.php?r=productos%2Ffind-ajax&idApp='+idApp+'&id='+id,{'_csrf': yii.getCsrfToken()},function(rst){
                 if(rst){
                     let producto=rst.data;
-                        console.log("Datas :",producto);
+                        //console.log("Datas :",producto);
                         let objProducto=new Producto();
-                        objProducto.setFromJson(producto)
+                        objProducto.fromJson(producto)
                         if(done){
                             done(objProducto);
                         };
@@ -72,31 +72,20 @@ class Producto{
 }
 
     /**metodo standar  que carga un objeto desde un json*/
-    setFromJson(dataJson){
+    fromJson(dataJson){
+
         if(dataJson){
-            this.id=dataJson.id
-            this.app_idApp=dataJson.app_idApp
-            this.codigo=dataJson.codigo
-            this.nombre=dataJson.nombre
-            this.descripcion=dataJson.descripcion
-            this.urlFoto=dataJson.urlFoto
-            this.estado=dataJson.estado
-            this.precio=dataJson.precio
-            this.costo=dataJson.costo
-            this.unidad=dataJson.unidad
-            this.unxCaja=dataJson.unxCaja
-            this.cajaxPallet=dataJson.cajaxPallet
-            this.idTipoProducto=dataJson.idTipoProducto
-            this.categoriaCodigo=dataJson.categoriaCodigo
-            this.costoBase=dataJson.costoBase
-            this.costoInstalacion=dataJson.costoInstalacion
-            this.opciones=dataJson.opciones// usar
-            this.idLista=dataJson.idLista //
-            //idMarca
-
+            let key;
+            for(key in dataJson){
+                if(dataJson.hasOwnProperty(key)){
+                    this[key] =dataJson[key];
+                  }
+                console.log(key)
+            }
+            
         }else{
-            Msg.error('Producto.setFromJson','la variable pasada es null')
+            Msg.error('Producto.fromJson','la variable pasada es null')
         }
-
     }
+
 }

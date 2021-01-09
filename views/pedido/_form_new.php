@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 use yii\web\View;
 use yii\data\ActiveDataProvider;
 
+use yii\helpers\URL;
+
 //use yii\jui\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\Pedido */
@@ -209,8 +211,24 @@ $this->registerJs($script, View::POS_BEGIN, 'my-options');
                         ['class' => 'yii\grid\SerialColumn'],
                         'cantidad',
                         'detalle',
-                        'monto'
-                        ]
+                        'monto',
+                        [   'class' => 'yii\grid\ActionColumn',
+                            'template'=>'{update}{delete}',
+                            'urlCreator' => function ($action, $model, $key, $index) {
+
+                                if ($action === 'update') {
+                                    $url=Url::to(['detalle-pedido/update','id'=>$model->id,'pedido_id'=>$model->pedido_id,'app_idApp'=>$model->app_idApp]);
+                                    return $url;
+                                }
+                                if ($action === 'delete') {
+                                    $url=Url::to(['detalle-pedido/delete','id'=>$model->id,'pedido_id'=>$model->pedido_id,'app_idApp'=>$model->app_idApp]);
+                                    return $url;
+                                }
+
+                        
+                            }
+                        ],
+                    ]
                                     ])
                 ?>
                 <!-- hasta aca modificando-->

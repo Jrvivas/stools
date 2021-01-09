@@ -101,13 +101,18 @@ class DetallePedidoController extends AppController
     public function actionUpdate($id, $pedido_id, $app_idApp)
     {
         $model = $this->findModel($id, $pedido_id, $app_idApp);
+        $app=Apps::get($app_idApp);
+        $productos=$app->productos;
+      
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'pedido_id' => $model->pedido_id, 'app_idApp' => $model->app_idApp]);
+            return $this->redirect(['pedido/update', 'id' => $model->pedido_id, 'app_idApp' => $model->app_idApp]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'productos'=>$productos
+           
         ]);
     }
 
@@ -124,7 +129,9 @@ class DetallePedidoController extends AppController
     {
         $this->findModel($id, $pedido_id, $app_idApp)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['pedido/update', 'id' => $pedido_id, 'app_idApp' => $app_idApp]);
+
+        //return $this->redirect(['index']);
     }
 
     /**

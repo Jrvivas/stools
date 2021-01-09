@@ -9,7 +9,10 @@ use yii\Web\View;
 /* @var $model app\models\DetallePedido */
 /* @var $form yii\widgets\ActiveForm */
 //la variable _csrf tiene que esta declarada en el layout <---TEMPORAL
+
+$js=$model->toJson();
 $script="var idApp='$model->app_idApp';var _csrf='".Yii::$app->request->csrfToken."';";
+$script.="var detalle=JSON.parse('$js')";
 
 $this->registerJs($script, View::POS_END, 'my-options'); 
 /*Agregamos el js para el manejo de ajax */

@@ -97,6 +97,7 @@ class DetallePedido{
           
        
     }
+    /**TODO */
     toJson(){
         return {id:this.id,
         productos_id:this.producto.id,
@@ -109,5 +110,23 @@ class DetallePedido{
         detalle:this.detalle,
         monto:this.monto,
         estado:this.estado}
+    }
+    /**
+     * Metodo standar  que carga un objeto desde un json
+     * */
+    fromJson(dataJson){
+
+        if(dataJson){
+            let key;
+            for(key in dataJson){
+                if(dataJson.hasOwnProperty(key)){
+                    this[key] =dataJson[key];
+                  }
+                //console.log(key)
+            }
+            
+        }else{
+            Msg.error('DetalleProducto.fromJson','la variable pasada es null')
+        }
     }
 }

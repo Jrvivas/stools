@@ -128,5 +128,9 @@ var pantalla=null;
 window.onload=function() {
     //crear una intancia de la clase Pantalla
     pantalla=new Pantalla(idApp)
+    if(detalle){
+        this.pantalla.detalle.fromJson(detalle);
+        this.pantalla.handlerSelectProducto(detalle.productos_id)
+    }
      
  };
