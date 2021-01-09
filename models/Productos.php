@@ -29,6 +29,8 @@ use Yii;
  */
 class Productos extends \yii\db\ActiveRecord
 {
+   
+    
     /**
      * {@inheritdoc}
      */
@@ -36,6 +38,8 @@ class Productos extends \yii\db\ActiveRecord
     {
         return 'productos';
     }
+
+    
 
     /**
      * {@inheritdoc}

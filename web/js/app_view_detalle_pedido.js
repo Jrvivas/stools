@@ -12,7 +12,9 @@ class Pantalla{
         this.idApp=idApp;
         this.handleSelectProducto=null;
         this.productoSel=null;
-        this.detalle=new DetallePedido()
+        this.detalle=new DetallePedido();
+        this.idCliente=null;
+
     }
     //metodo que refresca la pantalla luego de una modificación
     refresh(){
@@ -37,7 +39,36 @@ class Pantalla{
 
     showDatosCampos(){
         let descripcion='medidas ('+this.detalle.ancho+' X '+this.detalle.alto+') '+this.productoSel.nombre;
-       
+
+        switch(this.productoSel.unidad){
+            case Producto.UNIDAD_PRECIO_UNIDAD:
+                $("#field-alto").hide()
+                $("#field-ancho").hide()
+                $("#field-fraccion").hide()
+                descripcion=this.productoSel.nombre
+                break;
+            case Producto.UNIDAD_PRECIO_M2:
+                $("#field-alto").show()
+                $("#field-ancho").show()
+                $("#field-fraccion").show()
+                descripcion='medidas ('+this.detalle.ancho+'m X '+this.detalle.alto+'m) '+this.productoSel.nombre;
+                break;
+            case Producto.UNIDAD_PRECIO_MLINEAL:
+                $("#field-alto").hide()
+                $("#field-ancho").show()
+                $("#field-fraccion").show()
+                descripcion='medidas ('+this.detalle.ancho+'m X '+this.detalle.alto+'m) '+this.productoSel.nombre;
+                break;    
+            default:
+               $("#field-alto").hide()
+               $("#field-ancho").hide()
+               $("#field-fraccion").hide()
+
+
+
+        }
+
+
         $("#detallepedido-cantidad").val(this.detalle.cantidad)
         $("#detallepedido-alto").val(this.detalle.alto)
         $("#detallepedido-ancho").val(this.detalle.ancho)
@@ -47,14 +78,27 @@ class Pantalla{
         $("#detallepedido-inst").val(this.detalle.inst)
     }
 
+    /**
+     * Metodo que muestra una ventana para la busqueda de un producto
+     */
+    showBuscarProducto(){
+
+        //Desplegar la ventana flotante
+
+
+    }
+
     //cuando selecciona un producto
     handlerSelectProducto=(idProducto)=>{
         if(idProducto>0){
 
             this.msg(this.MSG_ESPERA,true)         //hacemos visible el mensaje de espera
 
-            this.productoSel=Producto.find(this.idApp,idProducto,(producto)=>{
+            this.productoSel=Producto.find(this.idApp,idProducto,this.idCliente,(producto)=>{
                 if(producto){
+
+                    // ### EL producto debe tener el precio de la lista
+                    //     O es pecial segun el cliente
                     this.productoSel=producto
                     this.detalle.producto=producto
                     this.detalle.calcularMonto();// calcula es mosnto para el nuevo producto
@@ -69,19 +113,29 @@ class Pantalla{
             
         }
     }
-
+    /**
+     * Cuando cambia el valor cantidad 
+     */
     handlerChangeCantidad=(newCantidad)=>{
         if(!isNaN(newCantidad)){
             this.detalle.setCantidad(newCantidad*1)   //comvertimos en numero
             this.refresh()
         }
     }
+
+    /**
+     * Cuando cambia el valor Ancho
+     */
     handlerChangeAncho=(newCantidad)=>{
         if(!isNaN(newCantidad)){
             this.detalle.setAncho(newCantidad*1)   //comvertimos en numero
             this.refresh()
         }
     }
+
+    /**
+     * Cuando cambia el valor Alto
+     */
     handlerChangeAlto=(newCantidad)=>{
         if(!isNaN(newCantidad)){
             this.detalle.setAlto(newCantidad*1)   //comvertimos en numero

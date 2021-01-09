@@ -49,13 +49,13 @@ $lstProductos=ArrayHelper::map($productos,'id','nombre' )
             <div class="col-md-6">
                 <div id="detalle-datos-producto"></div>
             </div>    
-            <div class="col-md-2">
+            <div class="col-md-2" id="field-cantidad">
                 <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeCantidad(this.value)']) ?>
             </div>    
-            <div class="col-md-2">    
+            <div class="col-md-2"  id="field-ancho" >    
                 <?= $form->field($model, 'ancho')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeAncho(this.value)']) ?>
             </div>    
-            <div class="col-md-2">
+            <div class="col-md-2"  id="field-alto">
                 <?= $form->field($model, 'alto')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeAlto(this.value)']) ?>
             </div>    
             <div class="col-md-2">
@@ -64,7 +64,7 @@ $lstProductos=ArrayHelper::map($productos,'id','nombre' )
             <div class="col-md-2">
                 <?= $form->field($model, 'monto')->textInput(['maxlength' => true]) ?>
             </div>    
-            <div class="col-md-2">
+            <div class="col-md-2"  id="field-fraccion">
                 <?= $form->field($model, 'fraccion')->textInput(['maxlength' => true]) ?>
             </div>    
             <div class="col-md-2">
@@ -80,4 +80,8 @@ $lstProductos=ArrayHelper::map($productos,'id','nombre' )
 
     <?php ActiveForm::end(); ?>
 
+
+
+    <?php  echo $this->render('/controls/_modalView', ['id'=>'Modal','title'=> Html::encode($this->title) ]); ?>
+    
 </div>
