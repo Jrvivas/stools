@@ -87,6 +87,7 @@ class Pantalla{
 
         //Desplegar la ventana flotante
         $("#body-modal").html(Helpers.listFind('Productos','list_productos','pantalla.handlerSelectProducto(this.value)'));
+        
 
 
     }

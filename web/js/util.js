@@ -102,7 +102,7 @@ function isNumber(n)
 
     class Helpers{
         /**
-         * Metodo que devuel el txt htmlpara dibujar una lista
+         * Metodo que devuelvu el htmlcode para dibujar una inputText  de busqueda y una lista
          * @param {string} title 
          * @param {string} idUlLista identificador del contenido de la lista
          * @param {string} funcOnKeyUP texto que se escribirá en elente las comillas del evento onkeyup

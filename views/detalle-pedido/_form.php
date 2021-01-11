@@ -11,16 +11,29 @@ use app\views\controls\Img;
 /* @var $form yii\widgets\ActiveForm */
 //la variable _csrf tiene que esta declarada en el layout <---TEMPORAL
 
+
+$lstProductos=ArrayHelper::map($productos,'id','nombre' );
+
+
+// Generando la lista de productos ???
+$txtLstPrtos="[";
+foreach($productos as $val){
+    $txtLstPrtos.="{id:".$val['id'].", codigo:'".$val['codigo']."', nombre:'".$val['nombre']."'},";
+}
+$txtLstPrtos.="]";
+
+// obtenelos el modelo en formato Json
 $js=$model->toJson();
-$script="var idApp='$model->app_idApp';var _csrf='".Yii::$app->request->csrfToken."';";
+$script="var idApp='$model->app_idApp'; var productos=$txtLstPrtos;";
+$script.="var _csrf='".Yii::$app->request->csrfToken."';";
 $script.="var detalle=JSON.parse('$js')";
 
 $this->registerJs($script, View::POS_END, 'my-options'); 
 /*Agregamos el js para el manejo de ajax */
-$this->registerJsFile(Yii::getAlias('@web').'/js/app_server.js',['position'=>View::POS_END] ,null);
+$this->registerJsFile(Yii::getAlias('@web').'/js/app_server.js',['position'=>View::POS_END] ,null);//??
 
 /*las funciones utile */
-$this->registerJsFile(Yii::getAlias('@web').'/js/util.js',['position'=>View::POS_END] ,null);
+$this->registerJsFile(Yii::getAlias('@web').'/js/util.js',['position'=>View::POS_END] ,null);//??
 
 /*Agregamos los modelos */
 $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_producto.js',['position'=>View::POS_END] ,null);
@@ -31,7 +44,8 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_detalle_pedido
 /*Agregamos el escript que manejara la pantalla  */
 $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_detalle_pedido.js',['position'=>View::POS_END] ,null);
 
-$lstProductos=ArrayHelper::map($productos,'id','nombre' )
+
+
 
 ?>
 
