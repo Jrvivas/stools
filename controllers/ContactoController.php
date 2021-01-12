@@ -21,14 +21,16 @@ class ContactoController extends AppController
      * Lists all Contacto models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($idApp)
     {
         $searchModel = new ContactoSearch();
+        $searchModel->app_idApp=$idApp;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        //var_dump(json_encode($dataProvider ));
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'idApp'=>$idApp,
         ]);
     }
 

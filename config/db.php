@@ -6,9 +6,9 @@ return [
     'username' => 'sigma75',
     'password' => 'Sigma1975',
     'charset' => 'latin1',*/
-    'dsn' => 'mysql:host=localhost;dbname=sigma75_apps',
+    'dsn' => 'mysql:host=localhost:3306;dbname=sigma75_apps',
     'username' => 'root',
-    'password' => '',
+    'password' => 'javier123456',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)
