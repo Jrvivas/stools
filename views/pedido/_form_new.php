@@ -167,9 +167,7 @@ $this->registerJs($script, View::POS_BEGIN, 'my-options');
            <!-- <div class="row " style="font-size:1.5em; background-color:rgba(255,255,255,0.5); border-style:solid; border-width:1px; border-radius:5px; border-color:var(--primary); padding:10px; margin:5px">-->
          <div class="row marcoItems" >
 
-                <div class="col-md-2">
-                    <?= $form->field($model, 'id')->textInput(['disabled' => true]) ?>
-                </div>
+                
 
                 <div class="col-md-4">
                     <?= $form->field($model, 'fechaIni')->textInput(['type' => 'date', 'value' => (new DateTime($model->fechaIni))->format('Y-m-d')]) ?>
@@ -193,7 +191,7 @@ $this->registerJs($script, View::POS_BEGIN, 'my-options');
 
 
                 <div class=" col-md-4">
-                    <?= $form->field($model, 'delivery')->dropDownList(['0' => 'No', '1' => 'Si'])->label('Viaje'); ?>
+                    <?= $form->field($model, 'delivery')->dropDownList(['0' => 'No', '1' => 'Si'])->label('Entrega a domicilio'); ?>
                 </div>
 
                 <div class="col-md-12">
@@ -250,7 +248,10 @@ $this->registerJs($script, View::POS_BEGIN, 'my-options');
                     <?= $form->field($model, 'descuento')->textInput(['maxlength' => true, 'onchange' => 'calcularMostrarTotalPedido()'])->label('Descuento ($ / %)') ?>
                 </div>
                 <div class="col-md-3">
-                    <?= $form->field($model, 'monto')->textInput(['maxlength' => true])->label('Monto $') ?>
+                    <?= $form->field($model, 'monto')->textInput(['maxlength' => true,'disabled' => true])->label('Monto $') ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'costo')->textInput(['maxlength' => true,'disabled' => true])->label('Costo $') ?>
                 </div>
                 <div class="col-md-3">
                     <?= $form->field($model, 'pago')->textInput(['maxlength' => true, 'onchange' => 'calcularMostrarTotalPedido()'])->label('Pagos $') ?>
@@ -273,7 +274,7 @@ $this->registerJs($script, View::POS_BEGIN, 'my-options');
             <div class="form-group">
                 <?= Html::a('Cancelar', ['pedido/index-react', 'idApp' => $model->app_idApp], ['class' => 'btn btn-danger  mx-2', 'style' => 'font-size:1.5em;']) ?>
 
-                <button class="btn btn-success" type="button" onclick="botNewEnviar(this)" style="font-size:1.5em;"  >Aceptar</button>
+                <?= Html::submitButton('Aceptar', ['class' => 'btn btn-success']) ?>
 
             </div>
 

@@ -38,7 +38,7 @@ class DetallePedido extends \yii\db\ActiveRecord
         return [
             [['id', 'app_idApp', 'pedido_id','productos_id','cantidad','monto'], 'required'],
             [['id','pedido_id','productos_id','inst'], 'integer'],
-            [['cantidad','monto', 'alto', 'ancho','fraccion'], 'number'],
+            [['cantidad','monto','costo', 'alto', 'ancho','fraccion'], 'number'],
             [['app_idApp'], 'string', 'max' => 124],
             [['detalle'], 'string', 'max' => 512],
             [['id', 'app_idApp','pedido_id'], 'unique', 'targetAttribute' => ['id', 'app_idApp','pedido_id']],
@@ -59,6 +59,7 @@ class DetallePedido extends \yii\db\ActiveRecord
             'detalle' => 'Descripcion',
             'cantidad'=>'Cantidad',
             'monto' => 'Monto',
+            'costo'=>'Costo',
             'alto' => 'Alto',
             'ancho'=>'Ancho',
             'inst'=>'Instalación',

@@ -159,7 +159,7 @@ class PedidoController extends  AppController
                         //return $this->render('@app\view\detalle-pedido\create', ['model' => $modelDetalle, 'idApp' => $idApp]);
                         return $this->redirect(["detalle-pedido/create",'idPedido' =>$model->id, 'idApp' => $idApp]);
                     }
-                    return $this->redirect(['index', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+                    return $this->redirect(['index', 'id' => $model->id, 'idApp' => $model->app_idApp]);
             }
             $model->id=null;
            
@@ -181,6 +181,7 @@ class PedidoController extends  AppController
     public function actionUpdate($id, $app_idApp)
     {
         $model = $this->findModel($id, $app_idApp);
+        $model->calcular();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if($model->accion==="newDetalle"){
@@ -189,7 +190,7 @@ class PedidoController extends  AppController
                 $modelDetalle->app_idApp=$app_idApp;
                 return $this->redirect(["detalle-pedido/create",'idPedido' =>$model->id, 'idApp' => $app_idApp]);
             }
-            return $this->redirect(['index', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+            return $this->redirect(['index', 'id' => $model->id, 'idApp' => $model->app_idApp]);
         }
 
         return $this->render('update', [

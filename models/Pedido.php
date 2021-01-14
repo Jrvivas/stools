@@ -86,7 +86,7 @@ class Pedido extends \yii\db\ActiveRecord
             [['id', 'contacto_id', 'idResponsable','delivery','prioridad','idModifico'], 'integer'],
             ['idModifico','default','value'=>null],
             [['fechaIni', 'fechaFin', 'fechaEntrega','accion'], 'safe'],
-            [['monto','pago','saldo'], 'number'],
+            [['monto','pago','saldo','costo'], 'number'],
             [['app_idApp','nombre'], 'string', 'max' => 124],
             [['descuento', 'impuesto'], 'string', 'max' => 45],
             [['comentarios'], 'string', 'max' => 512],
@@ -105,6 +105,7 @@ class Pedido extends \yii\db\ActiveRecord
             $this->pago = 0;
             $this->saldo = 0;
             $this->monto = 0;
+            $this->costo=0;
             $this->estado = 'ESPERA';
             $this->prioridad = 0; //Normal
 
@@ -128,6 +129,7 @@ class Pedido extends \yii\db\ActiveRecord
             'delivery' => 'Delivery',
             'comentarios' => 'Comentarios',
             'monto' => 'Monto',
+            'costo'=>'Costo',
             'pago' => 'Pagado',
             'Saldo' => 'Saldo',
             'descuento' => 'Descuento',
@@ -200,6 +202,17 @@ class Pedido extends \yii\db\ActiveRecord
      */
     public function maxId($id){
         return $this->find()->where(['app_idApp'=>$id])->max('id');
+     }
+
+
+     public function calcular(){
+         $this->monto=0;
+         $this->costo=0;
+         foreach($this->detallesPedido as $d){
+                $this->monto+=$d->monto;
+                $this->costo+=$d->costo;
+         }
+         $this->saldo=$this->monto - $this->pago;
      }
 
     /**

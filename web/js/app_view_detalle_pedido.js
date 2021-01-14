@@ -1,19 +1,16 @@
 //@require util 
 //@require models/app_model_producto
+//@require models/app_model_view
 
-
-class Pantalla{
-    static MSG_ERROR=1
-    static MSG_ALERTA=2
-    static MSG_PELIGRO=3
-    static MSG_ESPERA=4
+class Pantalla extends View{
 
     constructor(idApp){
-        this.idApp=idApp;
+        super(idApp)
         this.handleSelectProducto=null;
         this.productoSel=null;
         this.detalle=new DetallePedido();
         this.idCliente=null;
+        this.productos=[];
 
     }
     //metodo que refresca la pantalla luego de una modificación
@@ -30,10 +27,11 @@ class Pantalla{
     }
 
     showDatosProducto(){
+        let txtprecio=this.productoSel.precioEspecial==0?'$'+this.productoSel.precio:'$<strike>'+this.productoSel.precio+'</strike>&nbsp;<strong>$'+this.productoSel.precioEspecial+'</strong>'
         let textHtml=`<h5>Codigo:${this.productoSel.codigo}</h5> 
                         <span>${this.productoSel.descripcion}</span>
-                        <h4>Precio:$${this.productoSel.precio}</h4>
-                        <span>Unidad:${this.productoSel.unidad}</span>`
+                        <h4>Precio:${txtprecio}</h4>
+                        <span>Unidad:${this.productoSel.unidad}</span><span>&nbsp;-&nbsp;Stock:<strong>${this.productoSel.stockActual}</strong></span>`
         $("#detalle-datos-producto").html(textHtml)
     }
 
@@ -50,13 +48,13 @@ class Pantalla{
             case Producto.UNIDAD_PRECIO_M2:
                 $("#field-alto").show()
                 $("#field-ancho").show()
-                $("#field-fraccion").show()
+               // $("#field-fraccion").show()
                 descripcion='medidas ('+this.detalle.ancho+'m X '+this.detalle.alto+'m) '+this.productoSel.nombre;
                 break;
             case Producto.UNIDAD_PRECIO_MLINEAL:
                 $("#field-alto").hide()
                 $("#field-ancho").show()
-                $("#field-fraccion").show()
+               // $("#field-fraccion").show()
                 descripcion='medidas ('+this.detalle.ancho+'m X '+this.detalle.alto+'m) '+this.productoSel.nombre;
                 break;    
             default:
@@ -86,7 +84,8 @@ class Pantalla{
     showBuscarProducto(){
 
         //Desplegar la ventana flotante
-        $("#body-modal").html(Helpers.listFind('Productos','list_productos','pantalla.handlerSelectProducto(this.value)'));
+        $("#body-modal").html(Helpers.listFind('Productos','list_productos',`pantalla.listarProductos('list_productos')`));
+        this.listarProductos('list_productos')
         
 
 
@@ -98,11 +97,14 @@ class Pantalla{
 
             this.msg(this.MSG_ESPERA,true)         //hacemos visible el mensaje de espera
 
+            $("#detallepedido-productos_id").val(idProducto)
+            
             this.productoSel=Producto.find(this.idApp,idProducto,this.idCliente,(producto)=>{
                 if(producto){
 
                     // ### EL producto debe tener el precio de la lista
                     //     O es pecial segun el cliente
+                    
                     this.productoSel=producto
                     this.detalle.producto=producto
                     this.detalle.calcularMonto();// calcula es mosnto para el nuevo producto
@@ -146,37 +148,26 @@ class Pantalla{
             this.refresh()
         }
     }
-    
-    /**
-     * Metodo que maneja los mensaje en la pantalla
-     * @param {int} codigoMsg 
-     * @param {mix} option 
-     */
-    msg(codigoMsg,option){
-        switch(codigoMsg){
-            case Pantalla.MSG_ERROR:
-                 //TODO
-                 console.log('ERROR: ' + option);
-                 break;
-            case Pantalla.MSG_ALERTA:
-                 //TODO
-                 alert('Mensaje: ' + option);
-                 break;  
-            case Pantalla.MSG_PELIGRO:
-                 //TODO
-                 alert('¡PELIGRO!: ' + option);
-                 break;
-            case Pantalla.MSG_ESPERA:
-                  //TODO
-                  if(option===true){
-                      console.log('Esperando...')
-                  }else{
-                      console.log('Fin de espera')
-                  }
-                  break;            
-        }
 
+
+
+    /**
+     * Método que lista los productos filtrado según la palabra escrita en el área de texto
+     * @param {string} idLst Identificador del control de lista
+     */
+    listarProductos(idLst){
+         $("#"+idLst).html('')
+         let filtro=$("#textBuscar").val().toUpperCase();
+         let ptosFiltrado=this.productos.filter(function(pto){
+            return pto.nombre.toUpperCase().indexOf(filtro)>-1||pto.nombre.toUpperCase().indexOf(filtro)>-1||pto.codigo.toUpperCase().indexOf(filtro)>-1 })
+          ptosFiltrado.forEach(element => {
+            $("#"+idLst).append(`<li  id="p-${element.id}"class="list-group-item list-group-item-success" data-toggle="modal" data-target="#modal"  onclick="pantalla.handlerSelectProducto(${element.id})">[<strong>${element.codigo}</strong>]${element.nombre}</li>`)
+             
+          
+        });
     }
+    
+
 
 }
 
@@ -185,10 +176,13 @@ var pantalla=null;
 //Despues de cargar pantalla
 window.onload=function() {
     //crear una intancia de la clase Pantalla
-    pantalla=new Pantalla(idApp)
+    pantalla=new Pantalla(idApp);
+    pantalla.productos=productos ;       //Lista de producto que se obtiene en la vista
+    pantalla.idCliente=idCliente;       //Variabla global pasada por el modelo
     if(detalle){
-        this.pantalla.detalle.fromJson(detalle);
-        this.pantalla.handlerSelectProducto(detalle.productos_id)
+        pantalla.detalle.fromJson(detalle);    //json detalle  que se obtiene en la vista
+        pantalla.handlerSelectProducto(detalle.productos_id)
+        
     }
      
  };

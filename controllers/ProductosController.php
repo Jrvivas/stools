@@ -8,6 +8,7 @@ use app\models\ProductosSearch;
 use app\models\AppController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Precio;
 
 /**
  * ProductosController implements the CRUD actions for Productos model.
@@ -313,8 +314,16 @@ class ProductosController extends AppController
 
     public function actionFindAjax($idApp,$id,$idCliente=null){
         $pto=$this->findModel($id, $idApp);
-        if (isset($idCliente)){
 
+        
+        if (isset($idCliente)){
+            $precio=Precio::findOne(['idCliente'=>$idCliente,'app_idApp'=>$idApp,'idProducto'=>$id]);
+            if($precio){
+                $pto->precioEspecial=$precio->precio;
+            }
+            if($pto->stock){
+                $pto->stockActual=$pto->stock->cantidad;
+            }
         }
 
         if (Yii::$app->request->isAjax) {
