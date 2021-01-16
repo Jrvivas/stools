@@ -99,7 +99,9 @@ function isNumber(n)
         }
     }    
 
-
+    /**
+     * Helper de codigos preformateados html
+     */
     class Helpers{
         /**
          * Metodo que devuelvu el htmlcode para dibujar una inputText  de busqueda y una lista
@@ -112,7 +114,7 @@ function isNumber(n)
                         <div class="col-md-12 mt-5 ">
                             <div class="row marco_app" style="height: 500px; overflow: overlay;">
                                 <h2 class="text-center">${title}</h2>
-                                <div> Buscar <input  class="form-control" type="text" onkeyup="${funcOnKeyUP}"/>
+                                <div> Buscar <input  id="textBuscar" class="form-control" type="text" onkeyup="${funcOnKeyUP}"/>
                                 <ul  class="list-group "  style="    margin-top: 10px;" id="${idUlLista}">
                                 </ul>
                                 </div>

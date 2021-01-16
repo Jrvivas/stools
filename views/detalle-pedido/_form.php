@@ -24,16 +24,18 @@ $txtLstPrtos.="]";
 
 // obtenelos el modelo en formato Json
 $js=$model->toJson();
-$script="var idApp='$model->app_idApp'; var productos=$txtLstPrtos;";
+$script="var idApp='$model->app_idApp'; ";
+$script.="var idCliente=".$model->pedido->contacto_id.";";
+$script.="var productos=$txtLstPrtos;";
 $script.="var _csrf='".Yii::$app->request->csrfToken."';";
 $script.="var detalle=JSON.parse('$js')";
 
 $this->registerJs($script, View::POS_END, 'my-options'); 
 /*Agregamos el js para el manejo de ajax */
-$this->registerJsFile(Yii::getAlias('@web').'/js/app_server.js',['position'=>View::POS_END] ,null);//??
+//$this->registerJsFile(Yii::getAlias('@web').'/js/app_server.js',['position'=>View::POS_END] ,null);//??
 
 /*las funciones utile */
-$this->registerJsFile(Yii::getAlias('@web').'/js/util.js',['position'=>View::POS_END] ,null);//??
+//$this->registerJsFile(Yii::getAlias('@web').'/js/util.js',['position'=>View::POS_END] ,null);//??
 
 /*Agregamos los modelos */
 $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_producto.js',['position'=>View::POS_END] ,null);
@@ -41,6 +43,8 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_producto.js',[
 /*Agregamos los modelos */
 $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_detalle_pedido.js',['position'=>View::POS_END] ,null);
 
+/*Agregamos los modelos */
+$this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_view.js',['position'=>View::POS_END] ,null);
 /*Agregamos el escript que manejara la pantalla  */
 $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_detalle_pedido.js',['position'=>View::POS_END] ,null);
 
@@ -54,57 +58,51 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_detalle_pedido.js',['p
     <?php $form = ActiveForm::begin(); ?>
     <div class="row marcoItems" >
 
-            <div class="col-md-2">
-                <?= $form->field($model, 'id')->textInput(['disabled' => true]) ?>
-            </div>
-
-            <div class="col-md-2 col-xs-10">
-                <?= $form->field($model, 'productos_id')->dropDownList($lstProductos,['onchange'=>'pantalla.handlerSelectProducto(this.value)']) ?>
+            <div class="col-md-6 col-xs-9">
+                <?= $form->field($model, 'productos_id')->dropDownList($lstProductos,['onchange'=>'pantalla.handlerSelectProducto(this.value)' ,'prompt' => '-Elegir Producto-'])->label('Producto') ?>
             </div> 
 
-            <div class="col-md-1 col-xs-2"> 
+            <div class="col-md-1 col-xs-3"> 
                      
                      <button id="botProducto" class="btn btn-primary" data-toggle="modal" data-target="#modal" type="button" onclick="pantalla.showBuscarProducto()" style="margin-top: 15px;"><?= Img::icon('search','','16px','16px')?></button>
                    
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-5 col-xs-12">
                 <div id="detalle-datos-producto"></div>
             </div>  
 
-            <div class="col-md-2" id="field-cantidad">
+            <div class="col-md-2  col-xs-12" id="field-cantidad">
                 <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeCantidad(this.value)']) ?>
             </div>    
 
-            <div class="col-md-2"  id="field-ancho" >    
+            <div class="col-md-2  col-xs-12"  id="field-ancho" >    
                 <?= $form->field($model, 'ancho')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeAncho(this.value)']) ?>
             </div>    
 
-            <div class="col-md-2"  id="field-alto">
+            <div class="col-md-2  col-xs-12"  id="field-alto">
                 <?= $form->field($model, 'alto')->textInput(['maxlength' => true,'onchange'=>'pantalla.handlerChangeAlto(this.value)']) ?>
             </div>    
 
-            <div class="col-md-2">
+            <div class="col-md-6  col-xs-12">
                 <?= $form->field($model, 'detalle')->textInput(['maxlength' => true]) ?>
             </div>    
-            <div class="col-md-2">
+            <div class="col-md-2  col-xs-12">
                 <?= $form->field($model, 'monto')->textInput(['maxlength' => true]) ?>
             </div>  
             <!-- Costo del detalle-->
-            <div class="col-md-2"  id="field-costo">
+            <div class="col-md-2  col-xs-12"  id="field-costo">
                 <?= $form->field($model, 'costo')->textInput(['maxlength' => true]) ?>
             </div>
             <!-- Tiempo en Horas del pedido-->
-            <div class="col-md-2"  id="field-tiempo">
+            <div class="col-md-2  col-xs-12"  id="field-tiempo">
                 <?= $form->field($model, 'tiempo')->textInput(['maxlength' => true]) ?>
             </div>  
 
-            <div class="col-md-2"  id="field-fraccion">
+            <div class="col-md-2  col-xs-12"  id="field-fraccion">
                 <?= $form->field($model, 'fraccion')->textInput(['maxlength' => true]) ?>
             </div>    
-            <div class="col-md-2">
-                <?= $form->field($model, 'inst')->textInput() ?>
-            </div>  
+          
     </div>   
 
 

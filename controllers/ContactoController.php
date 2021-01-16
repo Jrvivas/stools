@@ -172,6 +172,40 @@ class ContactoController extends AppController
 
 
     /**
+     * Devuelve un json con los datos del contacto solicitado
+     * @return json
+     */
+    public function actionFindAjax($idApp,$id){
+        $cto=$this->findModel($id, $idApp);
+ 
+        if (Yii::$app->request->isAjax) {
+           
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+
+            if($cto){
+                $data=$cto;
+
+                return [
+                    'error'=>0,
+                    'data'=>$data,
+                    'message' => 'ok',
+                    ];
+
+            } else {
+                return [
+                    'error'=>1,
+                    'data'=>'',
+                    'message' => 'Problemas para obtener el Contacto',
+                ];
+            }
+
+
+        }
+    }
+
+
+    /**
      * Finds the Contacto model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id

@@ -86,7 +86,7 @@ class Pedido extends \yii\db\ActiveRecord
             [['id', 'contacto_id', 'idResponsable','delivery','prioridad','idModifico'], 'integer'],
             ['idModifico','default','value'=>null],
             [['fechaIni', 'fechaFin', 'fechaEntrega','accion'], 'safe'],
-            [['monto','pago','saldo'], 'number'],
+            [['monto','pago','saldo','costo'], 'number'],
             [['app_idApp','nombre'], 'string', 'max' => 124],
             [['descuento', 'impuesto'], 'string', 'max' => 45],
             [['comentarios'], 'string', 'max' => 512],
@@ -105,7 +105,8 @@ class Pedido extends \yii\db\ActiveRecord
             $this->pago = 0;
             $this->saldo = 0;
             $this->monto = 0;
-            $this->estado = 'ESPERA';
+            $this->costo=0;
+            $this->estado =Pedido::$_ESTADO_PRESUPUESTO;
             $this->prioridad = 0; //Normal
 
     }
@@ -128,6 +129,7 @@ class Pedido extends \yii\db\ActiveRecord
             'delivery' => 'Delivery',
             'comentarios' => 'Comentarios',
             'monto' => 'Monto',
+            'costo'=>'Costo',
             'pago' => 'Pagado',
             'Saldo' => 'Saldo',
             'descuento' => 'Descuento',
@@ -202,6 +204,22 @@ class Pedido extends \yii\db\ActiveRecord
         return $this->find()->where(['app_idApp'=>$id])->max('id');
      }
 
+
+     public function calcular(){
+         $this->monto=0;
+         $this->costo=0;
+         $descuento=$this->descuento;
+         $recargo=$this->impuesto;
+
+         foreach($this->detallesPedido as $d){
+                $this->monto+=$d->monto;
+                $this->costo+=$d->costo;
+         }
+         $this->save();
+        
+
+     }
+
     /**
      * Metodo que indica si el el Pedido es editable o no
      * @return boolean
@@ -243,6 +261,14 @@ class Pedido extends \yii\db\ActiveRecord
             return Pedido::$_FECHA_NO_NECESARIA;
         }
         
+    }
+
+
+    /**
+      * Devuelve el objeto en un json cargado
+      */
+      public function toJson(){
+        return  json_encode($this->find()->where(['id'=>$this->id,'app_idApp'=>$this->app_idApp])->asArray()->one());
     }
     //------------------------------------------------
 

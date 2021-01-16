@@ -40,6 +40,9 @@ class Productos extends \yii\db\ActiveRecord
         return 'productos';
     }
 
+     public $precioEspecial=0;
+     public $stockActual=0;
+
     
 
     /**
@@ -50,7 +53,7 @@ class Productos extends \yii\db\ActiveRecord
         return [
             [['id', 'app_idApp', 'nombre','precio', 'costo',], 'required'],
             [['id','idTipoProducto','idLista'], 'integer'],
-            [['precio', 'costo','tiempo', 'costoBase','costoInstalacion','unxCaja','cajaxPallet'], 'number'],
+            [['precio', 'costo','tiempo', 'costoBase','costoInstalacion','unxCaja','cajaxPallet','precioEspecial','stockActual'], 'number'],
             [['app_idApp', 'codigo'], 'string', 'max' => 124],
             [['nombre', 'urlFoto','categoriaCodigo'], 'string', 'max' => 255],
             [['descripcion', 'opciones'], 'string', 'max' => 512],
@@ -74,6 +77,7 @@ class Productos extends \yii\db\ActiveRecord
             'urlFoto' => 'Foto',
             'estado' => 'Estado',
             'precio' => 'Precio',
+            'precioEspecial'=>'Precio Especial',
             'costo' => 'Costo',
             'tiempo'=> 'Tiempo',
             'costoBase' => 'Costo base',
@@ -83,8 +87,14 @@ class Productos extends \yii\db\ActiveRecord
             'unidad' => 'Unidad',
             'unxCaja'=>'Productos x Caja',
             'cajaxPallet'=>'Cajas por Pallet',
-            'categoriaCodigo'=>'Categoria'
+            'categoriaCodigo'=>'Categoria',
+            'stockActual'=>'Stock'
         ];
+    }
+
+    public function fields()
+    {
+            return array_merge(parent::fields(),['precioEspecial','stockActual']); 
     }
 
     /**

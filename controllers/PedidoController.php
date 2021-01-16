@@ -54,6 +54,7 @@ class PedidoController extends  AppController
 
         /**
      * Lists all Pedido models.
+     * @deprecated
      * @return mixed
      */
     public function actionIndexReact($idApp)
@@ -86,7 +87,7 @@ class PedidoController extends  AppController
 
     }
 
- public function actionAjaxPedido($idApp)
+    public function actionAjaxPedido($idApp)
     {
 
         $searchModel = new PedidoSearchJson();
@@ -143,6 +144,7 @@ class PedidoController extends  AppController
             if(!isset($model->nombre)){
                 $fecha= date("Y-m-d h:i:sa");
                 $model->nombre='Pedido_'.$model->cliente->nombre.'_'.$fecha;
+                $model->idResponsable=Yii::$app->user->identity->id;
  
             }
             if(!isset($model->id)){
@@ -159,7 +161,7 @@ class PedidoController extends  AppController
                         //return $this->render('@app\view\detalle-pedido\create', ['model' => $modelDetalle, 'idApp' => $idApp]);
                         return $this->redirect(["detalle-pedido/create",'idPedido' =>$model->id, 'idApp' => $idApp]);
                     }
-                    return $this->redirect(['index', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+                    return $this->redirect(['index', 'id' => $model->id, 'idApp' => $model->app_idApp]);
             }
             $model->id=null;
            
@@ -181,6 +183,10 @@ class PedidoController extends  AppController
     public function actionUpdate($id, $app_idApp)
     {
         $model = $this->findModel($id, $app_idApp);
+        $model->calcular();
+        //var_dump($model);
+
+        $model->idModifico=Yii::$app->user->identity->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if($model->accion==="newDetalle"){
@@ -189,7 +195,7 @@ class PedidoController extends  AppController
                 $modelDetalle->app_idApp=$app_idApp;
                 return $this->redirect(["detalle-pedido/create",'idPedido' =>$model->id, 'idApp' => $app_idApp]);
             }
-            return $this->redirect(['index', 'id' => $model->id, 'app_idApp' => $model->app_idApp]);
+            return $this->redirect(['index', 'id' => $model->id, 'idApp' => $model->app_idApp]);
         }
 
         return $this->render('update', [
@@ -201,6 +207,7 @@ class PedidoController extends  AppController
      * Creates a new Pedido model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @deprecated
      */
     public function actionCreateAjax($idApp)
     {

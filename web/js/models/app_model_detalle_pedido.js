@@ -58,16 +58,19 @@ class DetallePedido{
         }
     }
 
+   
+
 
 
     calcularMonto(){
        
             let cantidad=parseFloat(this.cantidad);
-            let precio=parseFloat(this.producto.precio)
+            let precio=this.producto.precioEspecial==0?parseFloat(this.producto.precio):parseFloat(this.producto.precioEspecial);
             let unxcaja=parseFloat(this.producto.unxCaja)
             let cajaxpallet=parseFloat(this.producto.cajaxPallet)
             let costoPrto=parseFloat(this.producto.costo)
             let tiempoPrto=parseFloat(this.producto.tiempo)
+            
 
             if(this.precioDif>0){
                 precio=this.precioDif
@@ -88,6 +91,7 @@ class DetallePedido{
 
                 case Producto.UNIDAD_PRECIO_UNIDAD:
                     monto=precio*cantidad
+                
                     break
 
                 case Producto.UNIDAD_PRECIO_CAJA:
