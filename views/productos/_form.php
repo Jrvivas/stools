@@ -156,4 +156,4 @@ $this->registerJs($script, View::POS_END, 'my-options');
     <?php ActiveForm::end(); ?>
 
 </div>
-<?php  echo $this->render('/controls/_modalView', ['id' => 'ModalProducto','titulo'=>'Opciones del producto']); ?>
+<?php  echo $this->render('/controls/_modalView', ['id' => 'ModalProducto','title'=>'Opciones del producto']); ?>

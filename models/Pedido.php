@@ -106,7 +106,7 @@ class Pedido extends \yii\db\ActiveRecord
             $this->saldo = 0;
             $this->monto = 0;
             $this->costo=0;
-            $this->estado = 'ESPERA';
+            $this->estado =Pedido::$_ESTADO_PRESUPUESTO;
             $this->prioridad = 0; //Normal
 
     }
@@ -208,11 +208,16 @@ class Pedido extends \yii\db\ActiveRecord
      public function calcular(){
          $this->monto=0;
          $this->costo=0;
+         $descuento=$this->descuento;
+         $recargo=$this->impuesto;
+
          foreach($this->detallesPedido as $d){
                 $this->monto+=$d->monto;
                 $this->costo+=$d->costo;
          }
-         $this->saldo=$this->monto - $this->pago;
+         $this->save();
+        
+
      }
 
     /**
@@ -256,6 +261,14 @@ class Pedido extends \yii\db\ActiveRecord
             return Pedido::$_FECHA_NO_NECESARIA;
         }
         
+    }
+
+
+    /**
+      * Devuelve el objeto en un json cargado
+      */
+      public function toJson(){
+        return  json_encode($this->find()->where(['id'=>$this->id,'app_idApp'=>$this->app_idApp])->asArray()->one());
     }
     //------------------------------------------------
 

@@ -55,13 +55,16 @@ if($cliente){
     $lblCliente=$cliente->nombre.'('.$cliente->empresa.')';
 }
 
-$script = "var clientes=" . json_encode($clientes);
+$script = "var clientes=" . json_encode($clientes).";";
+$script.= "var pedido=".json_encode($model->toJson()).";";
 //===================Registramos los script necesarios
 $this->registerJs($script, View::POS_END, 'my-options'); 
 /*Agregamos los modelos */
 $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_view.js',['position'=>View::POS_END] ,null);
-/*Agregamos el escript que manejara la pantalla  */
+/*Agregamos el escript que manejara los contactos  */
 $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_contacto.js',['position'=>View::POS_END] ,null);
+/*Agregamos el escript que manejara pedido  */
+$this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_pedido.js',['position'=>View::POS_END] ,null);
 /*Agregamos el escript que manejara la pantalla  */
 $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_pedido.js',['position'=>View::POS_END] ,null);
 ?>
@@ -75,6 +78,11 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_pedido.js',['position'
          <div class="row marcoItems" >
 
                 
+
+                 <div class="col-md-4">
+                    <?= $form->field($model, 'estado')->dropDownList($estados, ['disabled' => $editable ? false : true,'style'=>'font-size: 1.2em;font-weight: bold;']) ?>
+                </div>
+
 
                 <div class="col-md-4">
                     <?= $form->field($model, 'fechaIni')->textInput(['type' => 'date', 'value' => (new DateTime($model->fechaIni))->format('Y-m-d')]) ?>
@@ -148,11 +156,11 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_pedido.js',['position'
                 <?php } ?>
 
                 <div class="col-md-3">
-                    <?= $form->field($model, 'impuesto')->textInput(['maxlength' => true, 'onchange' => 'calcularMostrarTotalPedido()'])->label('Recargo ($ / %)') ?>
+                    <?= $form->field($model, 'impuesto')->textInput(['maxlength' => true, 'onchange' => 'pantalla.handlerChangeImpuesto()'])->label('Recargo ($ / %)') ?>
                 </div>
 
                 <div class="col-md-3">
-                    <?= $form->field($model, 'descuento')->textInput(['maxlength' => true, 'onchange' => 'calcularMostrarTotalPedido()'])->label('Descuento ($ / %)') ?>
+                    <?= $form->field($model, 'descuento')->textInput(['maxlength' => true, 'onchange' => 'pantalla.handlerChangeDescuento()'])->label('Descuento ($ / %)') ?>
                 </div>
                 <div class="col-md-3">
                     <?= $form->field($model, 'monto')->textInput(['maxlength' => true,'disabled' => true])->label('Monto $') ?>
@@ -161,7 +169,7 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_pedido.js',['position'
                     <?= $form->field($model, 'costo')->textInput(['maxlength' => true,'disabled' => true])->label('Costo $') ?>
                 </div>
                 <div class="col-md-3">
-                    <?= $form->field($model, 'pago')->textInput(['maxlength' => true, 'onchange' => 'calcularMostrarTotalPedido()'])->label('Pagos $') ?>
+                    <?= $form->field($model, 'pago')->textInput(['maxlength' => true, 'onchange' => 'pantalla.handlerChangePago()'])->label('Pagos $') ?>
                 </div>
                 <div class="col-md-3">
                     <?= $form->field($model, 'saldo')->textInput(['maxlength' => true, 'disabled' => true])->label('Saldos $') ?>
@@ -171,22 +179,17 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_pedido.js',['position'
                     <?= $form->field($model, 'prioridad')->dropDownList($prioridades) ?>
                 </div>
 
-
-                <div class="col-md-4">
-                    <?= $form->field($model, 'estado')->dropDownList($estados, ['disabled' => $editable ? false : true]) ?>
-                </div>
-
             </div>
 
             <div class="form-group">
-                <?= Html::a('Cancelar', ['pedido/index-react', 'idApp' => $model->app_idApp], ['class' => 'btn btn-danger  mx-2', 'style' => 'font-size:1.5em;']) ?>
+                <?= Html::a('Cancelar', ['pedido/index', 'idApp' => $model->app_idApp], ['class' => 'btn btn-danger  mx-2', 'style' => 'font-size:1.5em;']) ?>
 
                 <?= Html::submitButton('Aceptar', ['class' => 'btn btn-success']) ?>
 
             </div>
 
             <?php ActiveForm::end(); ?>
-            <button id="botImprimir" class="btn btn-primary" data-toggle="modal" data-target="#ModalPedidos" type="button" onclick="generarComprobante()">Imprimir</button>
+            <button id="botImprimir" class="btn btn-primary" data-toggle="modal" data-target="#ModalPedidos" type="button" onclick="pantalla.handlerImprimir()">Imprimir</button>
 
         </div>
     </div>
