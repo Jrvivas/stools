@@ -27,7 +27,7 @@ class DetallePedido extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'detallePedido';
+        return 'detallepedido';
     }
 
     /**

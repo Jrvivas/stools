@@ -63,6 +63,7 @@ class ContactoController extends AppController
 
         return $this->render('create', [
             'model' => $model,
+            'app_idApp'=>$model->app_idApp
         ]);
     }
 
