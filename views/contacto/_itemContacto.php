@@ -18,9 +18,9 @@ if($model->cliente=='SI'){
 <div class="row "  style="background: white; padding: 5px; margin: 0px 0px 0px 5px; height: 100px; border-bottom: 1px solid grey;" onclick="botPedidoEditar(<?=$model->id?>)">
     <div class="col-md-1 col-xs-3">
     <?php  if($model->urlFoto!=null or $model->urlFoto!="") { ?>
-        <img src="<?=$model->urlFoto?>" class="imgIcon" alt="" onclick="botContactoEditar(<?=$model->id?>)">
+        <img src="<?=$model->urlFoto?>" class="imgIcon" alt="" >
     <?php }else{ ?>
-        <img src="<?=$urlLogo?>" class="imgIcon" alt="" onclick="botContactoEditar(<?=$model->id?>)">
+        <img src="<?=$urlLogo?>" class="imgIcon" alt="" >
     <?php } ?>
     </div>
     <div class="col-md-5  col-xs-2" style="height: 100%; border-left: 5px solid <?=$colorFondo?>;">
@@ -44,7 +44,7 @@ if($model->cliente=='SI'){
 
     <div class="col-md-2 col-sm-3">
         
-        <?= Html::a('<img src="assets/icons/pencil.svg"  alt="" style="width:32px; height:32px"> ', ['update', 'id' => $model->id, 'app_idApp' => $model->app_idApp], ['class' => 'btn btn-primary']) ?>
+        <!--<?= Html::a('<img src="assets/icons/pencil.svg"  alt="" style="width:32px; height:32px"> ', ['update', 'id' => $model->id, 'app_idApp' => $model->app_idApp], ['class' => 'btn btn-primary']) ?>-->
         <?= Html::a('<img src="assets/icons/trash.svg"  alt="" style="width:32px; height:32px"> ', ['delete', 'id' => $model->id, 'app_idApp' => $model->app_idApp], [
             'class' => 'btn btn-danger',
             'data' => [
