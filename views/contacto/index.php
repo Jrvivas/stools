@@ -14,7 +14,7 @@ $this->title = 'Contactos';
 $script= "var idApp='".$idApp."';"; // Pasar el idApp para los menu
 $script .= "function botProductoCalculoRapido() {alert('Programando...') ;}"; 
 $script .= "function botContactoEditar(id) { window.location.href ='" . \Yii::$app->urlManager->createUrl(['contacto/update','app_idApp'=>$idApp])."&id='+id;}";  //ver
-$script .= "function botProductoBorrar() {alert('No es posible borrar este producto');};";    
+$script .= "function botContactoBorrar() {alert('No es posible borrar este producto');};";    
 $script .= "window.onload=function() {  $('#txtBusq').on('keyup touchend', function(e) { $('#productossearch-txtsearch').val(this.value);$('form#w0').submit();})};";    
 $this->registerJs($script, View::POS_END, 'my-options'); 
 

@@ -100,7 +100,17 @@ class ContactoController extends AppController
     {
         $this->findModel($id, $app_idApp)->delete();
 
-        return $this->redirect(['index']);
+        $searchModel = new ContactoSearch();
+        $searchModel->app_idApp=$app_idApp;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //var_dump(json_encode($dataProvider ));
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'idApp'=>$app_idApp,
+        ]);
+
+        //return $this->redirect(['index']);
     }
 
      /**

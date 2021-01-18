@@ -35,21 +35,24 @@ if($model->cliente=='SI'){
     <div class="col-md-4 col-xs-6">
             
             <div  style="overflow: auto;">
-                 <h4>cel:<?=$model->cel?> <?php if($model->tel!=null or $model->tel!=""){
-                     echo '| tel:'.$model->tel;
+                 <?php if($model->cel!=null or $model->cel!=""){
+                    echo '<a href="https://api.whatsapp.com/send?phone=+549'.$model->cel.'&text=hola,%20qué%20tal?" target="_blank"> <img src="assets/icons/whatsapp.svg"  alt="" style="width:32px; height:32px"> </a>';
                  }
-                 ?></h3>
+                 ?>
             </div> 
     </div>
 
     <div class="col-md-2 col-sm-3">
-        <button  type="button"  class="btn btn-secondary px-3" style="width:46px; height:46px" onclick="botProductoEditar(<?=$model->id?>)">
-           <!-- <img src="assets/imgs/edit-2.svg"  alt="" style="width:32px; height:32px"> -->
-            <img src="assets/icons/pencil.svg"  alt="" style="width:32px; height:32px"> 
-        </button>
-        <button  type="button"  class="btn btn-secondary px-3"  style="width:46px; height:46px" onclick="botProductoBorrar()">
-             <img src="assets/icons/trash.svg"  alt="" style="width:32px; height:32px"> 
-        </button>
+        
+        <?= Html::a('<img src="assets/icons/pencil.svg"  alt="" style="width:32px; height:32px"> ', ['update', 'id' => $model->id, 'app_idApp' => $model->app_idApp], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('<img src="assets/icons/trash.svg"  alt="" style="width:32px; height:32px"> ', ['delete', 'id' => $model->id, 'app_idApp' => $model->app_idApp], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Estas seguro que desea borrar este Contacto?',
+                'method' => 'post',
+            ],
+        ]) ?>
+        
 
     </div>  
 </div>
