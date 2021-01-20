@@ -1,7 +1,9 @@
 <?php
 
 use app\models\Contacto;
+use app\models\CuentaSearch;
 use yii\bootstrap\Collapse;
+use yii\db\Query;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -60,4 +62,7 @@ $id=$ulId->maxId($_GET['idApp'])+1;
     <?php ActiveForm::end(); ?>
 
 </div>
-
+<?php
+//$cuenta = (new Query())->select('*')->from('cuenta')->where(['app_idApp'=>$_GET['idApp'],'contacto_id'=>$id])->all();
+//echo $cuenta[0]->nombre;
+?>

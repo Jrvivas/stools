@@ -2,7 +2,9 @@
 <?php
 
 use app\models\Contacto;
+use app\models\Cuenta;
 use yii\bootstrap\Collapse;
+use yii\db\Query;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -59,4 +61,20 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+$cuenta = (new Query())->select('*')->from('cuenta')->where(['app_idApp'=>$_GET['app_idApp'],'contacto_id'=>$_GET['id']])->all();
+$idAppCuenta= $cuenta[0]['app_idApp'];
+$idContactoCuenta= $cuenta[0]['contacto_id'];
+$nombreCuenta= $cuenta[0]['nombre'];
+$saldoCuenta=$cuenta[0]['saldo'];
+$fechaCuenta=$cuenta[0]['fecha'];
+$estadoCuenta=$cuenta[0]['estado'];
+
+$formulario='<div class="form-group field-contacto-nombre required has-success">
+<label class="control-label" for="cuentanombre">Nombre de la cuenta</label>
+<input type="text" id="cuenta-nombre" class="form-control" name="nombre" value="'.$nombreCuenta.'" maxlength="80" aria-required="true" aria-invalid="false">
+
+<div class="help-block"></div>
+</div>';
+?>
 
