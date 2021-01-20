@@ -17,6 +17,16 @@ $this->title = 'Aplicaciones';
 ?>
 <div class="apps-index">
 
+
+        <div class="row mt-5">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 ">
+                <img src="assets/imgs/avatar.svg" class="img-avatar" alt="" style="width: 62px; height: 62px;">
+                <span class="mx-2 h3">Bienvenido <?=Yii::$app->params['sesionApp']['userName']?></span> 
+            </div>
+            <div class="col-md-3"></div>
+            </div>
+
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p class="text-descripcion">

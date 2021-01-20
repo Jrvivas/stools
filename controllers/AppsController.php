@@ -27,6 +27,9 @@ class AppsController extends Controller
      */
     public function behaviors()
     {
+        Yii::$app->params['sesionApp']['userId']=Yii::$app->user->identity->id;
+        Yii::$app->params['sesionApp']['userName']=isset(Yii::$app->user->identity->nombre)?Yii::$app->user->identity->nombre:Yii::$app->user->identity->username ;
+
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -183,7 +186,7 @@ class AppsController extends Controller
         if ($model->load(Yii::$app->request->post()) ) {
 
             // insertar la fecha de inicio
-            $model->fechaInicio=date('Y-m-d H:i:s');    //  nueva propiedad
+            $model->fechaIni=date('Y-m-d H:i:s');    //  nueva propiedad
 
             
             // obtenemos la imagen del logo y la procesamos

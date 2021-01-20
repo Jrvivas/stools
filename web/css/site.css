@@ -3,10 +3,35 @@
     --secondary: #CACACA; 
     --app-ctr-bg-color: #10202c;
     --app-ctr-text-color: #c1d2df;/*nuevo*/
-    --app-bg-color: #c0c0c0;/*#2d3c47;*/
+    --app-bg-color: #ffffff;/*#2d3c47;*/
     --app-text-color:rgb(19, 18, 18);/*rgb(117, 117, 117);*/
     --app-text-Items: #07141d;
   }
+
+/*============================================*/
+.fondo-control{
+    background-image: linear-gradient(to right bottom, #e5097f, #c30087, #9b008d, #6b0090, #210990);
+}
+.img-avatar{
+    border:#6b0090 2px solid;
+    border-radius: 50%;
+
+}
+
+.boton-primary{
+    background-color: #6b0090;
+    border-radius: 20px;
+    color:white;
+}
+.mt-3 {
+    margin-top: 1rem!important;
+}
+.mt-5 {
+    margin-top: 3rem!important;
+}
+/*============================================================*/
+
+
 html,
 body {
     

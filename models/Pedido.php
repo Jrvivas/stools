@@ -30,6 +30,7 @@ use Yii;
  */
 class Pedido extends \yii\db\ActiveRecord
 {
+    public static $_ESTADO_NULO="NULL";
     public static $_ESTADO_PRESUPUESTO="PRESUPUESTO";
     public static $_ESTADO_ESPERA="ESPERA";
     public static $_ESTADO_APROBADO="APROBADO";
@@ -106,7 +107,7 @@ class Pedido extends \yii\db\ActiveRecord
             $this->saldo = 0;
             $this->monto = 0;
             $this->costo=0;
-            $this->estado =Pedido::$_ESTADO_PRESUPUESTO;
+            $this->estado =Pedido::$_ESTADO_NULO;
             $this->prioridad = 0; //Normal
 
     }

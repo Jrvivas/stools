@@ -33,11 +33,12 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        //'brandImage' =>'assets/icons/app.svg',
-        'brandLabel' => Yii::$app->name,
+        //'brandImage' =>'assets/imgs/logo.svg',
+        'brandLabel' =>'<img src="assets/imgs/logo.svg" alt="StoolS" style="height:32px;width:120px;margin-top: -5px;"/>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top navColor',
+            'class' => 'navbar-inverse navbar-fixed-top fondo-control',
+            
         ],
     ]);
     echo Nav::widget([
@@ -45,12 +46,12 @@ AppAsset::register($this);
         'items' => [
          
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                '<img src="assets/imgs/power.svg" alt="StoolS" style="height:32px;width:32px;margin-top: 8px"/>'
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Salir ('.Img::icon('person') . Yii::$app->user->identity->nombre . ')',
+                    '<img src="assets/imgs/power.svg" alt="StoolS" style="height:32px;width:32px"/>',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
