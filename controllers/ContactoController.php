@@ -6,9 +6,13 @@ use Yii;
 use app\models\Contacto;
 use app\models\AppController;
 use app\models\ContactoSearch;
+use app\models\Cuenta;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 
 /**
  * ContactoController implements the CRUD actions for Contacto model.
@@ -230,5 +234,158 @@ class ContactoController extends AppController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionCuenta($idApp,$idContacto)
+    {
+        
+        if (($model = Cuenta::findOne(['app_idApp' => $idApp, 'contacto_id' => $idContacto])) !== null) {
+            $cuenta= $model;
+        }else{
+            $cuenta=null;
+        }
+        //echo $nombreCuenta;
+        /*$searchModel = new ContactoSearch();
+        $searchModel->app_idApp=$idApp;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //var_dump(json_encode($dataProvider ));*/
+        if($cuenta!=null){
+                
+                $estados = ['0' => 'Normal','1' => 'Especial']; 
+                $template='';
+                $template='<div class="field-cuenta-app_idApp required">
+
+                <input type="hidden" id="cuenta-app_idApp" class="form-control" name="Cuenta[app_idApp]" value="'.$cuenta['app_idApp'].'">
+
+                <div class="help-block"></div>
+                </div>
+                <div class="field-cuenta-contacto_id required">
+
+                <input type="hidden" id="cuenta-contacto_id" class="form-control" name="Cuenta[contacto_id]" value="'.$cuenta['contacto_id'].'">
+                
+                <div class="help-block"></div>
+                </div>';
+                /*$form = ActiveForm::begin();
+                //$template.=$form = ActiveForm::begin();
+                $template.=$form->field($cuenta, 'contacto_id',['options' =>['style'=>[]]])->hiddenInput()->label(false);
+                $template.=$form->field($cuenta, 'nombre')->textInput(['maxlength' => true]);
+                $template.=$form->field($cuenta, 'saldo')->textInput(['maxlength' => true]);
+                $template.=$form->field($cuenta, 'estado')->dropDownList($estados);
+                $template.=Html::submitButton('Guardar', ['class' => 'btn btn-success']);
+                ActiveForm::end();*/
+            $template.=' <div class="form-group field-cuenta-nombre required">
+                    <label class="control-label" for="cuenta-nombre">Nombre</label>
+                    <input type="text" id="cuenta-nombre" class="form-control" name="Cuenta[nombre]" value="'.$cuenta['nombre'].'" maxlength="124" aria-required="true">
+
+                        <div class="help-block"></div>
+                    </div>';
+                $template.=' <div class="form-group field-cuenta-nombre required">
+                <label class="control-label" for="cuenta-saldo">Saldo</label>
+                <input type="number" id="cuenta-saldo" class="form-control" name="Cuenta[saldo]" value="'.$cuenta['saldo'].'" maxlength="124" aria-required="true">
+
+                    <div class="help-block"></div>
+                </div>';
+                $hh='';
+                foreach($estados as $key=>$value){
+                    if($key==$cuenta['estado']){
+                        $hh.='<option value="'.$key.'" selected>'.$value.'</option>';
+                    }else{
+                        $hh.='<option value="'.$key.'" >'.$value.'</option>';
+                    }
+                    
+                }
+                $template.='<div class="form-group">
+                <label class="control-label" for="cuenta-estado">Estado</label>
+                <select id="cuenta-estado" class="form-control" name="Cuenta[estado]">
+                '.$hh.'
+                </select>
+                
+                <div class="help-block"></div>
+                </div>';
+                $template.='<div class="form-group"><button id="guardarCuenta" type="button" class="btn btn-primary" onclick="guardarCuentaContacto('.$cuenta['contacto_id'].');">Guardar</button></div>';
+                return $template;
+                /*return $this->render('_cuentaUpdate', [
+                    'model' =>$cuenta
+                ]);*/
+            
+        }else{
+             
+            $estados = ['0' => 'Normal','1' => 'Especial']; 
+            $template='';
+        $template.=' <div class="form-group field-cuenta-nombre required">
+                <label class="control-label" for="cuenta-nombre">Nombre</label>
+                <input type="text" id="cuenta-nombre" class="form-control" name="Cuenta[nombre]" value="" placeholder="Nombre de la cuenta" maxlength="124" aria-required="true">
+
+                    <div class="help-block"></div>
+                </div>';
+            $template.=' <div class="form-group field-cuenta-nombre required">
+            <label class="control-label" for="cuenta-saldo">Saldo</label>
+            <input type="number" id="cuenta-saldo" class="form-control" name="Cuenta[saldo]" value="" placeholder="0.00" maxlength="124" aria-required="true">
+
+                <div class="help-block"></div>
+            </div>';
+            $hh='';
+            foreach($estados as $key=>$value){
+                
+                    $hh.='<option value="'.$key.'" >'.$value.'</option>';
+                
+                
+            }
+            $template.='<div class="form-group">
+            <label class="control-label" for="cuenta-estado">Estado</label>
+            <select id="cuenta-estado" class="form-control" name="Cuenta[estado]">
+            '.$hh.'
+            </select>
+            
+            <div class="help-block"></div>
+            </div>';
+            $template.='<div class="form-group"><button id="guardarCuenta" type="button" class="btn btn-primary" onclick="crearCuentaContacto('.$idContacto.');">Guardar</button></div>';
+            return $template;
+            /*return $this->render('_cuentaUpdate', [
+                'model' =>$cuenta
+            ]);*/
+        }
+        
+    }
+
+    public function actionCuentaupdate($idApp,$idContacto)
+    {
+        $request=Yii::$app->request->post();
+        /*echo var_dump($request);
+        echo '</br>';
+        echo $idApp.' - '.$idContacto;*/
+        $model = Cuenta::findOne(['app_idApp' => $idApp, 'contacto_id' => $idContacto]);
+        $model->nombre=$request['nombre'];
+        $model->saldo=$request['saldo'];
+        $model->estado=$request['estado'];
+        if($model->update()){
+            echo 'Se guardo correctamente';
+        }else{
+            echo 'no se pudo guardar';
+        }
+        
+        
+    }
+
+    public function actionCuentacreate($idApp,$idContacto)
+    {
+        $request=Yii::$app->request->post();
+        /*echo var_dump($request);
+        echo '</br>';
+        echo $idApp.' - '.$idContacto;*/
+        $model=new Cuenta();
+        $model->app_idApp=$idApp;
+        $model->contacto_id=$idContacto;
+        $model->nombre=$request['nombre'];
+        $model->saldo=$request['saldo'];
+        $model->estado=$request['estado'];
+        $model->fecha= date("Y-m-d H:i:s");
+        if($model->save()){
+            echo 'Se guardo correctamente';
+        }else{
+            echo 'no se pudo guardar';
+        }
+        
+        
     }
 }

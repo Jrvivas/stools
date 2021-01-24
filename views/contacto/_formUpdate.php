@@ -7,11 +7,67 @@ use yii\bootstrap\Collapse;
 use yii\db\Query;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Contacto */
 /* @var $form yii\widgets\ActiveForm */
 //echo var_dump($model);
+$script = <<<JS
+//----------------------------------
+function cuentaCorriente(idApp,id){
+        event.preventDefault();
+        var token=yii.getCsrfToken();
+        //alert(token+' - '+idApp+' - '+id);
+        var url='index.php?r=contacto%2Fcuenta&idApp='+idApp+'&idContacto='+id;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {_csrf: yii.getCsrfToken()},
+            success: function (respuesta) {
+                $('#modal-body-CC').html(respuesta);
+                $('#cuentaCorriente').modal('show');
+            }
+        });
+    }
+function guardarCuentaContacto(id){
+    event.preventDefault();
+    //alert('guardar');
+    var token=yii.getCsrfToken();
+        //alert(token+' - '+idApp+' - '+id);
+        var url='index.php?r=contacto%2Fcuentaupdate&idApp='+idApp+'&idContacto='+id;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {_csrf: yii.getCsrfToken(),nombre:$('#cuenta-nombre').val(),saldo:$('#cuenta-saldo').val(),estado:$('#cuenta-estado').val()},
+            success: function (respuesta) {
+                alert(respuesta);
+            }
+        });
+        return false;
+}
+function crearCuentaContacto(id){
+    event.preventDefault();
+    //alert('guardar');
+    var token=yii.getCsrfToken();
+        //alert(token+' - '+idApp+' - '+id);
+        var url='index.php?r=contacto%2Fcuentacreate&idApp='+idApp+'&idContacto='+id;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {_csrf: yii.getCsrfToken(),nombre:$('#cuenta-nombre').val(),saldo:$('#cuenta-saldo').val(),estado:$('#cuenta-estado').val()},
+            success: function (respuesta) {
+                alert(respuesta);
+            }
+        });
+        return false;
+}
+JS;
+
+
+$this->registerJs($script, View::POS_END, 'my-options');
+
+
 ?>
 
 <div class="contacto-form">
@@ -54,27 +110,32 @@ use yii\widgets\ActiveForm;
     ]);
     ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <div class="form-group" style="border: solid 2px black;">
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <button onclick="cuentaCorriente('<?php echo $_GET['app_idApp'];?>', <?php echo $_GET['id'];?>);" class="btn btn-primary" style=" float:right;">Cuenta Corriente</button>
     </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>
-<?php
-$cuenta = (new Query())->select('*')->from('cuenta')->where(['app_idApp'=>$_GET['app_idApp'],'contacto_id'=>$_GET['id']])->all();
-$idAppCuenta= $cuenta[0]['app_idApp'];
-$idContactoCuenta= $cuenta[0]['contacto_id'];
-$nombreCuenta= $cuenta[0]['nombre'];
-$saldoCuenta=$cuenta[0]['saldo'];
-$fechaCuenta=$cuenta[0]['fecha'];
-$estadoCuenta=$cuenta[0]['estado'];
-
-$formulario='<div class="form-group field-contacto-nombre required has-success">
-<label class="control-label" for="cuentanombre">Nombre de la cuenta</label>
-<input type="text" id="cuenta-nombre" class="form-control" name="nombre" value="'.$nombreCuenta.'" maxlength="80" aria-required="true" aria-invalid="false">
-
-<div class="help-block"></div>
-</div>';
-?>
-
+<div class="modal fade" id="cuentaCorriente" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ss">Cuenta Corriente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="modal-body-CC" class="modal-body">
+      <div class="text-center"> 
+         <img src="assets/imgs/espera.gif" alt="*" style="width:64px;padding:0px">
+      </div>
+    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        <button id="modalBotAceptar" type="button" data-dismiss="modal" class="btn btn-success">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
