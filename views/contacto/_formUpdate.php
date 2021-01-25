@@ -25,6 +25,7 @@ function cuentaCorriente(idApp,id){
             type: 'GET',
             data: {_csrf: yii.getCsrfToken()},
             success: function (respuesta) {
+
                 $('#modal-body-CC').html(respuesta);
                 $('#cuentaCorriente').modal('show');
             }
@@ -61,6 +62,11 @@ function crearCuentaContacto(id){
             }
         });
         return false;
+}
+
+function preciosEspeciales(idApp,id){
+    $('#modal-body-PE').html('precios especiales');
+    $('#preciosEspeciales').modal('show');
 }
 JS;
 
@@ -110,9 +116,10 @@ $this->registerJs($script, View::POS_END, 'my-options');
     ]);
     ?>
 
-    <div class="form-group" style="border: solid 2px black;">
+    <div class="form-group" >
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
         <button onclick="cuentaCorriente('<?php echo $_GET['app_idApp'];?>', <?php echo $_GET['id'];?>);" class="btn btn-primary" style=" float:right;">Cuenta Corriente</button>
+        <button onclick="preciosEspeciales('<?php echo $_GET['app_idApp'];?>', <?php echo $_GET['id'];?>);" class="btn btn-info" style=" float:right;">Precios Especiales</button>
     </div>
     <?php ActiveForm::end(); ?>
 
@@ -121,12 +128,35 @@ $this->registerJs($script, View::POS_END, 'my-options');
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ss">Cuenta Corriente</h5>
+        <h5 class="modal-title" id="ss">Cuenta Corriente <?php echo $model->nombre;?></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div id="modal-body-CC" class="modal-body">
+      <div class="text-center"> 
+         <img src="assets/imgs/espera.gif" alt="*" style="width:64px;padding:0px">
+      </div>
+    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        <button id="modalBotAceptar" type="button" data-dismiss="modal" class="btn btn-success">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="preciosEspeciales" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ss">Precios Especiales <?php echo $model->nombre;?></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="modal-body-PE" class="modal-body">
       <div class="text-center"> 
          <img src="assets/imgs/espera.gif" alt="*" style="width:64px;padding:0px">
       </div>
