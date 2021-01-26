@@ -144,7 +144,7 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
     <div class="row mt-3">
         <div class="col-2 col-xs-1"></div>
         <div class="col-8 col-xs-10">
-            <button id="bot-ped-detalle"  class="btn boton-primary" style="height:50px; width:100%" data-toggle="collapse" data-target="#ped-producto">
+            <button id="bot-ped-producto"  class="btn boton-primary" style="height:50px; width:100%" data-toggle="collapse" data-target="#ped-producto">
             <img src="assets/imgs/carrito_cantidad.svg" alt="Cliente" style="width: 42px ;float: left;"/>
                  <h4>Producto</h4>
             </button>

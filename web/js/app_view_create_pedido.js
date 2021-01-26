@@ -86,20 +86,11 @@ window.onload=function() {
             let me=this
                    
             /**Definimos las variable que se usaran en la pagina */
-            this.var={clientes:[],
-              estado:'NORMAL'
-            }
-
+          
             /**Definimos las funciones de la Pagina
              */
-            this.fun={selectCliente:null, selectContacto:null}
-            /**Shay un cliente seleccionado lo carga */
-            if(pantalla.clienteSel){
-                $("#bot-ped-cliente").html(
-                `<img src="assets/imgs/cliente_buscar.svg" alt="Cliente" style="width: 42px ;float: left;"/>
-                <h4  style="margin:0px">${pantalla.clienteSel.nombre}</h4><p  style="margin:0px;font-size:0.8em">${pantalla.clienteSel.direccion+" - "+pantalla.clienteSel.localidad+" ("+pantalla.clienteSel.cel+")"}</p>`
-                )
-            }
+            this.fun={selectCliente:null,listarClientes:null}
+
 
 
 
@@ -122,22 +113,18 @@ window.onload=function() {
             })
 
             $("#textBuscarCliente").keyup(()=>{
-                this.var.estado='BCLIENTE'
-                this.refresh()
+                //this.refresh()
+                this.fun.listarClientes()
             })
 
-            /*$("#textBuscarProducto").keyup(()=>{
-                this.var.estado='BPRODUCTO'
-                this.refresh()
-            })*/
-
+          
             $("#boton_cancelar").click(()=>{
                 pantalla.setPageSelect('select_opcion')
             })
             //------------------------------
 
  
-            
+            //Funccion que selecciona un cliente
             this.fun.selectCliente=(idboton)=>{
                let clienteSel=pantalla.clientes.filter(function(cte){return cte.id==idboton.split('_')[1]})[0];
                 if(clienteSel){
@@ -153,72 +140,64 @@ window.onload=function() {
               
    
                     this.refresh()
-
+                   // $('html, body').animate( { scrollTop : 0 }, 800 ); // desplaza hacia arriba la pantalla
                      pantalla.setPageSelect('pag_newdetalle') //vamos a la pantalla para cargar los productos
                 }
 
                 
             }
 
-            /*
-            //Operaciones de inicio
-            // - Cargar clientes a lista 
-            let clte=Contacto.getClientes(idApp,(rst)=>{
-                    if(rst){
-                        this.var.clientes=rst;
+            //que lista los clientes
+            this.fun.listarClientes=()=>{
 
-                        if(this.debug)console.log("Clientes:",this.var.clientes);
+                let filtro=$("#textBuscarCliente").val().toUpperCase()
 
-                        this.refresh()
-      
-                    }
-                });
+                if(filtro.length>0){
 
-            let Prto=Producto.getList(idApp,(rst)=>{
-                 if(rst){
-                    this.var.productos=rst
-                    if(this.debug)console.log("Productos:",this.var.clientes);
-                    this.refresh()
-                 }
-            })    */
+                       $('html, body').animate( { scrollTop : 90 }, 800 ); // desplaza hacia arriba la pantalla
+             
+                }
+                    let ClteFiltrado=pantalla.clientes.filter(function(cte){
+                        return cte.nombre.toUpperCase().indexOf(filtro)>-1||cte.empresa.toUpperCase().indexOf(filtro)>-1||cte.cel.toUpperCase().indexOf(filtro)>-1||cte.tel.toUpperCase().indexOf(filtro)>-1||cte.localidad.toUpperCase().indexOf(filtro)>-1||cte.cuit.toUpperCase().indexOf(filtro)>-1
+                    })
 
-            // filtrar clientes cuando cambia en cuadro de texto
-
+                    $("#list-cliente").empty() 
+                
+                    for(clte of ClteFiltrado){
+                            idBot="cliete_"+clte.id;
+                            //$("#lista_Productos").append( "<button id=\""+idBot+"\" type=\"button\" class=\"btn btn-primary \" style=\"margin: 5px;\"  data-toggle=\"modal\" data-target=\"#ModalPedidos\">"+prto.nombre+"</button>");
+                            $("#list-cliente").append( `<li id="${idBot}" class="list-group-item list-group-item-success" data-toggle="modal" data-target="#ModalPedidos">${clte.nombre}(${clte.empresa})-${clte.localidad}</li>`)
+                            
+                            let me=this
+                            $("#"+idBot).click(function(){
+                                //alert('Dibujar el dialogo para '+prto.nombre+ ' id:'+prto.id)
+                                me.fun.selectCliente(this.id)
+                            })
+                        }
+            
+               
+            }
+            //=========================
             this.refresh=()=>{
 
-                //==Manejo Cliente
-               
-       
-                        let filtro=$("#textBuscarCliente").val().toUpperCase()
-
-                        if(filtro.length>0){
-                            $('html, body').animate( { scrollTop : 90 }, 800 ); // desplaza hacia arriba la pantalla
-                        }
-
-                        let ClteFiltrado=pantalla.clientes.filter(function(cte){
-                            return cte.nombre.toUpperCase().indexOf(filtro)>-1||cte.empresa.toUpperCase().indexOf(filtro)>-1||cte.cel.toUpperCase().indexOf(filtro)>-1||cte.tel.toUpperCase().indexOf(filtro)>-1||cte.localidad.toUpperCase().indexOf(filtro)>-1||cte.cuit.toUpperCase().indexOf(filtro)>-1
-                        })
-
-                        $("#list-cliente").empty() 
-                    
-                        for(clte of ClteFiltrado){
-                                idBot="cliete_"+clte.id;
-                                //$("#lista_Productos").append( "<button id=\""+idBot+"\" type=\"button\" class=\"btn btn-primary \" style=\"margin: 5px;\"  data-toggle=\"modal\" data-target=\"#ModalPedidos\">"+prto.nombre+"</button>");
-                                $("#list-cliente").append( `<li id="${idBot}" class="list-group-item list-group-item-success" data-toggle="modal" data-target="#ModalPedidos">${clte.nombre}(${clte.empresa})-${clte.localidad}</li>`)
-                                
-                                let me=this
-                                $("#"+idBot).click(function(){
-                                    //alert('Dibujar el dialogo para '+prto.nombre+ ' id:'+prto.id)
-                                    me.fun.selectCliente(this.id)
-                                })
-                            }
-           
- 
-                //=========================
-
-
-
             }
+            
+            //-------------------------------Operaciones de inicio
+            // - Cargar clientes a lista 
+            this.fun.listarClientes()
+
+            // Chequear si hay un cliente seleccionado
+            if(pantalla.clienteSel){
+                $("#bot-ped-cliente").html(
+                `<img src="assets/imgs/cliente_buscar.svg" alt="Cliente" style="width: 42px ;float: left;"/>
+                <h4  style="margin:0px">${pantalla.clienteSel.nombre}</h4><p  style="margin:0px;font-size:0.8em">${pantalla.clienteSel.direccion+" - "+pantalla.clienteSel.localidad+" ("+pantalla.clienteSel.cel+")"}</p>`
+                )
+            }else{
+              $("#bot-ped-cliente").click()
+              $("#textBuscarCliente").focus()
+            }
+
+
  
         })
         )
@@ -227,57 +206,97 @@ window.onload=function() {
      pantalla.addPagina(new Page('pag_newdetalle',_page_new_detalle,false,function(){
 
                 let me=this
-                   //MANEJO DE EVENTOS-------------------------------------
+                 //MANEJO DE EVENTOS-------------------------------------
                  $(".boton-primary").click(function(){
                     if(!$("#"+this.id.split("-")[1]+"-"+this.id.split("-")[2]).hasClass("in")) { //Revisar
                         $("#botonera").hide()
                     }else{
                         $("#botonera").show()
-                        //me.var.estado='NORMAL'
+                      
                     }
-                    /*
-                    if(this.id.indexOf('cliente')>-1) {
-                        me.var.estado='BCLIENTE'
-                    } 
-                    if(this.id.indexOf('producto')>-1){
-                         me.var.estado='BPRODUCTO'
-                    } */
+
                     me.refresh()
                 })
     
-            $("#textBuscarProducto").keyup(()=>{
-                this.refresh()
-            })
-        
-            $("#boton_cancelar_detalle").click(()=>{
-                pantalla.setPageSelect('pag_presupuesto')
-            })
+                $("#textBuscarProducto").keyup(()=>{
+                    this.fun.listarProductos()
+                })
+            
+                $("#boton_cancelar_detalle").click(()=>{
+                    pantalla.setPageSelect('pag_presupuesto')
+                })
 
-            this.refresh=()=>{
-                
-                let filtroPrto=$("#textBuscarProducto").val().toUpperCase()
+                this.fun={listarProductos:null}
 
-                if(filtroPrto.length>0){
-                    $('html, body').animate( { scrollTop : 140 }, 800 ); // desplaza hacia arriba la pantalla
-                }
+                this.fun.listarProductos=()=>{
+                    let filtroPrto=$("#textBuscarProducto").val().toUpperCase()
 
-                let prtoFiltrado=pantalla.productos.filter(function(prto){
-                    return prto.nombre.toUpperCase().indexOf(filtroPrto)>-1||prto.codigo.toUpperCase().indexOf(filtroPrto)>-1||prto.descripcion.toUpperCase().indexOf(filtroPrto)>-1 })
-
-                $("#list-producto").empty() 
-                
-                for(prto of prtoFiltrado){
-                    idBot="prto_"+prto.id;
-                    //$("#lista_Productos").append( "<button id=\""+idBot+"\" type=\"button\" class=\"btn btn-primary \" style=\"margin: 5px;\"  data-toggle=\"modal\" data-target=\"#ModalPedidos\">"+prto.nombre+"</button>");
-                    $("#list-producto").append( `<li id="${idBot}" class="list-group-item list-group-item-success" data-toggle="modal" data-target="#ModalPedidos">${prto.nombre}(${prto.codigo})</li>`)
+                    if(filtroPrto.length>0){
+                        $('html, body').animate( { scrollTop : 90 }, 800 ); // desplaza hacia arriba la pantalla
+                    }
+    
+                    let prtoFiltrado=pantalla.productos.filter(function(prto){
+                        return prto.nombre.toUpperCase().indexOf(filtroPrto)>-1||prto.codigo.toUpperCase().indexOf(filtroPrto)>-1||prto.descripcion.toUpperCase().indexOf(filtroPrto)>-1 })
+    
+                    $("#list-producto").empty() 
                     
-                    let me=this
-                    $("#"+idBot).click(function(){
-                        //alert('Dibujar el dialogo para '+prto.nombre+ ' id:'+prto.id)
-                        me.fun.selectProducto(this.id)
-                    })
+                    for(prto of prtoFiltrado){
+                        idBot="prto_"+prto.id;
+                        //$("#lista_Productos").append( "<button id=\""+idBot+"\" type=\"button\" class=\"btn btn-primary \" style=\"margin: 5px;\"  data-toggle=\"modal\" data-target=\"#ModalPedidos\">"+prto.nombre+"</button>");
+                        $("#list-producto").append( `<li id="${idBot}" class="list-group-item list-group-item-success" data-toggle="modal" data-target="#ModalPedidos">${prto.nombre}(${prto.codigo})</li>`)
+                        
+                        let me=this
+                        $("#"+idBot).click(function(){
+                            //alert('Dibujar el dialogo para '+prto.nombre+ ' id:'+prto.id)
+                            me.fun.selectProducto(this.id)
+                        })
+                    }
                 }
+
+            //Funccion que selecciona un producto
+                this.fun.selectProducto=(idboton)=>{
+                    let productoSel=pantalla.productos.filter(function(cte){return cte.id==idboton.split('_')[1]})[0];
+                    if(productoSel){
+                        pantalla.productoSel=productoSel
+                        
+                        //$("#ped-cliente").removeClass("in")
+                        $("#bot-ped-producto").click()
+                
+                        $("#bot-ped-producto").html(
+                            `<img src="assets/imgs/producto.svg" alt="Cliente" style="width: 42px ;float: left;"/>
+                            <h4  style="margin:0px">${pantalla.productoSel.nombre+" ("+pantalla.productoSel.precio+")"}</h4><p  style="margin:0px;font-size:0.8em">${pantalla.productoSel.descripcion+" - "+pantalla.productoSel.unidad}</p>`
+                            )
+                
+        
+                        this.refresh()
+                        
+    
+                        //pantalla.setPageSelect('pag_newdetalle') //vamos a la pantalla para cargar los productos
+                    }
+                    $('html, body').animate( { scrollTop : 0 }, 300 ); // desplaza hacia arriba la pantalla
+                    
+                }
+
+           this.refresh=()=>{
+                
+
+           }
+
+           //------------INICIO---
+            // - Cargar Productos a lista 
+            this.fun.listarProductos()
+
+            // Chequear si hay un cliente seleccionado
+            if(pantalla.productoSel){
+                $("#bot-ped-producto").html(
+                `<img src="assets/imgs/producto.svg" alt="Cliente" style="width: 42px ;float: left;"/>
+                <h4  style="margin:0px">${pantalla.productoSel.nombre+" ("+pantalla.productoSel.precio+")"}</h4><p  style="margin:0px;font-size:0.8em">${pantalla.productoSel.descripcion+" - "+pantalla.productoSel.unidad}</p>`
+                )
+            }else{
+              $("#bot-ped-producto").click()
+              $("#textBuscarProducto").focus()
             }
+
 
      }))
 
