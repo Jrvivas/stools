@@ -104,16 +104,16 @@ class ContactoController extends AppController
     }
 
      /**
-     * Lists all Productos models.
+     * Lists all clientes del models.
      * @return mixed
      */
-    public function actionListaAjax($id)
+    public function actionListaAjax($idApp)
     {
         $searchModel = new Contacto();
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            $contactos =Contacto::find()->where(['app_idApp'=>$id,'cliente'=>'SI'])->all();
+            $contactos =Contacto::find()->where(['app_idApp'=>$idApp,'cliente'=>'SI'])->all();
             
             if ($contactos ) {
                 $data=array();

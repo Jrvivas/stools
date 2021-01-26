@@ -1,8 +1,8 @@
 :root {
     --primary:#f6648C; 
     --secondary: #CACACA; 
-    --app-ctr-bg-color: #10202c;
-    --app-ctr-text-color: #c1d2df;/*nuevo*/
+    --app-ctr-bg-color:#6b0090;
+    --app-ctr-text-color: #ffffff;/*nuevo*/
     --app-bg-color: #ffffff;/*#2d3c47;*/
     --app-text-color:rgb(19, 18, 18);/*rgb(117, 117, 117);*/
     --app-text-Items: #07141d;
@@ -18,16 +18,52 @@
 
 }
 
+
 .boton-primary{
-    background-color: #6b0090;
+    background-color: var(--app-ctr-bg-color);/*#6b0090;*/
     border-radius: 20px;
-    color:white;
+    color:var(--app-ctr-text-color);/*white;*/
 }
+.boton-float{
+    border: none;
+    position: fixed;
+    bottom: 10%;
+    right: 5%;
+    z-index: 10000;
+    font-size: 0px;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    color: transparent;
+    box-shadow:rgba(0, 0, 0, 0.349) 5px 5px;
+    }
+    .boton-float:hover{
+        width: 72px;
+        height: 72px;
+    }   
+
 .mt-3 {
     margin-top: 1rem!important;
 }
 .mt-5 {
     margin-top: 3rem!important;
+}
+
+.carrito-cantidad{
+    float: left;
+    margin-left: -20px;
+    margin-top: 5px;
+    color: black;
+    background:yellow;
+    padding: 5px;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+}
+.resumen-monto{
+    float: right;
+    color: var(--app-ctr-text-color);
+    font-size: 1.5em;
 }
 /*============================================================*/
 
@@ -191,7 +227,7 @@ a.desc:after {
     margin: 25px 10px;
     border: solid 2px var(--app-ctr-bg-color);
     background-color: var(--app-ctr-text-color);
-    border-radius: 10px;
+    border-radius: 50%;
     color:var(--app-ctr-bg-color);
     box-shadow: 5px 5px #00000050;
 }
@@ -199,10 +235,14 @@ a.desc:after {
 .bot-inicio:hover{
     margin: 25px 10px;
     border: solid 2px var(--app-ctr-text-color);
-    border-radius: 10px;
     background-color: var(--app-ctr-bg-color);
     color:var(--app-ctr-text-color);
     box-shadow: 8px 8px #00000050;
+}
+
+.btn:hover, .btn:focus, .btn.focus {
+
+    color: #ffea00;
 }
 /*--------------------------------------------------*/
 
@@ -212,7 +252,7 @@ a.desc:after {
     border-style:solid; 
     border-width:1px; 
     border-radius:5px; 
-    border-color:var(--primary); 
+    border-color: var(--app-ctr-bg-color);
     padding:10px; margin:5px
 }
 /*----------------------------------------------------------*/

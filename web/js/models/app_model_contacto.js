@@ -22,6 +22,24 @@ class Contacto{
         }
     }
 
+    static getClientes(idApp,done){
+        if(idApp!=null){
+            (new Server()).consulta('index.php?r=contacto%2Flista-ajax&idApp='+idApp,{},function(rst){
+                if(rst){
+                    let clientes=rst.data;
+                   
+                   
+                        if(done){
+                            done(clientes);
+                        };
+    
+                }else{
+                    Msg.error('Contacto.find','Se produsco un error cuando llamamos al servidor')  
+                }
+            });
+        }
+    }
+
         /**metodo standar  que carga un objeto desde un json*/
         fromJson(dataJson){
 

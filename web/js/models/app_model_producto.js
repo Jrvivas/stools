@@ -20,7 +20,7 @@ class Producto{
     static find(idApp,id,idCliente,done){
         if(idApp!=null && !isNaN(id) ){
             (new Server()).consulta('index.php?r=productos%2Ffind-ajax&idApp='+idApp+'&id='+id+'&idCliente='+idCliente,{'_csrf': yii.getCsrfToken()},function(rst){
-                if(rst){
+                if(rst.error==0){
                     let producto=rst.data;
                         //console.log("Datas :",producto);
                         let objProducto=new Producto();
@@ -30,9 +30,28 @@ class Producto{
                         };
     
                 }else{
-                    Msg.error('Producto.find','Se produsco un error cuando llamamos al servidor')  
+                    Msg.error('Producto.find','Se produjo un error de servidor '+rst.message)  
                 }
             });
+        }
+    }
+    /**
+     * Devuelve la lista de productos disponible
+     * @param {string} idApp 
+     * @param {fun} done 
+     */
+    static getList(idApp,done){
+        if(idApp!=null){
+            (new Server()).consulta('index.php?r=productos%2Flista-ajax&idApp='+idApp,{},function(rst){
+                if(rst.error==0){
+                    let productos=rst.data
+                    if(done){
+                        done(productos)
+                    }
+                }
+            })
+        }else{
+            Msg.error('Producto.getList','Se produjo un error de servidor '+rst.message)  
         }
     }
 

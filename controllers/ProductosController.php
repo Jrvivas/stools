@@ -195,6 +195,7 @@ class ProductosController extends AppController
                 {
 
                     $data[]=['id'=>$row->id,
+                            'codigo'=>$row->codigo,
                             'nombre'=>$row->nombre,
                             'unidad'=>$row->unidad,
                             'descripcion'=>$row->descripcion,

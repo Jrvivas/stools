@@ -45,7 +45,7 @@ class PedidoController extends  AppController
         $searchModel->app_idApp=$idApp;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
+        return $this->render('index', [ 
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'idApp'=>$idApp

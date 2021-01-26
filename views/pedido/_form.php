@@ -74,10 +74,33 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_pedido.js',['position'
     <?php if($model->estado==Pedido::$_ESTADO_NULO){?>
 
         <div class="row">
-
-          <?= Html::a('Presupuesto', ['pedido/create', 'idApp' => $model->app_idApp], ['class' => 'btn btn-danger  mx-2', 'style' => 'font-size:1.5em;']) ?>
-        
+            <div class="col-md-3"> </div>
+            <div class="col-md-6 text-center"> 
+                 <?= Html::a('<img src="assets/icons/card-checklist.svg" alt="Presupuesto"  style="width:72px;height:72px; margin:25px"/>', ['pedido/create', 'idApp' => $model->app_idApp], ['class' => 'btn bot-inicio mx-2', 'style' => 'font-size:1.5em;']) ?>
+                 <h3 style='margin-top: -0.5em;'>Presupuesto</h3>
+            </div>
+            <div class="col-md-3"> </div>
         </div>
+
+         <div class="row">
+            <div class="col-md-3"> </div>
+            <div class="col-md-6 text-center"> 
+                 <?= Html::a('<img src="assets/icons/cart-check.svg" alt="Pedido"  style="width:72px;height:72px; margin:25px"/>', ['pedido/create', 'idApp' => $model->app_idApp], ['class' => 'btn bot-inicio mx-2', 'style' => 'font-size:1.5em;']) ?>
+                 <h3 style='margin-top: -0.5em;'>Pedido</h3>
+            </div>
+            <div class="col-md-3"> </div>
+         </div>
+
+        <div class="row">
+            <div class="col-md-3"> </div>
+            <div class="col-md-6 text-center"> 
+                <?= Html::a('<img src="assets/icons/cart-plus.svg" alt="Ventas"  style="width:72px;height:72px; margin:25px"/>', ['pedido/create', 'idApp' => $model->app_idApp], ['class' => 'btn bot-inicio mx-2', 'style' => 'font-size:1.5em;']) ?>
+                <h3 style='margin-top: -0.5em;'>Venta Rapida</h3>
+            </div>
+            <div class="col-md-3"> </div>
+        </div>
+     
+
     <?php } else{?>
 
         <div class="row mx-5">

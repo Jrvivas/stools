@@ -35,8 +35,9 @@ $this->registerJs($script, View::POS_END, 'my-options');
         <?php
 
              foreach($tool as $t){
-                echo "  <div class=\"col-md-3\">";
-                echo Html::button( "<img src=\"{$t['urlIcon']}\" style=\"width:32px;height:32px\" alt=\"{$t['label']}\"/> <p>{$t['help']}</p>",['id'=>"bot".ucfirst($t['nombre']),'class'=>'bot-inicio']);
+                echo "  <div class=\"col-md-3 text-center \" title=\"{$t['help']}\">";
+                echo Html::button( "<img src=\"{$t['urlIcon']}\" style=\"width:72px;height:72px\" alt=\"{$t['label']}\"/>",['id'=>"bot".ucfirst($t['nombre']),'class'=>' bot-inicio']);
+                echo "<h3 style='margin-top: -0.5em;'>{$t['label']}</h3>";
                 echo     " </div>";
                     
 
