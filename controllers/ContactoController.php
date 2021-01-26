@@ -7,6 +7,7 @@ use app\models\Contacto;
 use app\models\AppController;
 use app\models\ContactoSearch;
 use app\models\Cuenta;
+use app\models\Productos;
 use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -387,5 +388,42 @@ class ContactoController extends AppController
         }
         
         
+    }
+
+    public function actionContactoproducto(){
+        
+        $query = new Query;
+            $query->select('id,nombre,precio')
+            ->from('productos')
+            ->where("app_idApp='". $_GET['app_idApp']."'");      
+            $productos=$query->all();
+
+        $query = new Query;
+            $query->select('idProducto,precio')
+            ->from('precio')
+            ->where("app_idApp='". $_GET['app_idApp']."' AND idCliente=".$_GET['id']."");      
+            $precios=$query->all();
+            //echo var_dump($precios[0]);
+        $html='<table id="preciosEspeciales"><thead>
+        <tr><th>Producto</th><th>Precio Producto</th><th>Precio Especial</th></tr>
+        <tbody>';
+        $centinela=0;
+        foreach($productos as $producto){
+            $html.='<tr><td>'.$producto['nombre'].'</td>
+            <td>'.$producto['precio'].'</td>';
+            foreach($precios as $precio){
+                if($precio['idProducto']==$producto['id']){
+                    $html.='<td>'.$precio['precio'].'</td></tr>';
+                    $centinela=1;
+                }
+            }
+            if($centinela!=1){
+                $html.='<td>No tiene precio especial</td></tr>';
+            }
+            $centinela=0;
+        }
+        $html.='</tbody></table>';
+
+        echo $html;
     }
 }
