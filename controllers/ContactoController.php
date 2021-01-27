@@ -405,20 +405,22 @@ class ContactoController extends AppController
             $precios=$query->all();
             //echo var_dump($precios[0]);
         $html='<table id="preciosEspeciales"><thead>
-        <tr><th>Producto</th><th>Precio Producto</th><th>Precio Especial</th></tr>
+        <tr><th>idProducto</th><th>Producto</th><th>Precio Producto</th><th>Precio Especial</th></tr>
+        </thead>
         <tbody>';
         $centinela=0;
         foreach($productos as $producto){
-            $html.='<tr><td>'.$producto['nombre'].'</td>
+            $html.='<tr><td>'.$producto['id'].'</td>
+            <td>'.$producto['nombre'].'</td>
             <td>'.$producto['precio'].'</td>';
             foreach($precios as $precio){
                 if($precio['idProducto']==$producto['id']){
-                    $html.='<td>'.$precio['precio'].'</td></tr>';
+                    $html.='<td><input type="number" value="'.$precio['precio'].'"></td></tr>';
                     $centinela=1;
                 }
             }
             if($centinela!=1){
-                $html.='<td>No tiene precio especial</td></tr>';
+                $html.='<td><input type="number" ></td></tr>';
             }
             $centinela=0;
         }
