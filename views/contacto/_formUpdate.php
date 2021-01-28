@@ -109,11 +109,6 @@ function filtrarProducto(){
 	}
   function guardarPrecios(){
     event.preventDefault();
-    alert('estoy guardando');
-		/*var txt=$("#filtrarProducto").val();
-		//console.log(txt);
-		var texto="";
-		var posi=true;*/
     var arr=[];
 		t = document.getElementById('preciosEspeciales');
 		filas = t.getElementsByTagName('tr');
