@@ -390,27 +390,27 @@ class ContactoController extends AppController
         
     }
 
-    public function actionContactoproducto(){
+    public function actionContactoproducto($idApp,$idContacto){
         
         $query = new Query;
             $query->select('id,nombre,precio')
             ->from('productos')
-            ->where("app_idApp='". $_GET['app_idApp']."'");      
+            ->where("app_idApp='". $idApp."'");      
             $productos=$query->all();
 
         $query = new Query;
             $query->select('idProducto,precio')
             ->from('precio')
-            ->where("app_idApp='". $_GET['app_idApp']."' AND idCliente=".$_GET['id']."");      
+            ->where("app_idApp='". $idApp."' AND idCliente=".$idContacto."");      
             $precios=$query->all();
             //echo var_dump($precios[0]);
-        $html='<table id="preciosEspeciales"><thead>
-        <tr><th>idProducto</th><th>Producto</th><th>Precio Producto</th><th>Precio Especial</th></tr>
+        $html='<input style="margin-bottom:2px;width: 100%;padding: 3px;margin-bottom: 3px;" type="text" id="filtrarProducto" onKeyUp="filtrarProducto();" placeholder="Producto"> <table id="preciosEspeciales"><thead>
+        <tr><th style="display:none">idProducto</th><th>Producto</th><th>Precio Producto</th><th>Precio Especial</th></tr>
         </thead>
         <tbody>';
         $centinela=0;
         foreach($productos as $producto){
-            $html.='<tr><td>'.$producto['id'].'</td>
+            $html.='<tr><td style="display:none">'.$producto['id'].'</td>
             <td>'.$producto['nombre'].'</td>
             <td>'.$producto['precio'].'</td>';
             foreach($precios as $precio){
@@ -424,8 +424,9 @@ class ContactoController extends AppController
             }
             $centinela=0;
         }
-        $html.='</tbody></table>';
+        $html.='</tbody></table>
+        <button id="guardarPrecios" onclick="guardarPrecios();" type="button"  class="btn btn-success">Guardar precios</button';
 
-        echo $html;
+        return $html;
     }
 }

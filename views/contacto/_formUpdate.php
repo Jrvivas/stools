@@ -65,9 +65,79 @@ function crearCuentaContacto(id){
 }
 
 function preciosEspeciales(idApp,id){
-    $('#modal-body-PE').html('precios especiales');
-    $('#preciosEspeciales').modal('show');
+  event.preventDefault();
+    //alert('guardar');
+    var token=yii.getCsrfToken();
+        //alert(token+' - '+idApp+' - '+id);
+        var url='index.php?r=contacto%2Fcontactoproducto&idApp='+idApp+'&idContacto='+id;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {_csrf: yii.getCsrfToken()},
+            success: function (respuesta) {
+              $('#modal-body-PE').html(respuesta);
+              $('#preciosEspeciales').modal('show');
+            }
+        });
+        return false;
+    
 }
+function filtrarProducto(){
+		var txt=$("#filtrarProducto").val();
+		//console.log(txt);
+		var texto="";
+		var posi=true;
+		t = document.getElementById('preciosEspeciales');
+		filas = t.getElementsByTagName('tr');
+		$('#preciosEspeciales tr').each(function (index) {			
+					if (index!=0){
+						var texto = $(this).find("td").eq(1).html();
+						var ele=filas[index];
+						
+						if (texto!=null){
+							texto=texto.toUpperCase();
+							posi = (texto.indexOf(txt.toUpperCase()) != -1);
+							ele.style.display = (posi) ? '' : 'none';
+							//console.log(texto);
+						}
+					}
+
+			});
+
+		
+
+	}
+  function guardarPrecios(){
+    event.preventDefault();
+    alert('estoy guardando');
+		/*var txt=$("#filtrarProducto").val();
+		//console.log(txt);
+		var texto="";
+		var posi=true;*/
+    var arr=[];
+		t = document.getElementById('preciosEspeciales');
+		filas = t.getElementsByTagName('tr');
+		$('#preciosEspeciales tr').each(function (index) {			
+					if (index!=0){
+						var idProducto = $(this).find("td").eq(0).text();
+            var producto = $(this).find("td").eq(1).text();
+            var precioEspecial = $(this).find("td").eq(3).find("input").val();
+            //console.log(precioEspecial);
+						
+						
+						if (precioEspecial!='' && precioEspecial!=null){
+				      var arr2=[idProducto, precioEspecial]
+              arr.push(arr2);
+							//console.log(texto);
+						}
+					}
+
+			});
+      console.log(arr);
+
+		
+
+	}
 JS;
 
 
