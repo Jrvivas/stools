@@ -107,7 +107,7 @@ function filtrarProducto(){
 		
 
 	}
-  function guardarPrecios(){
+  function guardarPrecios(elemento,id){
     event.preventDefault();
     var arr=[];
 		t = document.getElementById('preciosEspeciales');
@@ -128,7 +128,22 @@ function filtrarProducto(){
 					}
 
 			});
-      console.log(arr);
+      console.log((arr));
+      var token=yii.getCsrfToken();
+        //alert(token+' - '+idApp+' - '+id);
+        var idApp_=$(elemento).attr('id');
+        console.log(idApp_);
+        console.log(id);
+        var url='index.php?r=contacto%2Fpreciosespeciales&idApp='+idApp_+'&idContacto='+id;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {_csrf: yii.getCsrfToken(), precios:arr},
+            success: function (respuesta) {
+              alert(respuesta);
+            }
+        });
+        return false;
 
 		
 

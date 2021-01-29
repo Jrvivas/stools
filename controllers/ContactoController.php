@@ -425,8 +425,34 @@ class ContactoController extends AppController
             $centinela=0;
         }
         $html.='</tbody></table>
-        <button id="guardarPrecios" onclick="guardarPrecios();" type="button"  class="btn btn-success">Guardar precios</button';
+        <button id="'.$idApp.'" onclick="guardarPrecios(this,'.$idContacto.');" type="button"  class="btn btn-success">Guardar precios</button';
 
         return $html;
+    }
+    public function actionPreciosespeciales($idApp,$idContacto){
+        $request=Yii::$app->request->post();
+        foreach($request['precios'] as $precio){
+            echo $precio[0].' - '.$precio[1];
+            echo '<br>';
+        }
+        $query = new Query;
+            $query->select('idProducto,precio')
+            ->from('precio')
+            ->where("app_idApp='". $idApp."' AND idCliente=".$idContacto."");      
+            $preciosViejos=$query->all();
+            $centinela=true;
+            for($i=0; $i < count($request['precios']) ; $i++ ){
+                foreach($preciosViejos as $pv){
+                    //$request['precios'][$i][0] es el id de producto
+                    if($request['precios'][$i][0]==$pv['idProducto']){
+                        echo 'vamos a cambiar el precio: '.$pv['precio'].' a: '.$request['precios'][$i][1];
+                        $centinela=false;
+                    }
+                }
+                if($centinela){
+                    echo 'vamos a insertar el precio: '.$request['precios'][$i][1];
+                }
+                $centinela=true;
+            }
     }
 }
