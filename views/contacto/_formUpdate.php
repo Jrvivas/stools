@@ -148,6 +148,48 @@ function filtrarProducto(){
 		
 
 	}
+  function menosDiez(){
+    t = document.getElementById('preciosEspeciales');
+		filas = t.getElementsByTagName('tr');
+		$('#preciosEspeciales tr').each(function (index) {			
+					if (index!=0){
+						var idProducto = $(this).find("td").eq(0).text();
+            var producto = $(this).find("td").eq(1).text();
+            var precioAnterior = $(this).find("td").eq(2).text();
+            var precioNuevo=precioAnterior-(precioAnterior*0.1);
+            $(this).find("td").eq(3).find("input").val(precioNuevo);
+					}
+
+			});
+  }
+  function menosVeinte(){
+    t = document.getElementById('preciosEspeciales');
+		filas = t.getElementsByTagName('tr');
+		$('#preciosEspeciales tr').each(function (index) {			
+					if (index!=0){
+						var idProducto = $(this).find("td").eq(0).text();
+            var producto = $(this).find("td").eq(1).text();
+            var precioAnterior = $(this).find("td").eq(2).text();
+            var precioNuevo=precioAnterior-(precioAnterior*0.2);
+            $(this).find("td").eq(3).find("input").val(precioNuevo);
+					}
+
+			});
+  }
+  function menosTreinta(){
+    t = document.getElementById('preciosEspeciales');
+		filas = t.getElementsByTagName('tr');
+		$('#preciosEspeciales tr').each(function (index) {			
+					if (index!=0){
+						var idProducto = $(this).find("td").eq(0).text();
+            var producto = $(this).find("td").eq(1).text();
+            var precioAnterior = $(this).find("td").eq(2).text();
+            var precioNuevo=precioAnterior-(precioAnterior*0.3);
+            $(this).find("td").eq(3).find("input").val(precioNuevo);
+					}
+
+			});
+  }
 JS;
 
 

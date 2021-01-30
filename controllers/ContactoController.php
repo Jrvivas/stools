@@ -425,16 +425,17 @@ class ContactoController extends AppController
             $centinela=0;
         }
         $html.='</tbody></table>
-        <button id="'.$idApp.'" onclick="guardarPrecios(this,'.$idContacto.');" type="button"  class="btn btn-success">Guardar precios</button';
-
+        <div style="margin-top:5px">
+        <button id="'.$idApp.'" onclick="guardarPrecios(this,'.$idContacto.');" type="button"  class="btn btn-success">Guardar precios</button>
+        <button style="border-radius:50%; float:right;" onclick="menosDiez();" type="button"  class="btn btn-primary">10%</button>
+        <button style="border-radius:50%; float:right;" onclick="menosVeinte();" type="button"  class="btn btn-primary">20%</button>
+        <button style="border-radius:50%; float:right;" onclick="menosTreinta();" type="button"  class="btn btn-primary">30%</button>
+        </div>';
+        
         return $html;
     }
     public function actionPreciosespeciales($idApp,$idContacto){
         $request=Yii::$app->request->post();
-        foreach($request['precios'] as $precio){
-            echo $precio[0].' - '.$precio[1];
-            echo '<br>';
-        }
         $query = new Query;
             $query->select('idProducto,precio')
             ->from('precio')
@@ -445,14 +446,21 @@ class ContactoController extends AppController
                 foreach($preciosViejos as $pv){
                     //$request['precios'][$i][0] es el id de producto
                     if($request['precios'][$i][0]==$pv['idProducto']){
-                        echo 'vamos a cambiar el precio: '.$pv['precio'].' a: '.$request['precios'][$i][1];
+                        //echo 'vamos a cambiar el precio: '.$pv['precio'].' a: '.$request['precios'][$i][1];
                         $centinela=false;
+                        Yii::$app->db->createCommand()
+                        ->update('precio', ['precio'=>$request['precios'][$i][1]], ['app_idApp'=>$idApp,'idCliente'=>$idContacto,'idProducto'=>$request['precios'][$i][0]])
+                        ->execute();
                     }
                 }
                 if($centinela){
-                    echo 'vamos a insertar el precio: '.$request['precios'][$i][1];
+                    //echo 'vamos a insertar el precio: '.$request['precios'][$i][1];
+                    $command = Yii::$app->db->createCommand();
+                    $command->insert('precio',['app_idApp'=>$idApp,'idProducto'=>$request['precios'][$i][0],'idCliente'=>$idContacto,'precio'=>$request['precios'][$i][1],'nombre'=>'prueba','fechaAct'=>date("Y-m-d h:i:s")])
+                    ->execute();
                 }
                 $centinela=true;
             }
+            echo 'cambios guardados';
     }
 }
