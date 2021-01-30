@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Contacto */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Contactos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Contactos', 'url' => ['index','idApp'=>$model->app_idApp]];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Delete', ['delete', 'id' => $model->id, 'app_idApp' => $model->app_idApp], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Estas seguro que desea borrar este Contacto?',
                 'method' => 'post',
             ],
         ]) ?>

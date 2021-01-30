@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Contacto */
 
 $this->title = 'Creaar Contacto';
-$this->params['breadcrumbs'][] = ['label' => 'Contactos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Contactos', 'url' => ['index','idApp'=>$_GET['idApp']]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contacto-create">
