@@ -165,6 +165,26 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface {
         return array_merge($emps,$todos);
 
     }
+        /**
+     * Cambiar clave a usuario invitado
+     * @param string $idApp
+     * @param int $idUser
+     * @param string $newPassw
+     * @return boolean si en true la operacion fue exitosa
+     */
+    public static function changePasswordUser($idApp,$idUser,$newPassw){
+        $empleado=Invitado::find()->where(['app_idApp'=>$idApp,'idInvitado'=>$idUser])->one();
+        if(isset($empleado)){
+            $newPasswInv= crypt($newPassw, Yii::$app->params["salt"]);
+            $user=User::findOne($idUser);
+            $user->password=$newPasswInv;
+            if($user->save()){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 

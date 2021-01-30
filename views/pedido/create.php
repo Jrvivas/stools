@@ -14,6 +14,8 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_view.js',['pos
 $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_producto.js',['position'=>View::POS_END] ,null);
 /*Agregamos el escript que manejara los contactos  */
 $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_contacto.js',['position'=>View::POS_END] ,null);
+/*Agregamos el escript que manejara  detalle de pedido  */
+$this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_detalle_pedido.js',['position'=>View::POS_END] ,null);
 /*Agregamos el escript que manejara pedido  */
 $this->registerJsFile(Yii::getAlias('@web').'/js/models/app_model_pedido.js',['position'=>View::POS_END] ,null);
 /*Agregamos el escript que manejara la pantalla  */
@@ -25,7 +27,7 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
 </div>
     <!--  Panel de nuevo pedido -->
 
-<div id='pag-presupuesto'>
+<div id='pag-presupuesto'  style="display:none">
     <!--  BUscar cliente -->
     <div class="row mt-3">
         <div class="col-2 col-xs-1"></div>
@@ -61,8 +63,9 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
         <div class="col-8 col-xs-10">
             <button id="bot-ped-carrito"  class="btn boton-primary" style="height:50px; width:100%" data-toggle="collapse" data-target="#ped-carrito">
             <img src="assets/imgs/carrito_cantidad.svg" alt="Cliente" style="width: 42px ;float: left;"/>
-            <span class="carrito-cantidad">0</span>
+            <span id="lbl_cantidad_carrito" class="carrito-cantidad">0</span>
                 <h4>Carrito</h4>
+               
             </button>
 
             <div id="ped-carrito" class="collapse">
@@ -70,20 +73,23 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
              <div class="row">
                         <div class="col-md-12 mt-3 ">
                             <div class="row marco_app" style="height: 300px; overflow: overlay;">
-                                    <ul  class="list-group "  style=" margin-top: 10px;" id="list-detalle">
+                                    <ul  class="list-group "  style=" margin-top: 10px;" id="list_carrito">
                                         <li>cargando...</li>
                                     </ul>
                                
                             </div>
                         </div>
                     </div>
+                    <button id="boton_add_detalle" class="boton-float " style="width:52px; height:52px;right: 10%; background: green; position:absolute; bottom:5px ">
+                            <img src="assets/imgs/plus-circle.svg" alt="+" style="width: 42px"/>
+                    </button>
              <!-- -->   
             </div>
         </div>
         <div class="col-2 col-xs-1"></div>
     </div>
 
-<!-- Detalles extras  -->
+    <!-- Detalles extras  -->
     <div class="row mt-3">
         <div class="col-2 col-xs-1"></div>
         <div class="col-8 col-xs-10">
@@ -105,13 +111,13 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
     </div>
 
 
-<!-- Monto descuentos costos  -->
+    <!-- Monto descuentos costos  -->
     <div class="row mt-3">
         <div class="col-2 col-xs-1"></div>
         <div class="col-8 col-xs-10">
             <button id="bot-ped-resumen" class="btn boton-primary" style="height:50px; width:100%" data-toggle="collapse" data-target="#ped-resumen">
             <img src="assets/imgs/resumen-tiket.svg" alt="Cliente" style="width: 30px ;float: left;"/>
-            <span class="resumen-monto">$30000</span>
+            <span id="lbl_monto" class="resumen-monto">$30000</span>
                 <h4>Monto</h4>
             </button>
 
@@ -124,7 +130,7 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
         <div class="col-2 col-xs-1"></div>
     </div>
 
-<!-- Botones -->
+    <!-- Botones -->
     <div id="botonera">
        <button id="boton_cancelar" class="boton-float " style="left: 10%; background: red; ">
              <img src="assets/imgs/icon-cancel.svg" alt="X" style="width: 42px"/>
@@ -139,7 +145,7 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
 
 </div>
 
-<div id="pag_new_detalle">
+<div id="pag_new_detalle" style="display:none">
     <!--  Buscar cargar carrito  -->
     <div class="row mt-3">
         <div class="col-2 col-xs-1"></div>
@@ -168,14 +174,52 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
         </div>
         <div class="col-2 col-xs-1"></div>
     </div>
+
+        <!-- Opciones de destalles-->
+        <div class="row  mt-3 marco_app" id="detalle_opciones" style=" margin: 5px 11%; display:none">
+
+            <div class="col-2 col-xs-1"></div>
+            <div class="col-8 col-xs-10">
+                <!-- Manejo de cantidad -->
+                <div class="row">
+                    <div class="col">
+                        <label for="detalle_cantidad">Cantidad</label>
+                        <input type="text" id="detalle_cantidad" value="1" style="width: 50%";>
+                    </div>
+                </div>
+                <!-- Manejo de descripción -->
+                <div class="row">
+                    <div class="col">
+                        <label for="detalle_descripcion">Descripcion</label>
+                        <input type="text" id="detalle_descripcion" placeholder="Escriba anguna obserbación" style="width: 100%">
+                    </div>
+                </div>
+
+                  <!-- Manejo de Monto-->
+                  <div class="row">
+                    <div class="col">
+                    <img src="assets/imgs/suma_monto.svg" alt="producto" style="width: 42px ;float: left; background: var(--app-ctr-bg-color); border-radius: 10px; padding: 5px;margin-right: 10px;"/>
+                        <label for="detalle_descripcion">Monto</label>
+                        <input type="text" id="detalle_monto" value="0.00" style="width: 50%">
+                    </div>
+                </div>
+
+
+            
+            </div>
+            <div class="col-2 col-xs-1"></div>
+        </div>
+
         <!--  carrito  -->
     <div class="row mt-3">
         <div class="col-2 col-xs-1"></div>
         <div class="col-8 col-xs-10">
             <button id="bot-ped-carrito"  class="btn boton-primary" style="height:50px; width:100%" data-toggle="collapse" data-target="#ped-carrito">
             <img src="assets/imgs/carrito_cantidad.svg" alt="Cliente" style="width: 42px ;float: left;"/>
-            <span class="carrito-cantidad">0</span>
-                <h4>Carrito</h4>
+            <span  id="lbl_cantidad_carrito" class="carrito-cantidad">0</span>
+               
+                <h4 style="float:left">Carrito</h4>
+                <h4  id="lbl_monto" style="float:right">$0.00</h4>
             </button>
 
             <div id="ped-carrito" class="collapse">
@@ -183,7 +227,7 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
                 <div class="row">
                     <div class="col-md-12 mt-3 ">
                         <div class="row marco_app" style="height: 300px; overflow: overlay;">
-                                <ul  class="list-group "  style=" margin-top: 10px;" id="list-detalle">
+                                <ul  class="list-group "  style=" margin-top: 10px;" id="list_carrito">
                                     <li>cargando...</li>
                                 </ul>
                         </div>
@@ -200,8 +244,8 @@ $this->registerJsFile(Yii::getAlias('@web').'/js/app_view_create_pedido.js',['po
         <button id="boton_cancelar_detalle" class="boton-float " style="left: 10%; background: red; ">
                 <img src="assets/imgs/icon-cancel.svg" alt="X" style="width: 42px"/>
         </button>
-        <button id="boton_aceptar_add" class="boton-float " style="left:40%; right:40%; background: var(--app-ctr-bg-color);">
-                <img src="assets/imgs/icon-dowload.svg" alt="D" style="width: 42px;   "/>
+        <button id="boton_aceptar_add" class="boton-float " style="bottom:140px; right:10%; background: green;">
+                <img src="assets/imgs/icon-aceptar-add.svg" alt="D" style="width: 42px;   "/>
         </button>
         <button id="boton_aceptar_detalle"  class="boton-float"  style="right: 10%; background: green; ">
                 <img src="assets/imgs/icon-aceptar.svg" alt="V" style="width: 42px"/>

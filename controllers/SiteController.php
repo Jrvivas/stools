@@ -316,6 +316,20 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+     /**
+  * 
+  *ej:http://localhost/web/index.php?r=site%2Fchange-passw&idApp=27853313a7a284bc-20200711130059&idUser=5&newPassw=javito75
+  *http://localhost/web/index.php?r=site%2Fchange-passw&idApp=27853313a7a284bc-20200711130059&idUser=7&newPassw=Sgramajo21
+  */
+  public function actionChangePassw($idApp,$idUser,$newPassw){
+    if(User::changePasswordUser($idApp,$idUser,$newPassw)){
+        echo '<h1>OPERACION EXITOSA</h1>';
+    }else{
+         echo '<h1>ALGO FALLO</h1>';
+    }
+
+}
+
 
     public function actionNewPassword($palabra){
         echo crypt($palabra, Yii::$app->params["salt"]); //estudiar

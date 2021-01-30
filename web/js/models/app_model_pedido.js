@@ -30,8 +30,28 @@ class Pedido{
         
     }
    
-   constructor(){
+   constructor(id=0,app_idApp="#"){
+       this.id=id;
+       this.app_idApp=app_idApp;
+       this.fechaIni="";
+       this.fechaEntrega="";
+       this.fechaFin="";
+       this.contacto_id=0;
+       this.idResponsable=0;
+       this.detalles=[]
+       this.monto=0;
+       this.costo=0;
+       this.tiempo=0;
        
+   }
+
+   addDetalle(detalle){
+       if(detalle){
+           this.detalles.push(detalle)
+           this.monto+=parseFloat(detalle.monto)
+           this.consto+=parseFloat(detalle.costo)
+           this.tiempo+=parseFloat(detalle.tiempo)
+       }
    }
 
     /**metodo standar  que carga un objeto desde un json*/

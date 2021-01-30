@@ -200,10 +200,12 @@ class ProductosController extends AppController
                             'unidad'=>$row->unidad,
                             'descripcion'=>$row->descripcion,
                             'precio'=>$row->precio,
+                            'precioDif'=>0,
                             'costoBase'=>$row->costoBase,
                             'unxCaja'=>$row->unxCaja,
                             'cajaxPallet'=>$row->cajaxPallet,
                             'costoInstalacion'=>$row->costoInstalacion,
+                            
                             ];
                 }
                 return [

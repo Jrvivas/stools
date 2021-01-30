@@ -18,6 +18,17 @@
 
 }
 
+.icon-avatar{
+    width: 24px;
+    height: 24px;
+    float: left;
+    background: var(--app-ctr-bg-color);
+    border-radius: 50%;
+    border: solid 2px var(--app-ctr-text-color);
+    margin: 0px 10px 2px 0px;
+    box-shadow:rgba(0, 0, 0, 0.541) 2px 2px;
+
+}
 
 .boton-primary{
     background-color: var(--app-ctr-bg-color);/*#6b0090;*/
@@ -37,10 +48,22 @@
     color: transparent;
     box-shadow:rgba(0, 0, 0, 0.349) 5px 5px;
     }
-    .boton-float:hover{
-        width: 72px;
-        height: 72px;
-    }   
+.boton-float:hover{
+    width: 72px;
+    height: 72px;
+}   
+
+.list-item{
+    color: var(--app-text-Items);
+    font-size: 0.9em;
+    position: relative;
+    display: block;
+    padding: 10px 5px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.007);
+
+}
 
 .mt-3 {
     margin-top: 1rem!important;

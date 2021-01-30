@@ -40,6 +40,9 @@ class Pantalla extends View{
         this.clienteSel=null
         this.productos=[]
         this.productoSel=null
+        this.detalles=[];
+        this.detalleSel=null;
+        this.pedido=new Pedido()
          //Operaciones de inicio
             // - Cargar clientes a lista 
         Contacto.getClientes(idApp,(rst)=>{
@@ -61,8 +64,54 @@ class Pantalla extends View{
              }
         })    
     }
+
+
     refresh(){
         super.refresh()
+        $("#lbl_monto").html('$'+this.pedido.monto)
+        $("#lbl_cantidad_carrito").html(this.pedido.detalles.length)
+        this.listCarrito()
+    }
+
+
+
+    addCarrito(){
+        if(this.detalleSel){
+            this.pedido.addDetalle(this.detalleSel)
+            this.refresh()
+        }
+    }
+    listCarrito(){
+          // limpiamos la lista y dibujamos los elementos en la lista    
+          $("#list_carrito").empty() 
+          let i=0;          
+          for(prto of pantalla.pedido.detalles){
+              idBot="detalle_"+i++;
+              let icon='assets/imgs/producto.svg'
+              if(prto.urlFoto && prto.urlFoto!=''){
+                  icon=clte.urlFoto
+              }
+          
+              $("#list_carrito").append( `<li id="${idBot}" class="list-item " ">
+             
+                  <div class="row" >
+                      <div class="col-3">
+                          <img src="${icon}" alt="Cte" class="icon-avatar" style="width: 32px; height:32px"/>
+                      </div>
+                      <div class="col-9 truncate text-center">
+                      <h4 style="margin:0px">${prto.detalle}</h4>
+                      <p style="font-size:0.8em ;margin:0px">${prto.producto.nombre}${'  $'+prto.monto}</p>
+                      </div>
+                  </div>
+              
+              </li>`)
+              
+              let me=this
+              $("#"+idBot).click(function(){
+                  //alert('Dibujar el dialogo para '+prto.nombre+ ' id:'+prto.id)
+                  this.selectDetalle(this.id)//TODO
+              })
+          }
     }
 }
 
@@ -100,15 +149,8 @@ window.onload=function() {
                     $("#botonera").hide()
                 }else{
                     $("#botonera").show()
-                    //me.var.estado='NORMAL'
                 }
-                /*
-                if(this.id.indexOf('cliente')>-1) {
-                    me.var.estado='BCLIENTE'
-                } 
-                if(this.id.indexOf('producto')>-1){
-                     me.var.estado='BPRODUCTO'
-                } */
+              
                 me.refresh()
             })
 
@@ -121,6 +163,14 @@ window.onload=function() {
             $("#boton_cancelar").click(()=>{
                 pantalla.setPageSelect('select_opcion')
             })
+
+            $("#boton_add_detalle").click(()=>{
+                pantalla.productoSel=null
+                pantalla.detalleSel=null
+                pantalla.setPageSelect('pag_newdetalle') //vamos a la pantalla para cargar los productos
+                    
+            })
+
             //------------------------------
 
  
@@ -141,7 +191,7 @@ window.onload=function() {
    
                     this.refresh()
                    // $('html, body').animate( { scrollTop : 0 }, 800 ); // desplaza hacia arriba la pantalla
-                     pantalla.setPageSelect('pag_newdetalle') //vamos a la pantalla para cargar los productos
+                    if(pantalla.pedido.detalles.length==0) pantalla.setPageSelect('pag_newdetalle') //vamos a la pantalla para cargar los productos
                 }
 
                 
@@ -165,8 +215,22 @@ window.onload=function() {
                 
                     for(clte of ClteFiltrado){
                             idBot="cliete_"+clte.id;
-                            //$("#lista_Productos").append( "<button id=\""+idBot+"\" type=\"button\" class=\"btn btn-primary \" style=\"margin: 5px;\"  data-toggle=\"modal\" data-target=\"#ModalPedidos\">"+prto.nombre+"</button>");
-                            $("#list-cliente").append( `<li id="${idBot}" class="list-group-item list-group-item-success" data-toggle="modal" data-target="#ModalPedidos">${clte.nombre}(${clte.empresa})-${clte.localidad}</li>`)
+
+                            let icon='assets/imgs/avatar_borde.svg'
+                            if(clte.urlFoto && clte.urlFoto!=''){
+                                icon=clte.urlFoto
+                            }
+                            $("#list-cliente").append( `<li id="${idBot}" class="list-item " >
+                                <div class="row" >
+                                    <div class="col-3">
+                                        <img src="${icon}" alt="Cte" class="icon-avatar" style="width: 32px; height:32px"/>
+                                    </div>
+                                    <div class="col-9 truncate text-center">
+                                      <h4 style="margin:0px">${clte.nombre}</h4>
+                                      <p style="font-size:0.8em ;margin:0px">${clte.empresa}-${clte.localidad}</p>
+                                     </div>
+                                 </div>
+                                </li>`)
                             
                             let me=this
                             $("#"+idBot).click(function(){
@@ -225,7 +289,40 @@ window.onload=function() {
                 $("#boton_cancelar_detalle").click(()=>{
                     pantalla.setPageSelect('pag_presupuesto')
                 })
+                $("#boton_aceptar_detalle").click(()=>{
+                    me.addDetalle()
+                    pantalla.setPageSelect('pag_presupuesto')
+                })
+                $("#boton_aceptar_add").click(()=>{
+                    me.addDetalle()
+                   pantalla.detalleSel=null
+                   pantalla.productoSel=null
+                   $("#detalle_opciones").hide(200)  // desplegamos el panel de detalles
+                
+                   //Cargamos los datos del producto a boton
+                   $("#bot-ped-producto").html(    
+                       `<img src="assets/imgs/producto.svg" alt="Cliente" style="width: 42px ;float: left;"/>
+                       <h4  style="margin:0px">Buscar otro producto</h4><p  style="margin:0px;font-size:0.8em"></p>`
+                     )
+                   $("#bot-ped-producto").click()      // contaemos el Colapse
+                   
+                   me.refresh()
+                })
+     
+     
 
+
+                $("#detalle_cantidad").keyup(function(){
+                    pantalla.detalleSel.setCantidad(this.value)
+                    me.refresh()
+                })
+
+                //-------------------------------------------------------
+                this.addDetalle=()=>{
+                    if(pantalla.detalleSel){
+                        pantalla.addCarrito()
+                    }
+                }
                 this.fun={listarProductos:null}
 
                 this.fun.listarProductos=()=>{
@@ -237,13 +334,31 @@ window.onload=function() {
     
                     let prtoFiltrado=pantalla.productos.filter(function(prto){
                         return prto.nombre.toUpperCase().indexOf(filtroPrto)>-1||prto.codigo.toUpperCase().indexOf(filtroPrto)>-1||prto.descripcion.toUpperCase().indexOf(filtroPrto)>-1 })
-    
+                        
+
+                    // limpiamos la lista y dibujamos los elementos en la lista    
                     $("#list-producto").empty() 
                     
                     for(prto of prtoFiltrado){
                         idBot="prto_"+prto.id;
-                        //$("#lista_Productos").append( "<button id=\""+idBot+"\" type=\"button\" class=\"btn btn-primary \" style=\"margin: 5px;\"  data-toggle=\"modal\" data-target=\"#ModalPedidos\">"+prto.nombre+"</button>");
-                        $("#list-producto").append( `<li id="${idBot}" class="list-group-item list-group-item-success" data-toggle="modal" data-target="#ModalPedidos">${prto.nombre}(${prto.codigo})</li>`)
+                        let icon='assets/imgs/producto.svg'
+                        if(prto.urlFoto && prto.urlFoto!=''){
+                            icon=clte.urlFoto
+                        }
+                    
+                        $("#list-producto").append( `<li id="${idBot}" class="list-item " ">
+                       
+                            <div class="row" >
+                                <div class="col-3">
+                                    <img src="${icon}" alt="Cte" class="icon-avatar" style="width: 32px; height:32px"/>
+                                </div>
+                                <div class="col-9 truncate text-center">
+                                <h4 style="margin:0px">${prto.nombre}(${prto.codigo})</h4>
+                                <p style="font-size:0.8em ;margin:0px">${prto.descripcion}-${prto.precio}</p>
+                                </div>
+                            </div>
+                        
+                        </li>`)
                         
                         let me=this
                         $("#"+idBot).click(function(){
@@ -260,14 +375,16 @@ window.onload=function() {
                         pantalla.productoSel=productoSel
                         
                         //$("#ped-cliente").removeClass("in")
-                        $("#bot-ped-producto").click()
+                        $("#bot-ped-producto").click()      // contaemos el Colapse
                 
-                        $("#bot-ped-producto").html(
+                        //Cargamos los datos del producto a boton
+                        $("#bot-ped-producto").html(    
                             `<img src="assets/imgs/producto.svg" alt="Cliente" style="width: 42px ;float: left;"/>
                             <h4  style="margin:0px">${pantalla.productoSel.nombre+" ("+pantalla.productoSel.precio+")"}</h4><p  style="margin:0px;font-size:0.8em">${pantalla.productoSel.descripcion+" - "+pantalla.productoSel.unidad}</p>`
                             )
-                
-        
+
+                        this.fun.iniciarDetalle();
+
                         this.refresh()
                         
     
@@ -277,8 +394,25 @@ window.onload=function() {
                     
                 }
 
+
+            //Funccion que inicio aun nuevo detalle
+            this.fun.iniciarDetalle=()=>{
+
+                pantalla.detalleSel=new DetallePedido()
+                $("#detalle_opciones").show(200)  // desplegamos el panel de detalles
+
+                pantalla.detalleSel.producto=pantalla.productoSel
+                pantalla.detalleSel.setCantidad(1)
+                $("#detalle_cantidad").focus()
+                $('html, body').animate( { scrollTop :90 }, 100 ); // desplaza hacia arriba la pantalla
+                this.refresh()
+            } 
+            
+            
+
            this.refresh=()=>{
-                
+                     
+             if(pantalla.detalleSel)$("#detalle_monto").val(pantalla.detalleSel.monto)
 
            }
 
@@ -295,6 +429,7 @@ window.onload=function() {
             }else{
               $("#bot-ped-producto").click()
               $("#textBuscarProducto").focus()
+              
             }
 
 

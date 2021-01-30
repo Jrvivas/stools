@@ -65,7 +65,7 @@ class DetallePedido{
     calcularMonto(){
        
             let cantidad=parseFloat(this.cantidad);
-            let precio=this.producto.precioEspecial==0?parseFloat(this.producto.precio):parseFloat(this.producto.precioEspecial);
+            let precio=this.producto.precioDif==0?parseFloat(this.producto.precio):parseFloat(this.producto.precioDif);
             let unxcaja=parseFloat(this.producto.unxCaja)
             let cajaxpallet=parseFloat(this.producto.cajaxPallet)
             let costoPrto=parseFloat(this.producto.costo)
