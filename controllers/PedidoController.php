@@ -230,15 +230,20 @@ class PedidoController extends  AppController
             $data=json_decode(Yii::$app->request->getRawBody(),true);
             
             $data=$data['data'];
-               
+
+            $model->load($data,'');  
             
+            if($model->id==0){
+                $model->id=$model->maxId($idApp)+1; 
+            }
+            /*
             if(!empty($data['id']) && $model=$this->findModel($data['id'], $idApp)){
                 //$model=$this->findModel($data['id'], $idApp);
                 $actualizar=true;
                 
             }else{
                 $model = new Pedido();//??
-                $model->id=$model->maxId($idApp)+1; 
+                
                 $model->app_idApp=$idApp; //04-12-20
                 $model->idResponsable=Yii::$app->user->identity->id;//04-12-20
             }
@@ -247,9 +252,9 @@ class PedidoController extends  AppController
 
            if($actualizar==true){
                 $model->idModifico=Yii::$app->user->identity->id;
-            }
-            
-            $model->fechaIni=$data['fechaini'];
+            }*/
+           
+           /* $model->fechaIni=$data['fechaini'];
             $model->fechaFin=$data['fechafin'];
             $model->nombre=$data['nombre'];
             $model->comentarios=$data['comentario'];
@@ -262,7 +267,9 @@ class PedidoController extends  AppController
             $model->fechaEntrega=$data['fechaentrega'];
             $model->descuento=$data['descuento'];
             $model->impuesto=$data['impuesto'];
-            $model->delivery=$data['delivery'];
+            $model->delivery=$data['delivery'];*/
+
+
             $detalles=$data['detalles'];
           if(empty($model->fechaFin) && $model->estado=='ENTREGADO'){
               //if( $model->estado=='ENTREGADO'){
@@ -275,8 +282,10 @@ class PedidoController extends  AppController
 
                 if($model->save()){
                     $errores=[];
+                    $rst=$model->setDetallesPedido($detalles);
 
                     //Guardar detalles
+                    /*
                     foreach( $detalles as $d){
                         
                         if(!$actualizar){
@@ -285,6 +294,7 @@ class PedidoController extends  AppController
                                 continue;
                             }
                             $newDetalle= new DetallePedido();
+                            $newDetalle->load($d,'');
                             $newDetalle->id=$newDetalle->maxId($idApp,$model->id)+1;
                         } else{
                             
@@ -330,19 +340,16 @@ class PedidoController extends  AppController
                         }
 
                     }
+                    */
 
-                    if(empty($errores)){
+                    if($rst['error']==0){
                          return [
                                 'error'=>0,
                                 'data'=>[$model,$detalles],
                                 'mensaje' => 'Operación exitosa!',
                             ];
                     }else{
-                        return [
-                                'error'=>1,
-                                'data'=>$errores,
-                                'mensaje' => 'Error al guardar los detalles',
-                            ];
+                        return $rst;
                     }
 
 

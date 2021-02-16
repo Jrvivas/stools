@@ -42,16 +42,69 @@ class Pedido{
        this.monto=0;
        this.costo=0;
        this.tiempo=0;
+       this.pago=0;
+       this.saldo=0;
+       this.descuento='0';
+       this.impuesto='0';
        
    }
 
    addDetalle(detalle){
        if(detalle){
            this.detalles.push(detalle)
-           this.monto+=parseFloat(detalle.monto)
-           this.consto+=parseFloat(detalle.costo)
-           this.tiempo+=parseFloat(detalle.tiempo)
+           this.refresh()
        }
+   }
+
+
+   setDescuento(descuento){
+       if(descuento){
+           this.descuento=descuento
+           this.refresh()
+       }
+   }
+   setImpuesto(impuesto){
+        if(impuesto){
+            this.impuesto=impuesto
+            this.refresh()
+        }
+    }
+
+   setFechaEntrega(fecha){
+       if(fecha){
+           this.fechaEntrega=fecha
+           this.refresh()
+       }
+   } 
+   
+   refresh(){
+        this.monto=0
+        this.costo=0
+        this.tiempo=0
+        
+
+        this.detalles.forEach((d)=>{
+            this.monto+=parseFloat(d.monto)
+            this.costo+=parseFloat(d.costo)
+            this.tiempo+=parseFloat(d.tiempo)
+        })
+        let descuento=0
+        let impuesto=0
+        if(this.descuento.indexOf('%')>=0){
+            descuento=isNaN(this.descuento.split('%')[0])?0:this.monto*parseFloat(this.descuento.split('%')[0])/100
+        }else{
+            descuento=isNaN(this.descuento)?0:parseFloat(this.descuento)
+        }
+        if(this.impuesto.indexOf('%')>=0){
+            impuesto=isNaN(this.impuesto.split('%')[0])?0:this.monto*parseFloat(this.impuesto.split('%')[0])/100
+        }else{
+            impuesto=isNaN(this.impuesto)?0:parseFloat(this.impuesto)
+        }
+
+        
+        this.saldo=(this.monto-descuento+impuesto-parseFloat(this.pago)).toFixed(2)
+
+
    }
 
     /**metodo standar  que carga un objeto desde un json*/
@@ -69,6 +122,25 @@ class Pedido{
         }else{
             Msg.error('Pedido.fromJson','la variable pasada es null')
         }
+    }
+
+    dbSet=(done)=>{
+        // actualizar los datos antes de enviar
+        this.refresh()
+        if(this.app_idApp){
+            let server=new Server()
+
+            server.consulta('index.php?r=pedido%2Fcreate-ajax&idApp='+this.app_idApp,{data:this},function(rst){
+                    if(done){
+                        done(rst)
+                    }
+            })
+        }
+    }
+
+
+    validate=()=>{return true //TODO-------------------
+
     }
     
 

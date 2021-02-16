@@ -29,6 +29,25 @@ function getFechaDMA(date){
 
     return (day+'/'+month+'/'+year)
 }
+function getFechaAMDMysql(date){
+    let dt=new Date()
+    if(date){
+
+        if(!(date instanceof Date)){
+            if(date instanceof String){
+                dt=new Date(date)
+            }
+        } else{
+            dt=date
+        }
+
+    }
+    year  = dt.getFullYear();
+    month = (dt.getMonth() + 1).toString().padStart(2, "0");
+    day   = dt.getDate().toString().padStart(2, "0");
+
+    return (year+'-'+month+'-'+day)
+}
 
 
 function isNumber(n) 
