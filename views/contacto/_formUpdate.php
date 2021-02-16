@@ -183,7 +183,7 @@ function filtrarProducto(){
   }
   function reiniciar(elemento,id){
     event.preventDefault();
-    var idApp=$(elemento).attr('id');;
+    var idApp=$(elemento).attr('id');
     var token=yii.getCsrfToken();
         //alert(token+' - '+idApp+' - '+id);
         var url='index.php?r=contacto%2Fcontactoproducto&idApp='+idApp+'&idContacto='+id;
