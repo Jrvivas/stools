@@ -17,6 +17,13 @@ class Producto{
     static ESTADO_BORRADO='BORRADO'
     static ESTADO_SUSPENSO='SUSPENSO'
 
+    /**
+     * 
+     * @param {string} idApp Id de la Aplicacion
+     * @param {int} id 
+     * @param {int} idCliente ide del cliente si existe
+     * @param {obj} done funcion callback
+     */
     static find(idApp,id,idCliente,done){
         if(idApp!=null && !isNaN(id) ){
             (new Server()).consulta('index.php?r=productos%2Ffind-ajax&idApp='+idApp+'&id='+id+'&idCliente='+idCliente,{'_csrf': yii.getCsrfToken()},function(rst){
@@ -54,6 +61,9 @@ class Producto{
             Msg.error('Producto.getList','Se produjo un error de servidor '+rst.message)  
         }
     }
+
+
+    
 
    constructor( id=0,
                 app_idApp='',

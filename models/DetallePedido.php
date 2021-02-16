@@ -100,16 +100,9 @@ class DetallePedido extends \yii\db\ActiveRecord
     }
 
 
-        /**
-     * Gets query for [[Stock]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStock()
-    {
-        return $this->hasOne(Stock::className(), ['app_idApp' => 'app_idApp','idProducto'=>'productos_id']);
+    public function updateStock($tipo){
+        //Avtualiza el stock segun el tipo de operación
     }
-
 
     
 

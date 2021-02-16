@@ -11,7 +11,8 @@ class DetallePedido{
         this.id=id
         this.cantidad=cantidad
         this.producto=producto
-        this.precioDif=0  // Precio diferencial se usa cuando el precio del producto varia segun condiciones
+        this.productos_id=producto?producto.id:0;
+        this.precioDif=producto?producto.precioEspecial:0  // Precio diferencial se usa cuando el precio del producto varia segun condiciones
         this.monto=monto
         this.ancho=ancho
         this.alto=alto
@@ -57,6 +58,13 @@ class DetallePedido{
             return false;
         }
     }
+    setProducto=(producto)=>{
+        this.productos_id=producto.id;
+        this.producto=producto;
+        this.precioDif=producto.precioEspecial
+
+        this.calcularMonto()
+    }
 
    
 
@@ -65,16 +73,16 @@ class DetallePedido{
     calcularMonto(){
        
             let cantidad=parseFloat(this.cantidad);
-            let precio=this.producto.precioDif==0?parseFloat(this.producto.precio):parseFloat(this.producto.precioDif);
+            let precio=this.producto.precioEspecial==0?parseFloat(this.producto.precio):parseFloat(this.producto.precioEspecial);
             let unxcaja=parseFloat(this.producto.unxCaja)
             let cajaxpallet=parseFloat(this.producto.cajaxPallet)
-            let costoPrto=parseFloat(this.producto.costo)
+            let costoPrto=parseFloat(this.producto.costo?this.producto.costo:0)
             let tiempoPrto=parseFloat(this.producto.tiempo)
             
 
-            if(this.precioDif>0){
+           /* if(this.precioDif>0){
                 precio=this.precioDif
-            }
+            }*/
             
             this.fraccion=this.alto*this.ancho;
 
@@ -86,7 +94,7 @@ class DetallePedido{
             
             unxcaja=unxcaja!=0?unxcaja:1
             cajaxpallet=cajaxpallet!=0?cajaxpallet:1
-
+            this.detalle='-'
             switch(this.producto.unidad){
 
                 case Producto.UNIDAD_PRECIO_UNIDAD:
@@ -111,6 +119,7 @@ class DetallePedido{
                     monto=precio*this.fraccion*cantidad
                     costo=costoPrto*cantidad* this.fraccion;
                     tiempo=tiempoPrto*cantidad* this.fraccion;
+                    this.detalle='medidas ('+this.ancho.toFixed(2)+'x'+this.alto.toFixed(2)+') '
                     break
 
 
@@ -123,6 +132,7 @@ class DetallePedido{
             this.monto=monto.toFixed(2);
             this.costo=costo.toFixed(2);
             this.tiempo=tiempo.toFixed(2);
+           
           
        
     }

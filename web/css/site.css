@@ -32,7 +32,7 @@
 
 .boton-primary{
     background-color: var(--app-ctr-bg-color);/*#6b0090;*/
-    border-radius: 20px;
+    border-radius: 10px;
     color:var(--app-ctr-text-color);/*white;*/
 }
 .boton-float{
@@ -51,7 +51,71 @@
 .boton-float:hover{
     width: 72px;
     height: 72px;
-}   
+}  
+.input-edit{
+    background-image: url('/web/assets/imgs/icon_edit.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: right;
+    padding-right: 32px;
+    background-size: 30px 30px
+}
+
+.boton-redondo{
+    border: none;
+    z-index: 10000;
+    font-size: 0px;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    color: transparent;
+    box-shadow:rgba(0, 0, 0, 0.349) 5px 5px;
+}
+.boton-redondo:hover{
+    width: 72px;
+    height: 72px;
+} 
+
+
+
+.boton-calculadora, .boton-calculadora-aceptar, .boton-calculadora-cancel{
+    width: 100%;
+    height: 50px;
+    margin: 5px;
+    background: var(--app-ctr-bg-color);
+    color: var(--app-ctr-text-color);
+    border-radius: 20px;
+    border: solid 2px var(--app-ctr-text-color);
+    box-shadow:rgba(0, 0, 0, 0.425) 5px 5px;
+}
+.boton-calculadora-aceptar{
+    background: green;
+}
+.boton-calculadora-cancel{
+    background: red;
+}
+.boton-calculadora:hover{
+    
+    background-image: linear-gradient(to top,var(--app-ctr-bg-color), rgba(253, 249, 249, 0.411));
+}
+.boton-calculadora:active{
+    box-shadow:rgba(0, 0, 0, 0.425) 1px 1px;
+    background: var(--app-ctr-text-color);
+    color: var(--app-ctr-bg-color);
+    border: solid 2px var(--app-ctr-bg-color);
+    margin: 7px 7px;
+}
+.display_calculadora{
+    background: #ccc;
+    font-size: 3em;
+    padding: 10Px;
+    margin: 5px;
+    border: solid 2px #777777;
+    border-radius: 5px;
+
+}
+
+
 
 .list-item{
     color: var(--app-text-Items);

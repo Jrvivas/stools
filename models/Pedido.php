@@ -142,22 +142,64 @@ class Pedido extends \yii\db\ActiveRecord
 
 
    
-    /**
+    /*
      * Gets query for [[Detallepedidos]].
      *
      * @return \yii\db\ActiveQuery
-     */
+    
     public function getDetallepedidos() //----------------------------??????????????????????? CUAL SE USA!!!
     {
         return $this->hasMany(Detallepedido::className(), ['pedido_id' => 'id', 'pedido_app_idApp' => 'app_idApp']);
-    }
-    
+    } 
+    */
+
+
      /**
      * @return \yii\db\ActiveQuery
      */
     public function getDetallesPedido()      //----------------------------???????????????????????CUAL SE USA!!!
     {
         return $this->hasMany(DetallePedido::className(), ['app_idApp'=>'app_idApp', 'pedido_id'=>'id']);
+    }
+
+
+    /**
+     * Agrega y actualiza los detalles
+     * @param Array Arreglo de arreglos de los datos de detalles
+     * @return Array  arreglo del tipo responce
+     */
+    public function setDetallesPedido($detalles){
+
+        $problemas=[];
+
+        if($detalles && count($detalles)>0){
+
+            foreach( $detalles as $d){
+                $newDetalle=new DetallePedido();
+                $newDetalle->load($d,'');
+                $newDetalle->id=$newDetalle->maxId($this->app_idApp,$this->id)+1;
+                $newDetalle->pedido_id=$this->id;
+                $newDetalle->app_idApp=$this->app_idApp;
+
+                if($newDetalle->save()){
+                    // se inserto o actualizo
+                }else{
+                    $problemas[]=['errors'=>$newDetalle->errors,'origen'=>$d,'data'=>$newDetalle];
+                }
+                // Verificar si existe el detalle
+               
+            }
+        }
+        if(count($problemas)>0 ){
+            return['error'=>1,
+            'data'=>$problemas,
+            'mensaje' => 'Error al guardar los detalles',];
+        }else{
+             return['error'=>0,
+            'data'=>'',
+            'mensaje' => 'detalles actualizados',];
+        }
+
     }
 
 
