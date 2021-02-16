@@ -148,47 +148,55 @@ function filtrarProducto(){
 		
 
 	}
-  function menosDiez(){
+  function aplicarPorcentaje(){
     t = document.getElementById('preciosEspeciales');
 		filas = t.getElementsByTagName('tr');
 		$('#preciosEspeciales tr').each(function (index) {			
 					if (index!=0){
-						var idProducto = $(this).find("td").eq(0).text();
-            var producto = $(this).find("td").eq(1).text();
-            var precioAnterior = $(this).find("td").eq(2).text();
-            var precioNuevo=precioAnterior-(precioAnterior*0.1);
-            $(this).find("td").eq(3).find("input").val(precioNuevo);
+
+            var ele=filas[index];
+						
+						//console.log(ele.style.display);
+            if(ele.style.display!='none'){
+              var idProducto = $(this).find("td").eq(0).text();
+              var producto = $(this).find("td").eq(1).text();
+              var precioAnterior = $(this).find("td").eq(2).text();
+              var porcentaje=$('#valorPorcentaje').val();
+              if(porcentaje<0){
+                console.log(porcentaje)
+                var porcentajeFinal=-porcentaje/100;
+                var precioNuevo=parseFloat(precioAnterior)-(precioAnterior*porcentajeFinal);
+                $(this).find("td").eq(3).find("input").val(precioNuevo);
+              }else{
+                console.log(porcentaje)
+                var porcentajeFinal=porcentaje/100;
+                console.log(precioAnterior*porcentajeFinal);
+                var precioNuevo=parseFloat(precioAnterior)+(precioAnterior*porcentajeFinal);
+                $(this).find("td").eq(3).find("input").val(precioNuevo);
+              }
+              
+            }
+						
 					}
 
 			});
   }
-  function menosVeinte(){
-    t = document.getElementById('preciosEspeciales');
-		filas = t.getElementsByTagName('tr');
-		$('#preciosEspeciales tr').each(function (index) {			
-					if (index!=0){
-						var idProducto = $(this).find("td").eq(0).text();
-            var producto = $(this).find("td").eq(1).text();
-            var precioAnterior = $(this).find("td").eq(2).text();
-            var precioNuevo=precioAnterior-(precioAnterior*0.2);
-            $(this).find("td").eq(3).find("input").val(precioNuevo);
-					}
-
-			});
-  }
-  function menosTreinta(){
-    t = document.getElementById('preciosEspeciales');
-		filas = t.getElementsByTagName('tr');
-		$('#preciosEspeciales tr').each(function (index) {			
-					if (index!=0){
-						var idProducto = $(this).find("td").eq(0).text();
-            var producto = $(this).find("td").eq(1).text();
-            var precioAnterior = $(this).find("td").eq(2).text();
-            var precioNuevo=precioAnterior-(precioAnterior*0.3);
-            $(this).find("td").eq(3).find("input").val(precioNuevo);
-					}
-
-			});
+  function reiniciar(elemento,id){
+    event.preventDefault();
+    var idApp=$(elemento).attr('id');;
+    var token=yii.getCsrfToken();
+        //alert(token+' - '+idApp+' - '+id);
+        var url='index.php?r=contacto%2Fcontactoproducto&idApp='+idApp+'&idContacto='+id;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {_csrf: yii.getCsrfToken()},
+            success: function (respuesta) {
+              $('#modal-body-PE').html(respuesta);
+              //$('#preciosEspeciales').modal('show');
+            }
+        });
+        return false;
   }
 JS;
 

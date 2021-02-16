@@ -427,9 +427,9 @@ class ContactoController extends AppController
         $html.='</tbody></table>
         <div style="margin-top:5px">
         <button id="'.$idApp.'" onclick="guardarPrecios(this,'.$idContacto.');" type="button"  class="btn btn-success">Guardar precios</button>
-        <button style="border-radius:50%; float:right;" onclick="menosDiez();" type="button"  class="btn btn-primary">10%</button>
-        <button style="border-radius:50%; float:right;" onclick="menosVeinte();" type="button"  class="btn btn-primary">20%</button>
-        <button style="border-radius:50%; float:right;" onclick="menosTreinta();" type="button"  class="btn btn-primary">30%</button>
+        <button id="'.$idApp.'" style="border-radius:50%; float:right; margin-left:1%;" onclick="reiniciar(this,'.$idContacto.');" type="button"  class="btn btn-primary">Reiniciar</button>
+        <button style="border-radius:50%; float:right; margin-left:1%; " onclick="aplicarPorcentaje();" type="button"  class="btn btn-primary">Aplicar</button>
+        <input style="width:20%; float:right; margin-left:1%;" id="valorPorcentaje" type="number" class="form-control" placeholder="Porcentaje">
         </div>';
         
         return $html;
