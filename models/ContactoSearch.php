@@ -12,13 +12,15 @@ use app\models\Contacto;
 class ContactoSearch extends Contacto
 {
     public $txtSearch;
+    public $nombreCampo;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['txtSearch'], 'string', 'max' => 30]
+            [['txtSearch'], 'string', 'max' => 30],
+            [['nombreCampo'], 'string', 'max' => 30]
         ];
     }
 
@@ -58,8 +60,8 @@ class ContactoSearch extends Contacto
 
         // grid filtering conditions
         $query->andWhere(['=', 'app_idApp', $this->app_idApp]);
-
-        $query->andFilterWhere(['or',['like', 'nombre', $this->txtSearch],
+        if($this->nombreCampo=='Todos'){
+            $query->andFilterWhere(['or',['like', 'nombre', $this->txtSearch],
                             ['like', 'direccion', $this->txtSearch],
                             ['like', 'localidad', $this->txtSearch],
                             ['like', 'cel', $this->txtSearch],
@@ -67,6 +69,10 @@ class ContactoSearch extends Contacto
                             ['like', 'email', $this->txtSearch],
                             ['like', 'empresa', $this->txtSearch],
                             ['like', 'cuit', $this->txtSearch]]);
+        }else{
+            $query->andFilterWhere(['or',['like', $this->nombreCampo, $this->txtSearch]]);
+        }
+        
 
         return $dataProvider;
     }

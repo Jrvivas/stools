@@ -5,12 +5,12 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="<?=$id?>Label"><?=$titulo?></h5>
+        <h5 class="modal-title" id="<?=$id?>Label"><?=$title?></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div id="body<?=$id?>" class="modal-body">
+      <div id="body-<?=$id?>" class="modal-body">
       <div class="text-center"> 
          <img src="assets/imgs/espera.gif" alt="*" style="width:64px;padding:0px">
       </div>

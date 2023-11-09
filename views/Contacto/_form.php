@@ -6,15 +6,15 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Contacto */
 /* @var $form yii\widgets\ActiveForm */
+//echo var_dump($model);
 ?>
 
 <div class="contacto-form">
-
+     
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->textInput() ?>
 
-    <?= $form->field($model, 'app_idApp')->textInput(['maxlength' => true]) ?>
+    <?=  $form->field($model, 'app_idApp')->hiddenInput(['value'=> $_GET['idApp']])->label(false) ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 

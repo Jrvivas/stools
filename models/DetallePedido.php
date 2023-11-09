@@ -27,7 +27,7 @@ class DetallePedido extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'detallePedido';
+        return 'detallepedido';
     }
 
     /**
@@ -38,7 +38,7 @@ class DetallePedido extends \yii\db\ActiveRecord
         return [
             [['id', 'app_idApp', 'pedido_id','productos_id','cantidad','monto'], 'required'],
             [['id','pedido_id','productos_id','inst'], 'integer'],
-            [['cantidad','monto', 'alto', 'ancho','fraccion'], 'number'],
+            [['cantidad','monto','costo', 'alto', 'ancho','fraccion'], 'number'],
             [['app_idApp'], 'string', 'max' => 124],
             [['detalle'], 'string', 'max' => 512],
             [['id', 'app_idApp','pedido_id'], 'unique', 'targetAttribute' => ['id', 'app_idApp','pedido_id']],
@@ -58,7 +58,8 @@ class DetallePedido extends \yii\db\ActiveRecord
             'productos_id' => 'Id Producto',
             'detalle' => 'Descripcion',
             'cantidad'=>'Cantidad',
-            'monto' => 'Costo',
+            'monto' => 'Monto',
+            'costo'=>'Costo',
             'alto' => 'Alto',
             'ancho'=>'Ancho',
             'inst'=>'Instalación',
@@ -88,22 +89,32 @@ class DetallePedido extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Productos::className(), ['app_idApp' => 'app_idApp','id'=>'productos_id']);
     }
-
         /**
-     * Gets query for [[Stock]].
+     * Gets query for Pedido.
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getStock()
+    public function getPedido()
     {
-        return $this->hasOne(Stock::className(), ['app_idApp' => 'app_idApp','idProducto'=>'productos_id']);
+        return $this->hasOne(Pedido::className(), ['app_idApp' => 'app_idApp','id'=>'pedido_id']);
     }
 
+
+    public function updateStock($tipo){
+        //Avtualiza el stock segun el tipo de operación
+    }
 
     
 
     public function maxId($id,$pedido_id){
         return $this->find()->where(['app_idApp'=>$id,'pedido_id'=>$pedido_id])->max('id');
      }
+
+     /**
+      * Devuelve el objeto en un json cargado
+      */
+    public function toJson(){
+        return  json_encode($this->find()->where(['id'=>$this->id,'app_idApp'=>$this->app_idApp,'pedido_id'=>$this->pedido_id])->asArray()->one());
+    }
 
 }

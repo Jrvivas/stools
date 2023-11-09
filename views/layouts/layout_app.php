@@ -45,8 +45,10 @@ $this->registerJs($script, View::POS_HEAD , 'my-options');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link  rel="icon"   href="<?=$urlImgApp?>logo_16.png" type="image/png" />
 
-    <script src="js/app_server.js?v=0.002"></script>
+    
     <script src="js/util.js"></script>
+    <script src="js/app_server.js?v=0.002"></script>
+    
 
     <?php $this->registerCsrfMetaTags() ?>
 

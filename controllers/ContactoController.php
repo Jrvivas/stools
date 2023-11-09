@@ -21,14 +21,16 @@ class ContactoController extends AppController
      * Lists all Contacto models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($idApp)
     {
         $searchModel = new ContactoSearch();
+        $searchModel->app_idApp=$idApp;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        //var_dump(json_encode($dataProvider ));
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'idApp'=>$idApp,
         ]);
     }
 
@@ -61,6 +63,7 @@ class ContactoController extends AppController
 
         return $this->render('create', [
             'model' => $model,
+            'app_idApp'=>$model->app_idApp
         ]);
     }
 
@@ -101,16 +104,16 @@ class ContactoController extends AppController
     }
 
      /**
-     * Lists all Productos models.
+     * Lists all clientes del models.
      * @return mixed
      */
-    public function actionListaAjax($id)
+    public function actionListaAjax($idApp)
     {
         $searchModel = new Contacto();
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            $contactos =Contacto::find()->where(['app_idApp'=>$id,'cliente'=>'SI'])->all();
+            $contactos =Contacto::find()->where(['app_idApp'=>$idApp,'cliente'=>'SI'])->all();
             
             if ($contactos ) {
                 $data=array();
@@ -165,6 +168,40 @@ class ContactoController extends AppController
         }
           return "<div>['error'=>1,'data'=>'{}','message' => 'No es una llamada ajax',]</div>";
             
+    }
+
+
+    /**
+     * Devuelve un json con los datos del contacto solicitado
+     * @return json
+     */
+    public function actionFindAjax($idApp,$id){
+        $cto=$this->findModel($id, $idApp);
+ 
+        if (Yii::$app->request->isAjax) {
+           
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+
+            if($cto){
+                $data=$cto;
+
+                return [
+                    'error'=>0,
+                    'data'=>$data,
+                    'message' => 'ok',
+                    ];
+
+            } else {
+                return [
+                    'error'=>1,
+                    'data'=>'',
+                    'message' => 'Problemas para obtener el Contacto',
+                ];
+            }
+
+
+        }
     }
 
 

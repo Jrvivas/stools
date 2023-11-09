@@ -17,6 +17,7 @@ use Yii;
  * @property string $estado
  * @property float $precio
  * @property float $costo
+ * @property float|0 $tiempo en horas
  * @property float $costoBase
  * @property int $idLista
  * @property string|null $opciones
@@ -29,6 +30,8 @@ use Yii;
  */
 class Productos extends \yii\db\ActiveRecord
 {
+   
+    
     /**
      * {@inheritdoc}
      */
@@ -36,6 +39,11 @@ class Productos extends \yii\db\ActiveRecord
     {
         return 'productos';
     }
+
+     public $precioEspecial=0;
+     public $stockActual=0;
+
+    
 
     /**
      * {@inheritdoc}
@@ -45,7 +53,7 @@ class Productos extends \yii\db\ActiveRecord
         return [
             [['id', 'app_idApp', 'nombre','precio', 'costo',], 'required'],
             [['id','idTipoProducto','idLista'], 'integer'],
-            [['precio', 'costo', 'costoBase','costoInstalacion','unxCaja','cajaxPallet'], 'number'],
+            [['precio', 'costo','tiempo', 'costoBase','costoInstalacion','unxCaja','cajaxPallet','precioEspecial','stockActual'], 'number'],
             [['app_idApp', 'codigo'], 'string', 'max' => 124],
             [['nombre', 'urlFoto','categoriaCodigo'], 'string', 'max' => 255],
             [['descripcion', 'opciones'], 'string', 'max' => 512],
@@ -69,7 +77,9 @@ class Productos extends \yii\db\ActiveRecord
             'urlFoto' => 'Foto',
             'estado' => 'Estado',
             'precio' => 'Precio',
+            'precioEspecial'=>'Precio Especial',
             'costo' => 'Costo',
+            'tiempo'=> 'Tiempo',
             'costoBase' => 'Costo base',
             'costoInstalacion'=>'Costo de Instalación',
             'idLista' => 'Lista de precio',
@@ -77,8 +87,14 @@ class Productos extends \yii\db\ActiveRecord
             'unidad' => 'Unidad',
             'unxCaja'=>'Productos x Caja',
             'cajaxPallet'=>'Cajas por Pallet',
-            'categoriaCodigo'=>'Categoria'
+            'categoriaCodigo'=>'Categoria',
+            'stockActual'=>'Stock'
         ];
+    }
+
+    public function fields()
+    {
+            return array_merge(parent::fields(),['precioEspecial','stockActual']); 
     }
 
     /**

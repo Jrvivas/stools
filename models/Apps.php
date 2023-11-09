@@ -14,6 +14,7 @@ use \yii\data\ActiveDataProvider;
  * @property string $codigoApp Codigo de la aplicacion que hace referencia
  * @property string $codigoPlan código del plan de sevicio adquirido
  * @property string $codigoRubro  Código del rubro ala que pertenece la aplicación
+ * @property string $fechaIni
  * @property string|null $urlLogo deprecated
  * @property string|null $color1 deprecated
  * @property string|null $color2  deprecated
@@ -248,6 +249,21 @@ class Apps extends \yii\db\ActiveRecord
      ];
      }
     
+      /**
+     * get the Apps model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return Apps the loaded model o null
+
+     */
+     static function get($id)
+    {
+        if (($model = Apps::findOne($id)) !== null) {
+            return $model;
+        }
+
+        return null;
+    }
 
    
 }

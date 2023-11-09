@@ -8,6 +8,7 @@ use app\models\ProductosSearch;
 use app\models\AppController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Precio;
 
 /**
  * ProductosController implements the CRUD actions for Productos model.
@@ -194,14 +195,17 @@ class ProductosController extends AppController
                 {
 
                     $data[]=['id'=>$row->id,
+                            'codigo'=>$row->codigo,
                             'nombre'=>$row->nombre,
                             'unidad'=>$row->unidad,
                             'descripcion'=>$row->descripcion,
                             'precio'=>$row->precio,
+                            'precioDif'=>0,
                             'costoBase'=>$row->costoBase,
                             'unxCaja'=>$row->unxCaja,
                             'cajaxPallet'=>$row->cajaxPallet,
                             'costoInstalacion'=>$row->costoInstalacion,
+                            
                             ];
                 }
                 return [
@@ -309,6 +313,46 @@ class ProductosController extends AppController
 
       
       
+    }
+
+    public function actionFindAjax($idApp,$id,$idCliente=null){
+        $pto=$this->findModel($id, $idApp);
+
+        
+        if (isset($idCliente)){
+            $precio=Precio::findOne(['idCliente'=>$idCliente,'app_idApp'=>$idApp,'idProducto'=>$id]);
+            if($precio){
+                $pto->precioEspecial=$precio->precio;
+            }
+            if($pto->stock){
+                $pto->stockActual=$pto->stock->cantidad;
+            }
+        }
+
+        if (Yii::$app->request->isAjax) {
+           
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+
+            if($pto){
+                $data=$pto;
+
+                return [
+                    'error'=>0,
+                    'data'=>$data,
+                    'message' => 'ok',
+                    ];
+
+            } else {
+                return [
+                    'error'=>1,
+                    'data'=>'',
+                    'message' => 'Problemas para obtener el producto',
+                ];
+            }
+
+
+        }
     }
     
 

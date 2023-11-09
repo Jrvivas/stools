@@ -12,7 +12,7 @@ $this->title = 'Modificar Pedido: ' . $model->id;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form_new', [
+    <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 

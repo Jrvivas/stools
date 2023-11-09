@@ -29,6 +29,25 @@ function getFechaDMA(date){
 
     return (day+'/'+month+'/'+year)
 }
+function getFechaAMDMysql(date){
+    let dt=new Date()
+    if(date){
+
+        if(!(date instanceof Date)){
+            if(date instanceof String){
+                dt=new Date(date)
+            }
+        } else{
+            dt=date
+        }
+
+    }
+    year  = dt.getFullYear();
+    month = (dt.getMonth() + 1).toString().padStart(2, "0");
+    day   = dt.getDate().toString().padStart(2, "0");
+
+    return (year+'-'+month+'-'+day)
+}
 
 
 function isNumber(n) 
@@ -89,4 +108,40 @@ function isNumber(n)
         return {width, height};
         }
 
+    /**
+     * Clase que maneja mensajes
+     */    
+    class Msg{
+
+        static error(ambito,mensaje){
+            console.log('ERROR: '+ambito+'('+mensaje+')');
+        }
+    }    
+
+    /**
+     * Helper de codigos preformateados html
+     */
+    class Helpers{
+        /**
+         * Metodo que devuelvu el htmlcode para dibujar una inputText  de busqueda y una lista
+         * @param {string} title 
+         * @param {string} idUlLista identificador del contenido de la lista
+         * @param {string} funcOnKeyUP texto que se escribirá en elente las comillas del evento onkeyup
+         */
+        static listFind(title,idUlLista,funcOnKeyUP){
+            return `<div class="row">
+                        <div class="col-md-12 mt-5 ">
+                            <div class="row marco_app" style="height: 500px; overflow: overlay;">
+                                <h2 class="text-center">${title}</h2>
+                                <div> Buscar <input  id="textBuscar" class="form-control" type="text" onkeyup="${funcOnKeyUP}"/>
+                                <ul  class="list-group "  style="    margin-top: 10px;" id="${idUlLista}">
+                                </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+        }
+    }
+
+    
     //------------------------------------------------------------------------

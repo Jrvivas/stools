@@ -30,6 +30,7 @@ use Yii;
  */
 class Pedido extends \yii\db\ActiveRecord
 {
+    public static $_ESTADO_NULO="NULL";
     public static $_ESTADO_PRESUPUESTO="PRESUPUESTO";
     public static $_ESTADO_ESPERA="ESPERA";
     public static $_ESTADO_APROBADO="APROBADO";
@@ -41,6 +42,8 @@ class Pedido extends \yii\db\ActiveRecord
     public static $_ESTADO_RECHAZADO="RECHAZADO";
 
     public static $_FECHA_NO_NECESARIA=-999;
+
+    public $accion="";
 
 
     /**
@@ -57,6 +60,13 @@ class Pedido extends \yii\db\ActiveRecord
                Pedido::$_ESTADO_ENTREGADO=>'Entregado',
                Pedido::$_ESTADO_RECHAZADO=>'Rechazado'
                ];
+    }
+
+    /**
+     * Lista de Prioridades
+     */
+    public static function listaPrioridades(){
+        return [0 => 'Normal', 2 => 'Media', 4 => 'Alta', 8 => 'Urgente', 10 => 'Hoy'];
     }
        
     /**
@@ -76,15 +86,30 @@ class Pedido extends \yii\db\ActiveRecord
             [['id', 'app_idApp', 'contacto_id', 'nombre', 'fechaIni'], 'required'],
             [['id', 'contacto_id', 'idResponsable','delivery','prioridad','idModifico'], 'integer'],
             ['idModifico','default','value'=>null],
-            [['fechaIni', 'fechaFin', 'fechaEntrega'], 'safe'],
-            [['monto','pago','saldo'], 'number'],
+            [['fechaIni', 'fechaFin', 'fechaEntrega','accion'], 'safe'],
+            [['monto','pago','saldo','costo'], 'number'],
             [['app_idApp','nombre'], 'string', 'max' => 124],
             [['descuento', 'impuesto'], 'string', 'max' => 45],
             [['comentarios'], 'string', 'max' => 512],
-            [['estado'], 'string', 'max' => 20],
+            [['estado','accion'], 'string', 'max' => 20],
             [['id', 'app_idApp'], 'unique', 'targetAttribute' => ['id', 'app_idApp']],
             [['app_idApp'], 'exist', 'skipOnError' => true, 'targetClass' => Apps::className(), 'targetAttribute' => ['app_idApp' => 'idApp']],
         ];
+    }
+
+    public function __construct()
+    {
+            parent::__construct();
+            $this->contacto_id=null;   //Cliente eventual
+            $this->descuento = 0;
+            $this->impuesto = 0;
+            $this->pago = 0;
+            $this->saldo = 0;
+            $this->monto = 0;
+            $this->costo=0;
+            $this->estado =Pedido::$_ESTADO_NULO;
+            $this->prioridad = 0; //Normal
+
     }
 
     /**
@@ -105,6 +130,7 @@ class Pedido extends \yii\db\ActiveRecord
             'delivery' => 'Delivery',
             'comentarios' => 'Comentarios',
             'monto' => 'Monto',
+            'costo'=>'Costo',
             'pago' => 'Pagado',
             'Saldo' => 'Saldo',
             'descuento' => 'Descuento',
@@ -116,22 +142,64 @@ class Pedido extends \yii\db\ActiveRecord
 
 
    
-    /**
+    /*
      * Gets query for [[Detallepedidos]].
      *
      * @return \yii\db\ActiveQuery
-     */
+    
     public function getDetallepedidos() //----------------------------??????????????????????? CUAL SE USA!!!
     {
         return $this->hasMany(Detallepedido::className(), ['pedido_id' => 'id', 'pedido_app_idApp' => 'app_idApp']);
-    }
-    
+    } 
+    */
+
+
      /**
      * @return \yii\db\ActiveQuery
      */
     public function getDetallesPedido()      //----------------------------???????????????????????CUAL SE USA!!!
     {
         return $this->hasMany(DetallePedido::className(), ['app_idApp'=>'app_idApp', 'pedido_id'=>'id']);
+    }
+
+
+    /**
+     * Agrega y actualiza los detalles
+     * @param Array Arreglo de arreglos de los datos de detalles
+     * @return Array  arreglo del tipo responce
+     */
+    public function setDetallesPedido($detalles){
+
+        $problemas=[];
+
+        if($detalles && count($detalles)>0){
+
+            foreach( $detalles as $d){
+                $newDetalle=new DetallePedido();
+                $newDetalle->load($d,'');
+                $newDetalle->id=$newDetalle->maxId($this->app_idApp,$this->id)+1;
+                $newDetalle->pedido_id=$this->id;
+                $newDetalle->app_idApp=$this->app_idApp;
+
+                if($newDetalle->save()){
+                    // se inserto o actualizo
+                }else{
+                    $problemas[]=['errors'=>$newDetalle->errors,'origen'=>$d,'data'=>$newDetalle];
+                }
+                // Verificar si existe el detalle
+               
+            }
+        }
+        if(count($problemas)>0 ){
+            return['error'=>1,
+            'data'=>$problemas,
+            'mensaje' => 'Error al guardar los detalles',];
+        }else{
+             return['error'=>0,
+            'data'=>'',
+            'mensaje' => 'detalles actualizados',];
+        }
+
     }
 
 
@@ -172,10 +240,41 @@ class Pedido extends \yii\db\ActiveRecord
 
 
 
-
+    /**
+     * Busca el maximo id  de los pedido 
+     */
     public function maxId($id){
         return $this->find()->where(['app_idApp'=>$id])->max('id');
      }
+
+
+     public function calcular(){
+         $this->monto=0;
+         $this->costo=0;
+         $descuento=$this->descuento;
+         $recargo=$this->impuesto;
+
+         foreach($this->detallesPedido as $d){
+                $this->monto+=$d->monto;
+                $this->costo+=$d->costo;
+         }
+         $this->save();
+        
+
+     }
+
+    /**
+     * Metodo que indica si el el Pedido es editable o no
+     * @return boolean
+     */
+    public function isEditable(){
+           if ($this->estado == Pedido::$_ESTADO_ENTREGADO) {
+                return false;
+            } else {
+                return true;
+            }
+    }
+  
 
 
      //-------------------------------------------
@@ -205,6 +304,14 @@ class Pedido extends \yii\db\ActiveRecord
             return Pedido::$_FECHA_NO_NECESARIA;
         }
         
+    }
+
+
+    /**
+      * Devuelve el objeto en un json cargado
+      */
+      public function toJson(){
+        return  json_encode($this->find()->where(['id'=>$this->id,'app_idApp'=>$this->app_idApp])->asArray()->one());
     }
     //------------------------------------------------
 

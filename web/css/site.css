@@ -1,12 +1,160 @@
 :root {
     --primary:#f6648C; 
     --secondary: #CACACA; 
-    --app-ctr-bg-color: #10202c;
-    --app-ctr-text-color: #c1d2df;/*nuevo*/
-    --app-bg-color: #c0c0c0;/*#2d3c47;*/
+    --app-ctr-bg-color:#6b0090;
+    --app-ctr-text-color: #ffffff;/*nuevo*/
+    --app-bg-color: #ffffff;/*#2d3c47;*/
     --app-text-color:rgb(19, 18, 18);/*rgb(117, 117, 117);*/
     --app-text-Items: #07141d;
   }
+
+/*============================================*/
+.fondo-control{
+    background-image: linear-gradient(to right bottom, #e5097f, #c30087, #9b008d, #6b0090, #210990);
+}
+.img-avatar{
+    border:#6b0090 2px solid;
+    border-radius: 50%;
+
+}
+
+.icon-avatar{
+    width: 24px;
+    height: 24px;
+    float: left;
+    background: var(--app-ctr-bg-color);
+    border-radius: 50%;
+    border: solid 2px var(--app-ctr-text-color);
+    margin: 0px 10px 2px 0px;
+    box-shadow:rgba(0, 0, 0, 0.541) 2px 2px;
+
+}
+
+.boton-primary{
+    background-color: var(--app-ctr-bg-color);/*#6b0090;*/
+    border-radius: 10px;
+    color:var(--app-ctr-text-color);/*white;*/
+}
+.boton-float{
+    border: none;
+    position: fixed;
+    bottom: 10%;
+    right: 5%;
+    z-index: 10000;
+    font-size: 0px;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    color: transparent;
+    box-shadow:rgba(0, 0, 0, 0.349) 5px 5px;
+    }
+.boton-float:hover{
+    width: 72px;
+    height: 72px;
+}  
+.input-edit{
+    background-image: url('../assets/imgs/icon_edit.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: right;
+    padding-right: 32px;
+    background-size: 30px 30px
+}
+
+.boton-redondo{
+    border: none;
+    z-index: 10000;
+    font-size: 0px;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    color: transparent;
+    box-shadow:rgba(0, 0, 0, 0.349) 5px 5px;
+}
+.boton-redondo:hover{
+    width: 72px;
+    height: 72px;
+} 
+
+
+
+.boton-calculadora, .boton-calculadora-aceptar, .boton-calculadora-cancel{
+    width: 100%;
+    height: 50px;
+    margin: 5px;
+    background: var(--app-ctr-bg-color);
+    color: var(--app-ctr-text-color);
+    border-radius: 20px;
+    border: solid 2px var(--app-ctr-text-color);
+    box-shadow:rgba(0, 0, 0, 0.425) 5px 5px;
+}
+.boton-calculadora-aceptar{
+    background: green;
+}
+.boton-calculadora-cancel{
+    background: red;
+}
+.boton-calculadora:hover{
+    
+    background-image: linear-gradient(to top,var(--app-ctr-bg-color), rgba(253, 249, 249, 0.411));
+}
+.boton-calculadora:active{
+    box-shadow:rgba(0, 0, 0, 0.425) 1px 1px;
+    background: var(--app-ctr-text-color);
+    color: var(--app-ctr-bg-color);
+    border: solid 2px var(--app-ctr-bg-color);
+    margin: 7px 7px;
+}
+.display_calculadora{
+    background: #ccc;
+    font-size: 3em;
+    padding: 10Px;
+    margin: 5px;
+    border: solid 2px #777777;
+    border-radius: 5px;
+
+}
+
+
+
+.list-item{
+    color: var(--app-text-Items);
+    font-size: 0.9em;
+    position: relative;
+    display: block;
+    padding: 10px 5px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.007);
+
+}
+
+.mt-3 {
+    margin-top: 1rem!important;
+}
+.mt-5 {
+    margin-top: 3rem!important;
+}
+
+.carrito-cantidad{
+    float: left;
+    margin-left: -20px;
+    margin-top: 5px;
+    color: black;
+    background:yellow;
+    padding: 5px;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+}
+.resumen-monto{
+    float: right;
+    color: var(--app-ctr-text-color);
+    font-size: 1.5em;
+}
+/*============================================================*/
+
+
 html,
 body {
     
@@ -166,7 +314,7 @@ a.desc:after {
     margin: 25px 10px;
     border: solid 2px var(--app-ctr-bg-color);
     background-color: var(--app-ctr-text-color);
-    border-radius: 10px;
+    border-radius: 50%;
     color:var(--app-ctr-bg-color);
     box-shadow: 5px 5px #00000050;
 }
@@ -174,10 +322,14 @@ a.desc:after {
 .bot-inicio:hover{
     margin: 25px 10px;
     border: solid 2px var(--app-ctr-text-color);
-    border-radius: 10px;
     background-color: var(--app-ctr-bg-color);
     color:var(--app-ctr-text-color);
     box-shadow: 8px 8px #00000050;
+}
+
+.btn:hover, .btn:focus, .btn.focus {
+
+    color: #ffea00;
 }
 /*--------------------------------------------------*/
 
@@ -187,7 +339,7 @@ a.desc:after {
     border-style:solid; 
     border-width:1px; 
     border-radius:5px; 
-    border-color:var(--primary); 
+    border-color: var(--app-ctr-bg-color);
     padding:10px; margin:5px
 }
 /*----------------------------------------------------------*/

@@ -2,11 +2,11 @@
 
 return [
     'class' => 'yii\db\Connection',
-   /* 'dsn' => 'mysql:host=localhost;dbname=sigma75_apps',
+   /* 'dsn' => 'mysql:host=localhost;dbname=sigma75_stools',
     'username' => 'sigma75',
-    'password' => 'Sigma1975',
-    'charset' => 'latin1',*/
-    'dsn' => 'mysql:host=localhost;dbname=sigma75_apps',
+    'password' => 'JRV@sigma75',
+    'charset' => 'utf8',*/
+    'dsn' => 'mysql:host=localhost;dbname=sigma75_stools',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',
